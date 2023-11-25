@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-import '../assets/fonts/league-spartan/LeagueSpartan-VariableFont_wght.ttf'
+import "@fontsource/league-spartan";
+import "@fontsource/league-spartan/400.css"; // Specify weight
 import './styles.scss'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
