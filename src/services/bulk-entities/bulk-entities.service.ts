@@ -1,4 +1,4 @@
-import { BulkEntitiesResponse, IdentityRequest } from "../pages/main-page/MainPage.typings";
+import { BulkEntitiesResponse, IdentityRequest } from "./bulk-entities.typings";
 
 const BulkEntitiesService = {
 

@@ -2,12 +2,15 @@ import './MainPage.scss'
 import Header from '../../components/header/Header'
 import About from '../../components/about/About'
 import { useEffect, useState } from 'react'
-import BulkEntitiesService from '../../services/BulkEntitiesService';
+import BulkEntitiesService from '../../services/bulk-entities/bulk-entities.service';
 import LoadingSpinner from '../../components/loading-spinner/loading-spinner';
+import DiscountDisplaySection from '../../components/discounts-display-section/DiscountDisplaySection';
+import { Identity, SimpleDiscount } from '../../services/bulk-entities/bulk-entities.typings';
 
 
 function MainPage() {
-    const [bulkEntities, setBulkEntities] = useState({});
+    const [discounts, setDiscounts] = useState([] as SimpleDiscount[]);
+    const [identities, setIdentities] = useState([] as Identity[]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -22,22 +25,25 @@ function MainPage() {
         sortBy: 'CIK',
         order: 'ASC'
       }).then(bulkEntityResponse => {
-        console.log(bulkEntityResponse);
-        setBulkEntities(bulkEntityResponse);
+        setIdentities(bulkEntityResponse.identities);
+        setDiscounts(bulkEntityResponse.discounts);
         setLoading(false);
       });
     };
 
     return (
       <>
-      { loading ? (
-        <LoadingSpinner></LoadingSpinner>
-      ) : (
-        <div className='main-page'>
-          <Header></Header>
-          <About></About>
-        </div>
-      )}
+        <Header></Header>
+        <About></About>
+        { loading ? (
+          <>
+            <LoadingSpinner></LoadingSpinner>
+          </>
+        ) : (
+          <div className='main-page'>
+            <DiscountDisplaySection discounts={ discounts }></DiscountDisplaySection>
+          </div>
+        )}
       </>
     )
 }

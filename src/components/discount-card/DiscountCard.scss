@@ -1,0 +1,44 @@
+@import 'src/variables';
+
+.discount-card {
+    height: 265px;
+    width: 260px;
+    box-sizing: border-box;
+    background: $light-gray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border: 3px solid $dark-gray;
+    padding: 19px 27px;
+
+    .company-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .symbol {
+            color: $dark-gray;
+            font-family: $league-spartan;
+            font-size: $x-large-font;
+            font-weight: 600;
+            padding-top: 10px;
+        }
+    
+        .name {
+            color: $dark-gray;
+            font-family: $libre-baskerville;
+            font-size: $plus-font;
+            font-weight: 400;
+            text-align: center;
+            padding-top: 16px;
+        }
+    }
+
+    .tty-price {
+        color: $dark-gray;
+        font-family: $league-spartan;
+        font-size: $x-large-font;
+        font-weight: 600;
+    }
+}

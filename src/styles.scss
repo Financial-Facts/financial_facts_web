@@ -1,3 +1,10 @@
+body {
+    margin: 0;
+    background: #F5F5F5; 
+    min-height: 100dvh;
+    overflow-x: hidden;
+}
+
 #root {
-    height: 100%;
+    min-height: 100%;
 }

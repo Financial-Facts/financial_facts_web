@@ -1,7 +1,14 @@
-export type BulkEntitiesResponse = (BulkDiscountsWrapper & BulkIdentitiesWrapper) | BulkIdentitiesWrapper
-
 export interface BulkDiscountsWrapper {
     discounts: SimpleDiscount[]
+}
+
+export interface DiscountWrapper {
+    discount: SimpleDiscount
+}
+
+export interface BulkEntitiesResponse {
+    discounts: SimpleDiscount[]
+    identities: Identity[]
 }
 
 export interface SimpleDiscount {
