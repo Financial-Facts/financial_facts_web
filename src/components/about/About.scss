@@ -1,0 +1,131 @@
+@import 'src/variables';
+
+.about {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    padding: 100px 0;
+    gap: 50px;
+    flex-shrink: 0;
+
+    .logo {
+        display: none;
+    }
+
+    .image {
+        background: url('./assets/about_image_full.jpg');
+        background-size: cover;
+        background-position: center;
+        width: 50%;
+        max-width: 420px;
+        height: 100%;
+        margin-left: 50px;
+    }
+
+    .body {
+        width: 420px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+        color: $dark-gray;
+        font-family: $league-spartan;
+        margin-right: 50px;
+
+        h2 {
+            margin: 0;
+            font-size: $x-large-font;
+            text-wrap: balance;
+
+            span {
+                color: $base-purple;
+            }
+        }
+
+        h3 {
+            margin: 17px 0 5px 0;
+            font-size: $large-font;
+        }
+
+        p {
+            font-family: $libre-baskerville;
+            font-size: $normal-font;
+            line-height: 24px;
+        }
+
+        .read-more-button {
+            height: 50px;
+            width: 200px;
+            font-size: $large-font;
+            font-family: $league-spartan;
+            border-radius: 4px;
+            border: 3px solid $dark-gray;
+            transition-duration: 0.4s;
+            background: $off-white;
+            color: $dark-gray;
+            cursor: pointer;
+        }
+
+        .read-more-button:hover {
+            background: $base-purple;
+            color: $off-white;
+        }
+
+        .read-more-button:focus {
+            outline: 1px solid $dark-gray;
+            outline-offset: -8px;
+        }
+
+    }
+}
+
+@media only screen and (max-width: 768px) {
+
+    .about {
+        padding: 50px 0;
+
+        .logo {
+            display: flex;
+            height: 96px;
+            width: 96px;
+        }
+
+        .image {
+            display: none;
+        }
+
+        .body {
+            width: 100%;
+            padding: 0 10%;
+            margin-right: 0;
+
+            .body-header {
+                display: flex;
+                flex-direction: row;
+                gap: 25px;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 673px) {
+
+    .about {
+        .logo {
+            height: 140px;
+            width: 140px;
+        }
+    }
+}
+
+@media only screen and (max-width: 576px) {
+
+    .body {
+
+        h3 {
+            display: none;
+        }
+    }
+}

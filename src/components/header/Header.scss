@@ -1,6 +1,9 @@
+@import 'src/variables';
+
 .header {
     display: flex;
     flex-wrap: wrap;
+    flex-shrink: 0;
     height: 300px;
     width: 100%;
     background: center / contain no-repeat, lightgray 50% url('./assets/header_background.png');
@@ -27,22 +30,24 @@
         flex: 0.8;
         flex-direction: column;
         align-items: center;
-        font-family: League Spartan;
+        font-family: $league-spartan;
         text-align: center;
         justify-content: center;
+        color: $dark-gray;
 
         h1 {
-            font-size: 64px;
+            font-size: $xx-large-font;
             font-weight: 600;
             line-height: normal;
             margin: 25px 0;
         }
 
-        span {
-            font-size: 48px;
+        h2 {
+            margin: 0;
+            font-size: $x-large-font;
             font-weight: 500;
             line-height: normal;
-            padding-bottom: 25px;
+            padding: 0 25px 25px;
         }
     }
 }
@@ -58,11 +63,15 @@
             flex: 1;
 
             h1 {
-                font-size: 48px;
+                font-size: $x-large-font;
+            }
+
+            h2 {
+                font-size: $large-font;
             }
     
             span {
-                font-size: 32px;
+                font-size: $large-font;
             }
         }
     }

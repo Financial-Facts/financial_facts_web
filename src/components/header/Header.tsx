@@ -9,7 +9,7 @@ function Header() {
         </section>
         <section className='title-wrapper'>
             <h1>Financial Facts</h1>
-            <span>Your Gateway to Undervalued Stocks!</span>
+            <h2>Your Gateway to Undervalued Stocks!</h2>
         </section>
       </header>
     )
