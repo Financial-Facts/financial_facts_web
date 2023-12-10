@@ -8,8 +8,9 @@
     width: 100%;
     background: center / contain no-repeat, lightgray 50% url('./assets/discount_display_background.png');
     background-size: cover;
-    height: 370px;
-    padding: 65px 0;
+    padding: 65px 0 0;
+    box-sizing: border-box;
+    height: 500px;
 
     h2 {
         color: $base-purple;
@@ -22,6 +23,10 @@
         font-family: $league-spartan;
         font-size: $large-font;
         margin: 17px 0 21px 0;
+        
+        span {
+            color: $base-purple;
+        }
     }
 
     .discounts {
@@ -40,5 +45,32 @@
     .discounts {
         -ms-overflow-style: none;  /* IE and Edge */
         scrollbar-width: none;  /* Firefox */
+    }
+
+    .nav-circle-wrapper {
+        display: flex;
+        gap: 15px;
+        padding-top: 29px;
+        
+        .active {
+            background: $base-purple;
+        }
+
+        .inactive {
+            background: $off-white;
+        }
+
+        .nav-circle {
+            height: 15px;
+            width: 15px;
+            border-radius: 10px;
+            transition-duration: 0.4s;
+            border: 1px solid $dark-gray;
+            cursor: pointer;
+        }
+
+        .nav-circle:hover {
+            background: $base-purple;
+        }
     }
 }
