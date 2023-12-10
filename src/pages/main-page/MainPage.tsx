@@ -32,19 +32,11 @@ function MainPage() {
     };
 
     return (
-      <>
+      <div className='main-page'>
         <Header></Header>
         <About></About>
-        { loading ? (
-          <>
-            <LoadingSpinner></LoadingSpinner>
-          </>
-        ) : (
-          <div className='main-page'>
-            <DiscountDisplaySection discounts={ discounts }></DiscountDisplaySection>
-          </div>
-        )}
-      </>
+        <DiscountDisplaySection discounts={ discounts } loading={loading}></DiscountDisplaySection>
+      </div>
     )
 }
   

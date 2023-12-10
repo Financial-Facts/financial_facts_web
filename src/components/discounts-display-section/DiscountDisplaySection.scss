@@ -1,5 +1,44 @@
+@import 'src/variables';
+
 .discount-display-section {
     display: flex;
-    gap: 10px;
-    list-style: none;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    background: center / contain no-repeat, lightgray 50% url('./assets/discount_display_background.png');
+    background-size: cover;
+    height: 370px;
+    padding: 65px 0;
+
+    h2 {
+        color: $base-purple;
+        font-family: $league-spartan;
+        font-size: $x-large-font;
+        margin: 0;
+    }
+
+    h3 {
+        font-family: $league-spartan;
+        font-size: $large-font;
+        margin: 17px 0 21px 0;
+    }
+
+    .discounts {
+        display: flex;
+        padding: 0;
+        gap: 10px;
+        list-style: none;
+        width: 830px;
+        overflow-x: auto;
+    }
+
+    .discounts::-webkit-scrollbar {
+        display: none;
+    }
+  
+    .discounts {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
 }
