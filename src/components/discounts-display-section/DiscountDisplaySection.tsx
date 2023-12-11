@@ -3,6 +3,7 @@ import DiscountCard from "../discount-card/DiscountCard"
 import LoadingSpinner from "../loading-spinner/loading-spinner"
 import "./DiscountDisplaySection.scss"
 import NavCircleList from "../nav-circle-list/NavCircleList"
+import { useRef } from "react"
 
 export interface DiscountDisplayParams {
   discounts: SimpleDiscount[],
@@ -11,10 +12,22 @@ export interface DiscountDisplayParams {
 
 function DiscountDisplaySection({ discounts, loading }: DiscountDisplayParams ) {
 
+    const discountList = useRef<HTMLUListElement>();
+
     const renderDiscountCards = () => {
       return discounts
         .sort((a, b) => a.active ? -1 : b.active ? 1 : a.ttySalePrice - b.ttySalePrice)
         .map(discount => <DiscountCard key={discount.cik} discount={ discount }></DiscountCard>);
+    }
+
+    const scrollToIndex = (index: number) => {
+      const element = discountList.current;
+      if (element) {
+        element.scrollTo({
+          left: (840 * index),
+          behavior: 'smooth'
+        });
+      }
     }
 
     return (
@@ -25,10 +38,12 @@ function DiscountDisplaySection({ discounts, loading }: DiscountDisplayParams ) 
           <LoadingSpinner></LoadingSpinner>
         ) : (
           <>
-            <ul className="discounts">
+            <ul ref={discountList as React.LegacyRef<HTMLUListElement>} className="discounts">
               { renderDiscountCards() }
             </ul>
-            <NavCircleList numOfCircles={ (discounts.length / 4) + 1 }></NavCircleList>
+            <NavCircleList
+              numOfCircles={ discounts.length > 4 ? discounts.length / 4 : 0 }
+              scrollToIndex={ scrollToIndex }></NavCircleList>
           </>
         )}
       </section>
