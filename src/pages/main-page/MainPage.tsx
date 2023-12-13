@@ -3,9 +3,9 @@ import Header from '../../components/header/Header'
 import About from '../../components/about/About'
 import { useEffect, useState } from 'react'
 import BulkEntitiesService from '../../services/bulk-entities/bulk-entities.service';
-import LoadingSpinner from '../../components/loading-spinner/loading-spinner';
 import DiscountDisplaySection from '../../components/discounts-display-section/DiscountDisplaySection';
 import { Identity, SimpleDiscount } from '../../services/bulk-entities/bulk-entities.typings';
+import { catchError } from 'rxjs/internal/operators/catchError';
 
 
 function MainPage() {
@@ -24,16 +24,21 @@ function MainPage() {
         limit: 100,
         sortBy: 'CIK',
         order: 'ASC'
-      }).then(bulkEntityResponse => {
+      }).pipe(catchError(err => {
+        setLoading(false);
+        throw err;
+      })).subscribe(bulkEntityResponse => {
         setIdentities(bulkEntityResponse.identities);
-        setDiscounts(bulkEntityResponse.discounts);
+        if (bulkEntityResponse.discounts) {
+          setDiscounts(bulkEntityResponse.discounts);
+        }
         setLoading(false);
       });
     };
 
     return (
       <div className='main-page'>
-        <Header></Header>
+        <Header text="Financial Facts" subtext="Your Gateway to Undervalued Stocks!"></Header>
         <About></About>
         <DiscountDisplaySection discounts={ discounts } loading={loading}></DiscountDisplaySection>
       </div>

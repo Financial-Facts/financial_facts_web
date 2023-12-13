@@ -1,15 +1,15 @@
 import "./Header.scss"
 
-function Header() {
+function Header({ text, subtext }: { text: string, subtext?: string }) {
 
     return (
-      <header className='header'>
+      <header className={`header ${subtext ? 'fixed-header-height' : ''}`}>
         <section className="logo-wrapper">
             <img src="./assets/logo.svg" className="logo"/>
         </section>
         <section className='title-wrapper'>
-            <h1>Financial Facts</h1>
-            <h2>Your Gateway to Undervalued Stocks!</h2>
+            <h1>{ text }</h1>
+            { subtext ? <h2>{subtext}</h2> : undefined }
         </section>
       </header>
     )

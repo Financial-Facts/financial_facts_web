@@ -1,10 +1,13 @@
 @import 'src/variables';
 
+.fixed-header-height {
+    height: 300px;
+}
+
 .header {
     display: flex;
     flex-wrap: wrap;
     flex-shrink: 0;
-    height: 300px;
     width: 100%;
     background: center / contain no-repeat, lightgray 50% url('./assets/header_background.png');
     background-size: cover;

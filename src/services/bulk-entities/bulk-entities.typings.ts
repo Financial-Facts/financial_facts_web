@@ -7,7 +7,7 @@ export interface DiscountWrapper {
 }
 
 export interface BulkEntitiesResponse {
-    discounts: SimpleDiscount[]
+    discounts?: SimpleDiscount[]
     identities: Identity[]
 }
 
