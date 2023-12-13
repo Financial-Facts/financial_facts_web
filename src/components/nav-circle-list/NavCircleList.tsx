@@ -7,9 +7,9 @@ export interface DiscountDisplayParams {
   loading: boolean
 }
 
-function NavCircleList({ numOfCircles, scrollToIndex }: { 
+function NavCircleList({ numOfCircles, setCurrentCardIndex }: { 
     numOfCircles: number,
-    scrollToIndex: (index: number) => void
+    setCurrentCardIndex: (index: number) => void
 }) {
 
     const [navCircles, setNavCircles] = useState([] as boolean[]);
@@ -36,7 +36,7 @@ function NavCircleList({ numOfCircles, scrollToIndex }: {
     }
 
     const handleCircleSelection = (clickedIndex: number) => {
-        scrollToIndex(clickedIndex);
+        setCurrentCardIndex(clickedIndex);
         setNavCircles(navCircles.map((_navCircle, circleIndex) => circleIndex === clickedIndex));
     }
 

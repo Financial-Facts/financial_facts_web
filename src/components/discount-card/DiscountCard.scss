@@ -18,6 +18,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 19px 21px;
+    margin: 0 5px;
 
     .company-info {
         display: flex;
@@ -47,5 +48,21 @@
         font-family: $league-spartan;
         font-size: $large-font;
         font-weight: 600;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+
+    .discount-card { 
+        height: 205px;
+        min-width: 200px;
+        box-sizing: border-box;
+        background: $light-gray;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 19px 21px;
+        margin: 0 5px;
     }
 }
