@@ -81,7 +81,7 @@ function DiscountDisplaySection({ discounts, loading }: DiscountDisplayParams ) 
           { shouldDisplayArrow ? (
             <button className={ `move-button move-${ direction }-button` }
               onClick={ (_event) => handleArrowClick(arrow) }>
-              <img src="./assets/arrow_right.svg"></img>
+              <img src="/assets/arrow_right.svg"></img>
             </button>
           ): undefined }
         </div> ) : undefined;

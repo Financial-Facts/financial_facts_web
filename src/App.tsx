@@ -9,7 +9,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainPage/>}/>
-        <Route index path="discount/:cik" element={<DiscountPage/>}/>
+        <Route path="discount/:cik" element={<DiscountPage/>}/>
       </Routes>
     </BrowserRouter>
   );
