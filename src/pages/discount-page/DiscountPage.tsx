@@ -36,8 +36,7 @@ function DiscountPage() {
 
     return (
       <div className='discount-page'>
-        <Header text="Discounts" subtext={''}></Header>
-        <DiscountDisplaySection discounts={discounts} loading={loading}></DiscountDisplaySection>
+        <Header text="Current Discounts" subtext={''}></Header>
       </div>
     )
 }

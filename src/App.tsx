@@ -9,7 +9,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainPage/>}/>
-        <Route path="discount/:cik" element={<DiscountPage/>}/>
+        <Route path="/discount" element={<DiscountPage/>}>
+          <Route path=":cik" element={<DiscountPage/>}/>
+        </Route>
       </Routes>
     </BrowserRouter>
   );
