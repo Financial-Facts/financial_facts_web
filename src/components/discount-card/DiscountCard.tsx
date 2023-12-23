@@ -11,13 +11,13 @@ function DiscountCard({ discount }: DiscountWrapper ) {
     }
 
     return (
-        <li className={'discount-card ' + (discount.active ? 'active' : 'inactive')}
+        <li className='discount-card'
             onClick={ () => navigate(`/discount/${ discount.cik }`) }>
             <div className="company-info">
                 <span className="symbol">{ discount.symbol }</span>
                 <span className="name">{ discount.name }</span>
             </div>
-            <span className="tty-price">${ round(discount.ttySalePrice, 2) }</span>
+            <span className="tty-price">${ round(discount.ttySalePrice, 2) * 2 }</span>
         </li>
     )
   }

@@ -1,11 +1,11 @@
 import { useParams } from 'react-router-dom';
 import './DiscountPage.scss'
-import DiscountDisplaySection from '../../components/discounts-display-section/DiscountDisplaySection';
+import DiscountDisplaySection from '../../sections/discounts-display-section/DiscountDisplaySection';
 import { useEffect, useState } from 'react';
 import BulkEntitiesService from '../../services/bulk-entities/bulk-entities.service';
 import { SimpleDiscount } from '../../services/bulk-entities/bulk-entities.typings';
 import { catchError } from 'rxjs';
-import Header from '../../components/header/Header';
+import Header from '../../sections/header/Header';
 
 
 function DiscountPage() {

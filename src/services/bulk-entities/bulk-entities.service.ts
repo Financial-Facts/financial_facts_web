@@ -1,8 +1,7 @@
-import { map } from "rxjs/operators";
 import { BulkEntitiesResponse, IdentityRequest, SimpleDiscount } from "./bulk-entities.typings";
 import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
 import { Observable } from "rxjs/internal/Observable";
-import { Subscriber } from "rxjs/internal/Subscriber";
+import { environment } from "../../environment";
 
 
 const discounts = new BehaviorSubject<SimpleDiscount[]>([]);
@@ -71,7 +70,7 @@ async function fetchBulkEntitiesFromFFS(
     identityRequest: IdentityRequest,
     includeDiscounts: boolean
 ): Promise<BulkEntitiesResponse> {
-    return fetch(`https://financial-facts.net/v1/identity/bulk?includeDiscounts=${includeDiscounts}`, {
+    return fetch(`${environment.ffsRestUrl}/v1/identity/bulk?includeDiscounts=${includeDiscounts}`, {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json'

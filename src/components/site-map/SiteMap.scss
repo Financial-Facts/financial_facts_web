@@ -1,0 +1,39 @@
+@import 'src/variables';
+
+.site-map {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: $league-spartan;
+    color: $dark-gray;
+
+    .parent-list {
+        display: flex;
+        width: 100%;
+        max-width: 630px;
+        justify-content: center;
+        padding: 0 50px;
+        box-sizing: border-box;
+        flex-wrap: wrap;
+        row-gap: 24px;
+
+        ul {
+            display: flex;
+            flex-wrap: nowrap;
+            padding: 0;
+            justify-content: space-around;
+        }
+
+        .child-list-1 {
+            flex: 40%;
+            min-width: 167px;
+        }
+
+        .child-list-2 {
+            flex: 60%;
+        }
+
+    }
+
+}

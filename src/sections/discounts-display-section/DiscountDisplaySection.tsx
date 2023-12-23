@@ -1,8 +1,8 @@
 import { SimpleDiscount } from "../../services/bulk-entities/bulk-entities.typings"
-import DiscountCard from "../discount-card/DiscountCard"
-import LoadingSpinner from "../loading-spinner/loading-spinner"
+import DiscountCard from "../../components/discount-card/DiscountCard"
+import LoadingSpinner from "../../components/loading-spinner/loading-spinner"
 import "./DiscountDisplaySection.scss"
-import NavCircleList from "../nav-circle-list/NavCircleList"
+import NavCircleList from "../../components/nav-circle-list/NavCircleList"
 import { useEffect, useState } from "react"
 
 export interface DiscountDisplayParams {
@@ -48,7 +48,7 @@ function DiscountDisplaySection({ discounts, loading }: DiscountDisplayParams ) 
     
     const renderDiscountCards = () => {
       return discounts
-        .sort((a, b) => a.active ? -1 : b.active ? 1 : a.ttySalePrice - b.ttySalePrice)
+        .sort((a, b) => a.symbol > b.symbol ? 1 : -1)
         .map(discount => <DiscountCard key={discount.cik} discount={ discount }></DiscountCard>);
     }
 

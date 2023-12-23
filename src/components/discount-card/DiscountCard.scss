@@ -1,13 +1,5 @@
 @import 'src/variables';
 
-.inactive {
-    border: 3px solid $dark-red;
-}
-
-.active {
-    border: 3px solid $emerald-green;
-}
-
 .discount-card {
     height: 205px;
     min-width: 200px;
@@ -20,6 +12,7 @@
     padding: 19px 21px;
     margin: 0 5px;
     cursor: pointer;
+    border: 2px solid $dark-gray;
 
     .company-info {
         display: flex;

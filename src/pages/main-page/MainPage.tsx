@@ -1,17 +1,18 @@
 import './MainPage.scss'
-import Header from '../../components/header/Header'
-import About from '../../components/about/About'
+import Header from '../../sections/header/Header'
+import About from '../../sections/about/About'
 import { useEffect, useState } from 'react'
 import BulkEntitiesService from '../../services/bulk-entities/bulk-entities.service';
-import DiscountDisplaySection from '../../components/discounts-display-section/DiscountDisplaySection';
-import { Identity, SimpleDiscount } from '../../services/bulk-entities/bulk-entities.typings';
+import DiscountDisplaySection from '../../sections/discounts-display-section/DiscountDisplaySection';
+import { SimpleDiscount } from '../../services/bulk-entities/bulk-entities.typings';
 import { catchError } from 'rxjs/internal/operators/catchError';
-import FactsLinkSection from '../../components/facts-link-section/FactsLinkSection';
+import FactsLinkSection from '../../sections/facts-link-section/FactsLinkSection';
+import Footer from '../../sections/footer/Footer';
+import ContactSection from '../../sections/contact-section/ContactSection';
 
 
 function MainPage() {
     const [discounts, setDiscounts] = useState([] as SimpleDiscount[]);
-    const [identities, setIdentities] = useState([] as Identity[]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -34,7 +35,6 @@ function MainPage() {
           if (bulkEntityResponse.discounts) {
             setDiscounts(bulkEntityResponse.discounts);
           }
-          setIdentities(bulkEntityResponse.identities);
           setLoading(false);
         });
     };
@@ -48,6 +48,8 @@ function MainPage() {
           loading={ loading }>
         </DiscountDisplaySection>
         <FactsLinkSection></FactsLinkSection>
+        <ContactSection></ContactSection>
+        <Footer></Footer>
       </div>
     )
 }

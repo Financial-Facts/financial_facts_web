@@ -1,0 +1,56 @@
+@import 'src/variables';
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    font-family: $league-spartan;
+    color: $dark-gray;
+
+    h2 {
+        margin: 0 0 18px 0;
+        font-weight: 600;
+    }
+
+    span {
+        margin: 0 0 18px 0;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        justify-content: space-between;
+        min-height: 202px;
+
+        .text-field {
+            border-radius: 4px;
+            border: 1px solid $dark-gray;
+            background: $magnolia-white;
+            font-family: $libre-baskerville;
+        }
+        
+        textarea {
+            resize: none;
+            height: 100px;
+        }
+
+        button {
+            width: fit-content;
+            background: $base-purple;
+            color: $off-white;
+            font-size: $normal-font;
+            font-family: $league-spartan;
+            font-weight: 600;
+            padding: 8px 24px;
+            cursor: pointer;
+            border-radius: 4px;
+            border: 1px solid $dark-gray;
+            transition-duration: 0.4s;
+        }
+
+        button:hover {
+            background: $off-white;
+            color: $dark-gray;
+        }
+    }
+}
