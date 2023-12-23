@@ -17,21 +17,23 @@
         box-sizing: border-box;
         flex-wrap: wrap;
         row-gap: 24px;
+        justify-content: space-evenly;
+        margin-right: 24px;
 
-        ul {
-            display: flex;
-            flex-wrap: nowrap;
-            padding: 0;
-            justify-content: space-around;
+        a {
+            text-decoration: none;
         }
 
-        .child-list-1 {
-            flex: 40%;
-            min-width: 167px;
+        .inactive {
+            color: $dark-gray;
         }
 
-        .child-list-2 {
-            flex: 60%;
+        .active {
+            color: $base-purple;
+        }
+
+        li {
+            margin-left: 24px;
         }
 
     }
