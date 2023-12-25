@@ -1,9 +1,9 @@
-import { SimpleDiscount } from "../../services/bulk-entities/bulk-entities.typings"
-import DiscountCard from "../../components/discount-card/DiscountCard"
-import LoadingSpinner from "../../components/loading-spinner/loading-spinner"
-import "./DiscountDisplaySection.scss"
-import NavCircleList from "../../components/nav-circle-list/NavCircleList"
-import { useEffect, useState } from "react"
+import { SimpleDiscount } from '../../services/bulk-entities/bulk-entities.typings'
+import DiscountCard from '../../components/discount-card/DiscountCard'
+import LoadingSpinner from '../../components/loading-spinner/loading-spinner'
+import './DiscountDisplaySection.scss'
+import NavCircleList from '../../components/nav-circle-list/NavCircleList'
+import { useEffect, useState } from 'react'
 
 export interface DiscountDisplayParams {
   discounts: SimpleDiscount[],
@@ -81,23 +81,23 @@ function DiscountDisplaySection({ discounts, loading }: DiscountDisplayParams ) 
           { shouldDisplayArrow ? (
             <button className={ `move-button move-${ direction }-button` }
               onClick={ (_event) => handleArrowClick(arrow) }>
-              <img src="/assets/arrow_right.svg"></img>
+              <img src='/assets/arrow_right.svg'></img>
             </button>
           ): undefined }
         </div> ) : undefined;
     }
 
     return (
-      <section className="discount-display-section">
+      <section className='discount-display-section'>
         <h2>Current Discounts</h2>
         <h3>See existing discounts and their <span>sale price</span></h3>
         { loading ? (
-          <LoadingSpinner size="LARGE" color="PURPLE"></LoadingSpinner>
+          <LoadingSpinner size='LARGE' color='PURPLE'></LoadingSpinner>
         ) : (
           <div className={`body ${usingArrowNavigation ? 'body-arrows' : ''}`}>
             { renderArrowButton('LEFT') }
             <ul ref={ (e) => initDiscountListRef(e) }
-              className="discounts">
+              className='discounts'>
               { renderDiscountCards() }
             </ul>
             { renderArrowButton('RIGHT') }

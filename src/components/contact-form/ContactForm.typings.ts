@@ -1,0 +1,1 @@
+export type Outcome = 'isSuccess' | 'isFailure' | 'neutral';

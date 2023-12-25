@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import "./loading-spinner.scss"
-import { Color, Size } from "./loading-spinner.typings";
+import { useEffect, useState } from 'react';
+import './loading-spinner.scss'
+import { Color, Size } from './loading-spinner.typings';
 
 function LoadingSpinner({ size, color }: { size: Size, color: Color }) {
 

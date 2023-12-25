@@ -21,7 +21,6 @@ function DiscountPage() {
 
     useEffect(() => {
         fetchDiscounts();
-        console.log(cik);
         if (cik) {
           DiscountService.getDiscount(cik).subscribe(discount => {
             setSelectedDiscount(discount);
@@ -65,7 +64,7 @@ function DiscountPage() {
 
     return (
       <div className='discount-page'>
-        <Header text="Current Discounts" subtext={''}></Header>
+        <Header text='Current Discounts' subtext={''}></Header>
         <PeriodicDataTable tableData={ dataSets }></PeriodicDataTable>
       </div>
     )
