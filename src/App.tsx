@@ -1,7 +1,25 @@
-import DiscountPage from "./pages/discount-page/DiscountPage";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';import DiscountPage from "./pages/discount-page/DiscountPage";
 import MainPage from "./pages/main-page/MainPage"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 function App() {
 

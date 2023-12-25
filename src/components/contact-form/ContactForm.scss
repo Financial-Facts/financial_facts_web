@@ -46,6 +46,10 @@
             border-radius: 4px;
             border: 1px solid $dark-gray;
             transition-duration: 0.4s;
+            max-height: 32px;
+            max-width: 82px;
+            display: flex;
+            justify-content: center;
         }
 
         button:hover {

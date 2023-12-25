@@ -92,7 +92,7 @@ function DiscountDisplaySection({ discounts, loading }: DiscountDisplayParams ) 
         <h2>Current Discounts</h2>
         <h3>See existing discounts and their <span>sale price</span></h3>
         { loading ? (
-          <LoadingSpinner></LoadingSpinner>
+          <LoadingSpinner size="LARGE" color="PURPLE"></LoadingSpinner>
         ) : (
           <div className={`body ${usingArrowNavigation ? 'body-arrows' : ''}`}>
             { renderArrowButton('LEFT') }
