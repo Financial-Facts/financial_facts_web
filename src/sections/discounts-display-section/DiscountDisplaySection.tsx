@@ -4,13 +4,18 @@ import LoadingSpinner from '../../components/loading-spinner/loading-spinner'
 import './DiscountDisplaySection.scss'
 import NavCircleList from '../../components/nav-circle-list/NavCircleList'
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
+import { DiscountState } from '../../state/discounts/discounts.slice'
 
 export interface DiscountDisplayParams {
   discounts: SimpleDiscount[],
   loading: boolean
 }
 
-function DiscountDisplaySection({ discounts, loading }: DiscountDisplayParams ) {
+function DiscountDisplaySection() {
+
+    const discounts = useSelector< { discounts: DiscountState }, SimpleDiscount[]>((state) => state.discounts.discounts);
+    const loading = useSelector< { discounts: DiscountState }, boolean>((state) => state.discounts.loading);
 
     const initDiscountListRef = (ref: HTMLUListElement | null) => {
       if (ref) setDiscountListRef(ref);
@@ -47,7 +52,7 @@ function DiscountDisplaySection({ discounts, loading }: DiscountDisplayParams ) 
     }, [ numCardsToDisplay, discountListRef ]);
     
     const renderDiscountCards = () => {
-      return discounts
+      return [...discounts]
         .sort((a, b) => a.symbol > b.symbol ? 1 : -1)
         .map(discount => <DiscountCard key={discount.cik} discount={ discount }></DiscountCard>);
     }

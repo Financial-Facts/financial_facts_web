@@ -33,40 +33,5 @@
             resize: none;
             height: 100px;
         }
-
-        .isSuccess {
-            background: $emerald-green;
-        }
-
-        .isFailure {
-            background: $dark-red;
-        }
-
-        button {
-            background: $base-purple;
-            color: $off-white;
-            font-size: $normal-font;
-            font-family: $league-spartan;
-            font-weight: 600;
-            padding: 8px 24px;
-            cursor: pointer;
-            border-radius: 4px;
-            border: 1px solid $dark-gray;
-            transition-duration: 0.4s;
-            height: 32px;
-            width: 82px;
-            display: flex;
-            justify-content: center;
-
-            img {
-                height: 100%;
-            }
-
-        }
-
-        .neutral:hover {
-            background: $off-white;
-            color: $dark-gray;
-        }
     }
 }

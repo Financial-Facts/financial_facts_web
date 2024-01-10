@@ -1,19 +1,12 @@
 import { Link } from "react-router-dom";
 import "./SiteMap.scss";
-import { useEffect, useState } from "react";
-import StateService from "../../services/state/state.service";
-import { Page, PageStatus } from "../../services/state/state.typings";
+import { Page, PageState } from "../../state/page/page.typings";
+import { useSelector } from "react-redux";
 
 
 function SiteMap() {
 
-    const [pages, setPages] = useState({} as PageStatus);
-
-    useEffect(() => {
-        StateService.activePage$.subscribe(pages => {
-            setPages(pages);
-        })
-    }, []);
+    const pages = useSelector<{ page: PageState }, PageState>((state) => state.page);
 
     const renderSiteMapList = () => renderSiteMapListItems(Object.keys(pages) as Page[]);
 

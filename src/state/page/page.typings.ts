@@ -1,4 +1,4 @@
-export type PageStatus = Record<Page, PageData>;
+export type PageState = Record<Page, PageData>;
 
 export type Page = 'Main' | 'About' | 'Discount' | 'Facts' | 'API Docs';
 

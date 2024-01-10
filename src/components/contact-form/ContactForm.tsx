@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import './ContactForm.scss'
 import EmailService from '../../services/email/email.service';
-import LoadingSpinner from '../loading-spinner/loading-spinner';
-import { Outcome } from './ContactForm.typings';
+import SubmitButton from '../submit-button/submit-button';
+import { Outcome } from '../submit-button/submit-button.typings';
 
 function ContactForm() {
 
@@ -58,13 +58,7 @@ function ContactForm() {
                 <input type='text' className='text-field name-field' placeholder='Name' value={name} onChange={(e) => setName(e.target.value)}/>
                 <input type='text' className='text-field subject-field' placeholder='Subject' value={subject} onChange={(e) => setSubject(e.target.value)}/>
                 <textarea className='text-field message-field' maxLength={128} placeholder='Message' value={message} onChange={(e) => setMessage(e.target.value)}/>
-                <button type='submit' className={outcome}>{ 
-                    loading ? 
-                        <LoadingSpinner size='SMALL' color='BLACK'></LoadingSpinner> : 
-                        outcome !== 'neutral' ?
-                            <img src={`/assets/icons/${outcome === 'isSuccess' ? 'check' : 'x'}.svg`}/> :
-                            'Send' 
-                }</button>
+                <SubmitButton loading={loading} outcome={outcome}></SubmitButton>
             </form>
         </div>
     )

@@ -6,9 +6,13 @@ import "@fontsource/league-spartan/400.css";
 import "@fontsource/libre-baskerville";
 import "@fontsource/libre-baskerville/400.css";
 import './styles.scss'
+import { Provider } from 'react-redux'
+import { store } from './state/store.ts';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
 )
