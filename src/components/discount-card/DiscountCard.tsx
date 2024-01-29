@@ -17,7 +17,7 @@ function DiscountCard({ discount }: DiscountWrapper ) {
                 <span className="symbol">{ discount.symbol }</span>
                 <span className="name">{ discount.name }</span>
             </div>
-            <span className="tty-price">${ round(discount.ttySalePrice, 2) * 2 }</span>
+            <span className="tty-price">${ round(discount.stickerPrice, 2) * 2 }</span>
         </li>
     )
   }

@@ -1,0 +1,83 @@
+@import 'src/variables';
+
+.hamburger-react {
+    margin: 0 9px;
+}
+
+
+.drop-down-container {
+    $drop-down-menu-width: 200px;
+    height: 0;
+    width: 0;
+    position: relative;
+    top: 40px;
+    right: calc($drop-down-menu-width + 32px);
+
+    .drop-down {
+        width: $drop-down-menu-width;
+        text-decoration: none;
+        list-style-type: none;
+        margin: 0;
+        padding: 32px 16px;
+        background: $light-gray;
+        box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.25);
+        border-radius: 4px;
+        gap: 15px;
+        display: flex;
+        flex-direction: column;
+
+        .drop-down-item {
+            display: flex;
+            align-items: center;
+            height: 40px;
+            border-radius: 4px;
+            box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.25);
+            font-family: $league-spartan;
+            font-size: $plus-font;
+            background: $magnolia-white;
+
+            a {
+                text-decoration: none;
+                height: 100%;
+                width: 100%;
+                padding-left: 16px;
+                padding: 10px 0 0 16px;
+                box-sizing: border-box;
+            }
+
+            .active {
+                color: $base-purple;
+            }
+
+            .inactive {
+                color: $dark-gray;
+            }
+
+        }
+
+        .drop-down-item:hover {
+            -webkit-transition: all .5s;
+            -moz-transition: all .5s;
+            -o-transition: all .5s;
+            transition: all .5s;
+        }
+
+
+        .drop-down-item.active:hover {
+            text-shadow:
+                -0.25px -0.25px 0 $base-purple,
+                0.25px -0.25px 0 $base-purple,
+                -0.25px 0.25px 0 $base-purple,
+                0.25px 0.25px 0 $base-purple;
+        }
+
+        .drop-down-item.inactive:hover {
+            text-shadow:
+                -0.25px -0.25px 0 $dark-gray,
+                0.25px -0.25px 0 $dark-gray,
+                -0.25px 0.25px 0 $dark-gray,
+                0.25px 0.25px 0 $dark-gray;
+        }
+
+    }
+}

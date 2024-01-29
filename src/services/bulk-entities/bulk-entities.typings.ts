@@ -12,14 +12,13 @@ export interface BulkEntitiesResponse {
 }
 
 export interface SimpleDiscount {
+    cik: string,
     name: string,
     symbol: string,
-    ratio_Price: number,
-    ttmSalePrice: number,
-    tfySalePrice: number,
-    ttySalePrice: number,
-    cik: string,
-    active: boolean
+    active: boolean,
+    stickerPrice: number,
+    discountedCashFlowPrice: number,
+    benchmarkRatioPrice: number,
 }
 
 export interface BulkIdentitiesWrapper {

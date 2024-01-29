@@ -8,3 +8,14 @@ body {
 #root {
     height: 100%;
 }
+
+button {
+    padding-block: 0;
+    padding-inline: 0;
+    border-width: 0;
+    cursor: pointer;
+}
+
+ul {
+    padding-inline-start: 0;
+}
