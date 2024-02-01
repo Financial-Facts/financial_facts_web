@@ -26,14 +26,14 @@ function MainPage() {
     }, []);
 
     return (
-      <div className='main-page'>
+      <main className='main-page'>
         <Header text="Financial Facts" subtext="Your Gateway to Undervalued Stocks!"></Header>
         <About></About>
         <DiscountDisplaySection></DiscountDisplaySection>
         <FactsLinkSection></FactsLinkSection>
         <ContactSection></ContactSection>
         <Footer></Footer>
-      </div>
+      </main>
     )
 }
   

@@ -1,0 +1,24 @@
+.switch-toggle {
+    display: flex;
+    background: #242729;
+    width: fit-content;
+ }
+
+ .toggle-option {
+    display: flex;
+ }
+
+ .switch-toggle input {
+   display: none;
+ }
+
+ .switch-toggle input + label {
+   padding: 7px;
+   float:left;
+   color: #fff;
+   cursor: pointer;
+ }
+ 
+ .switch-toggle input:checked + label {
+   background: green;
+ }

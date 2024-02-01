@@ -2,11 +2,16 @@
 
 .search {
     transition-duration: 0.4s;
-    border-width: 0;
-    padding-block: 0;
-    gap: 8px;
     padding-right: 16px;
     box-sizing: border-box;
+    flex-direction: column;
+
+    .search-bar-wrapper {
+        display: flex;
+        align-items: center;
+        height: 64px;
+        flex: none;
+    }
 
     .search-icon {
         margin: 0px 9px;
@@ -14,21 +19,10 @@
         filter: invert(13%) sepia(54%) saturate(7494%) hue-rotate(280deg) brightness(103%) contrast(98%);
     }
 
-    .search-bar {
-        background: transparent;
-        padding-block: 0;
-        padding-inline: 0;
-        border-width: 0;
-        height: 50%;
-        width: 100%;
-        color: #000;
-        font-family: $league-spartan;
-        font-size: $large-font;
-    }
-
     .exit-button {
-        height: 50%;
-        width: auto;
+        height: 30px;
+        width: 30px;
+        margin: 9px;
         cursor: pointer;
         filter: invert(13%) sepia(54%) saturate(7494%) hue-rotate(280deg) brightness(103%) contrast(98%);
     }

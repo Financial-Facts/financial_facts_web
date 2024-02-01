@@ -1,15 +1,26 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './expandable-menu.scss';
 import { Divide as Hamburger } from 'hamburger-react';
 import { useSelector } from 'react-redux';
 import { Page, PageState } from '../../state/page/page.typings';
 import { Link } from 'react-router-dom';
+import { ClosurePayload } from '../sticky-menu/StickyMenu';
+import { Subject } from 'rxjs/internal/Subject';
 
-function ExpandableMenu() {
+function ExpandableMenu({ $closeDropdowns }: { $closeDropdowns: Subject<ClosurePayload[]> }) {
 
-    const [isExpanded, setIsExpanded] = useState(false);
+    const [ isExpanded, setIsExpanded ] = useState(false);
     const pages = useSelector<{ page: PageState }, PageState>((state) => state.page);
 
+    useEffect(() => {
+        const watchForClosure = $closeDropdowns
+            .subscribe((payload: ClosurePayload[]) => setIsExpanded(
+                !payload.includes('ALL') && !payload.includes('NAV')));
+        return () => {
+            watchForClosure.unsubscribe();
+        }
+    }, []);
+    
     const renderDropdownMenuList = () => renderDropdownMenuListItems(Object.keys(pages) as Page[]);
 
     const renderDropdownMenuListItems = (pageList: Page[]) => 
@@ -21,9 +32,11 @@ function ExpandableMenu() {
         });
 
     return (
-        <div className={'sticky-menu-option'}
+        <nav className={'sticky-menu-option expandable-menu'}
             aria-expanded={isExpanded}>
             <Hamburger color="#8C19D3"
+                hideOutline={false}
+                toggled={isExpanded}
                 onToggle={(toggled) => setIsExpanded(toggled) }>
             </Hamburger>
             {
@@ -34,7 +47,7 @@ function ExpandableMenu() {
                         </ul>
                     </div> : undefined
             }
-        </div>
+        </nav>
     )
   }
   

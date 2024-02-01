@@ -1,0 +1,17 @@
+@import 'src/variables';
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    
+    .search-bar {
+        background: transparent;
+        height: 50%;
+        width: 100%;
+        color: $dark-gray;
+        font-family: $league-spartan;
+        font-size: $plus-font;
+    }
+}

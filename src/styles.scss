@@ -16,6 +16,14 @@ button {
     cursor: pointer;
 }
 
+input {
+    padding-block: 0;
+    padding-inline: 8px;
+    border-width: 0;
+}
+
 ul {
     padding-inline-start: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
 }

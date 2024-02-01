@@ -31,9 +31,17 @@ export interface Identity {
     name: string
 }
 
+export type SortBy = 'CIK' | 'NAME' | 'SYMBOL';
+
+export type SearchBy = 'CIK' | 'NAME' | 'SYMBOL';
+
+export type Order = 'ASC' | 'DESC';
+
 export interface IdentityRequest {
     startIndex: number,
     limit: number,
-    sortBy: string,
-    order: string
+    keyword?: string,
+    searchBy?: SearchBy,
+    sortBy: SortBy,
+    order: Order
   }

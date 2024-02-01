@@ -1,0 +1,22 @@
+@import 'src/variables';
+
+.dividing-line {
+    height: 1px;
+    background: $dark-gray;
+    opacity: 0.2;
+    margin: 0 0 16px 16px;
+}
+
+.results-dropdown {
+    overflow: auto;
+    max-height: 200px;
+    margin: 0 0 16px 16px;
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
+
+    .identity-item {
+        font-family: $league-spartan;
+        font-size: $normal-font;
+    }
+}
