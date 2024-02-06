@@ -1,0 +1,10 @@
+@import 'src/variables';
+
+.search-filter-form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+    padding: 16px 0 16px 0;
+    border-top: 1px solid rgba(41, 41, 41, .2);
+    font-family: $league-spartan;
+}

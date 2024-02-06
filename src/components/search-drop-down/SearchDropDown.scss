@@ -1,22 +1,71 @@
 @import 'src/variables';
 
-.dividing-line {
-    height: 1px;
-    background: $dark-gray;
-    opacity: 0.2;
-    margin: 0 0 16px 16px;
+.dropdown-container {
+    display: flex;
+    font-family: $league-spartan;
+    font-size: $normal-font;
+    color: $dark-gray;
+    gap: 16px;
+}
+
+.cik {
+    min-width: 108px;
+    width: 108px;
+}
+
+.identity-info {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    justify-content: space-between;
+    gap: 16px;
+    padding-right: 16px;
+
+    div {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    
+    :first-child {
+        white-space: nowrap;
+        display: flex;
+        justify-content: center;
+    }
+}
+
+.search-results-label {
+    margin-bottom: 4px;
+
+    div {
+        display: flex;
+    }
 }
 
 .results-dropdown {
-    overflow: auto;
-    max-height: 200px;
-    margin: 0 0 16px 16px;
-    display: flex;
-    gap: 16px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-bottom: 16px;
     flex-direction: column;
+    padding-top: 16px;
+    border-top: 1px solid rgba(41, 41, 41, .2);
 
     .identity-item {
-        font-family: $league-spartan;
-        font-size: $normal-font;
+        display: flex;
+        gap: 16px;
     }
+
+    .identity-item:hover {
+        color: $base-purple;
+        cursor: pointer;
+    }
+
+}
+
+@media only screen and (max-width: 576px) {
+
+    .results-dropdown .identity-item div {
+        width: 100%;
+    }
+
 }

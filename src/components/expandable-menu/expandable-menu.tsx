@@ -20,6 +20,12 @@ function ExpandableMenu({ $closeDropdowns }: { $closeDropdowns: Subject<ClosureP
             watchForClosure.unsubscribe();
         }
     }, []);
+
+    useEffect(() => {
+        if (isExpanded) {
+            $closeDropdowns.next([ 'SEARCH' ]);
+        }
+    }, [ isExpanded ]);
     
     const renderDropdownMenuList = () => renderDropdownMenuListItems(Object.keys(pages) as Page[]);
 

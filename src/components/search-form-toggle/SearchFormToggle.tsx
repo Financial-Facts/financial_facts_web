@@ -1,3 +1,4 @@
+import { handleEnterKeyEvent } from '../../utilities';
 import './SearchFormToggle.scss';
 
 export interface ToggleOption <T> {
@@ -5,23 +6,27 @@ export interface ToggleOption <T> {
     input: T
 }
 
-function SearchFormToggle<T>({ name, defaultId, options, setter }: {
+function SearchFormToggle<T>({ name, label, defaultId, options, setter }: {
     name: string,
+    label: string,
     defaultId: string,
     options: ToggleOption<T>[],
-    setter: (_: T) => void
+    setter?: (_: T) => void
 }) {
 
     const handleToggleChange = (id: string) => {
         const option = options.find(option => option.id === id);
-        if (option) {
+        if (option && setter) {
             setter(option.input);
         }
     }
     
     const renderToggleOptions = () => {
         return options.map((option, index) =>
-        <div className='toggle-option' key={`${name}-state-${index}`}>
+        <div className='toggle-option'
+            tabIndex={0}
+            key={`${name}-state-${index}`}
+            onKeyDown={(e) => handleEnterKeyEvent(e, () => handleToggleChange(option.id))}>
             <input id={`${name}-state-${index}`}
                 type="radio"
                 name={name}
@@ -32,9 +37,14 @@ function SearchFormToggle<T>({ name, defaultId, options, setter }: {
     }
 
     return (
-        <div className="switch-toggle switch-3 switch-candy">
-           { renderToggleOptions() }
-      </div>
+        <div className='multi-toggle'>  
+            <span>
+                { label }
+            </span>
+            <div id={`${name}-toggle-group`} className="switch-toggle switch-3 switch-candy">
+                { renderToggleOptions() }
+            </div>
+        </div>
     )
   }
   

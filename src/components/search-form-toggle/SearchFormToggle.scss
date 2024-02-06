@@ -1,24 +1,40 @@
-.switch-toggle {
+@import 'src/variables';
+
+.multi-toggle {
     display: flex;
-    background: #242729;
-    width: fit-content;
- }
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    color: $dark-gray;
+    
+    .switch-toggle {
+        display: flex;
+        background: $magnolia-white;
+        width: fit-content;
+        font-family: $league-spartan;
+        border-radius: 25px;
+        border: 1px solid rgba(41, 41, 41, .2);
+    }
+    
+    .toggle-option {
+        display: flex;
+    }
+    
+    .switch-toggle input {
+        display: none;
+    }
+    
+    .switch-toggle input + label {
+        padding: 7px;
+        float: left;
+        color: $dark-gray;
+        cursor: pointer;
+    }
+    
+    .switch-toggle input:checked + label {
+        background: $base-purple;
+        color: $off-white;
+        border-radius: 25px;
+    }
 
- .toggle-option {
-    display: flex;
- }
-
- .switch-toggle input {
-   display: none;
- }
-
- .switch-toggle input + label {
-   padding: 7px;
-   float:left;
-   color: #fff;
-   cursor: pointer;
- }
- 
- .switch-toggle input:checked + label {
-   background: green;
- }
+}

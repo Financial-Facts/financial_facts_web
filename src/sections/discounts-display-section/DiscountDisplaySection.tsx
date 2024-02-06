@@ -6,6 +6,7 @@ import NavCircleList from '../../components/nav-circle-list/NavCircleList'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { DiscountState } from '../../state/discounts/discounts.slice'
+import { CONSTANTS } from '../../components/constants'
 
 export interface DiscountDisplayParams {
   discounts: SimpleDiscount[],
@@ -99,7 +100,7 @@ function DiscountDisplaySection() {
         { loading ? (
           <LoadingSpinner size='LARGE' color='PURPLE'></LoadingSpinner>
         ) : (
-          <div className={`body ${usingArrowNavigation ? 'body-arrows' : ''}`}>
+          <div className={`body ${usingArrowNavigation ? 'body-arrows' : CONSTANTS.EMPTY}`}>
             { renderArrowButton('LEFT') }
             <ul ref={ (e) => initDiscountListRef(e) }
               className='discounts'>

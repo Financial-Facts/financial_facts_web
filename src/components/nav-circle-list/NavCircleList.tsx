@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { SimpleDiscount } from "../../services/bulk-entities/bulk-entities.typings"
 import "./NavCircleList.scss"
+import { CONSTANTS } from "../constants"
 
 export interface DiscountDisplayParams {
   discounts: SimpleDiscount[],
@@ -30,7 +31,7 @@ function NavCircleList({ numOfCircles, setCurrentCardIndex }: {
       return navCircles.map((isActive, index) => {
         return <div
             key={`nav-circle-${index}`}
-            className={'nav-circle ' + (isActive ? 'active' : '')}
+            className={'nav-circle ' + (isActive ? 'active' : CONSTANTS.EMPTY)}
             onClick={ () => handleCircleSelection(index) }></div>
       });
     }

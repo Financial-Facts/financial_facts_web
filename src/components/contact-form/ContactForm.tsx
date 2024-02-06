@@ -3,19 +3,20 @@ import './ContactForm.scss'
 import EmailService from '../../services/email/email.service';
 import SubmitButton from '../submit-button/submit-button';
 import { Outcome } from '../submit-button/submit-button.typings';
+import { CONSTANTS } from '../constants';
 
 function ContactForm() {
 
-    const [name, setName] = useState('');
-    const [subject, setSubject] = useState('');
-    const [message, setMessage] = useState('');
+    const [name, setName] = useState(CONSTANTS.EMPTY);
+    const [subject, setSubject] = useState(CONSTANTS.EMPTY);
+    const [message, setMessage] = useState(CONSTANTS.EMPTY);
     const [loading, setLoading] = useState(false);
     const [outcome, setOutcome] = useState('neutral' as Outcome);
 
     const clearFields = (): void => {
-        setName('');
-        setSubject('');
-        setMessage('');
+        setName(CONSTANTS.EMPTY);
+        setSubject(CONSTANTS.EMPTY);
+        setMessage(CONSTANTS.EMPTY);
     }
 
     const validateFields = (): boolean => {

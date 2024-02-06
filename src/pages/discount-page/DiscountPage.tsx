@@ -13,6 +13,7 @@ import { AppDispatch } from '../../state/store';
 import ContactSection from '../../sections/contact-section/ContactSection';
 import Footer from '../../sections/footer/Footer';
 import { setActivePage } from '../../state/page/page.slice';
+import { CONSTANTS } from '../../components/constants';
 
 
 function DiscountPage() {
@@ -59,7 +60,7 @@ function DiscountPage() {
 
     return (
       <div className='discount-page'>
-        <Header text='Current Discounts' subtext={''}></Header>
+        <Header text='Current Discounts' subtext={CONSTANTS.EMPTY}></Header>
         <PeriodicDataTable tableData={ dataSets }></PeriodicDataTable>
         <ContactSection></ContactSection>
         <Footer></Footer>

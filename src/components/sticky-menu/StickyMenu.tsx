@@ -64,8 +64,8 @@ function StickyMenu() {
     return (
         <section className='sticky-menu'
             ref={ (e) => initStickyMenuRef(e) }>
-            <ExpandableSearch $closeDropdowns={$closeDropdowns}></ExpandableSearch>
-            <ExpandableMenu $closeDropdowns={$closeDropdowns}></ExpandableMenu>
+            <ExpandableSearch $closeDropdowns={$closeDropdowns}/>
+            <ExpandableMenu $closeDropdowns={$closeDropdowns}/>
         </section>
     )
   }

@@ -2,9 +2,11 @@
 
 .search {
     transition-duration: 0.4s;
-    padding-right: 16px;
+    padding: 0 16px;
     box-sizing: border-box;
     flex-direction: column;
+    height: 64px;
+    width: 450px;
 
     .search-bar-wrapper {
         display: flex;
@@ -28,13 +30,17 @@
     }
 }
 
+.display-filter-form {
+    height: 206px;
+}
+
+.display-search-results {
+    height: 410px;
+}
+
 .search-button {
     padding: 0;
     margin: 0;
     cursor: pointer;
     width: 64px;
-}
-
-.search-field {
-    width: 450px;
 }

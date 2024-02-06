@@ -1,10 +1,11 @@
+import { CONSTANTS } from "../../components/constants";
 import StickyMenu from "../../components/sticky-menu/StickyMenu";
 import "./Header.scss"
 
 function Header({ text, subtext }: { text: string, subtext?: string }) {
 
     return (
-      <header className={`header ${subtext ? 'fixed-header-height' : ''}`}>
+      <header className={`header ${subtext ? 'fixed-header-height' : CONSTANTS.EMPTY}`}>
         <div className="logo-wrapper">
             <img src="/assets/logo.svg" className="logo"/>
         </div>

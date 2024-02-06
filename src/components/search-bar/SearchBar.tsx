@@ -7,53 +7,63 @@ import { filter } from 'rxjs/internal/operators/filter';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChanged';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
-import { Identity, Order, SearchBy, SortBy } from '../../services/bulk-entities/bulk-entities.typings';
+import { CONSTANTS } from '../constants';
+import { IdentityListAction, SearchCriteria, SearchCriteriaAction } from '../expandable-search/expandable-search.typings';
 
 
-function SearchBar({ setIdentities, sortBy, searchBy, order }: {
-    setIdentities: (identities: Identity[]) => void,
-    sortBy: SortBy,
-    searchBy: SearchBy,
-    order: Order
+function SearchBar({ identityListDispatch, searchCriteria, dispatch }: {
+    identityListDispatch: (action: IdentityListAction) => void,
+    searchCriteria: SearchCriteria,
+    dispatch: (action: SearchCriteriaAction) => void
 }) {
 
     const [ searchBarRef, setSearchBarRef ] = useState(null as HTMLInputElement | null);
 
     useEffect(() => {
         if (searchBarRef) {
-            const inputSubscription = fromEvent<InputEvent>(searchBarRef, 'input')
-                .pipe(
-                    map(event => {
-                        const target = event.target;
-                        if (target && target === searchBarRef) {
-                            return searchBarRef.value;
-                        }
-                    }),
-                    filter(input => !!input && input.length > 2),
-                    debounceTime(300),
-                    distinctUntilChanged(),
-                    switchMap(input => BulkEntitiesService.fetchBulkIdentities({
-                        startIndex: 0,
-                        limit: 100,
-                        searchBy: searchBy,
-                        sortBy: sortBy,
-                        order: order,
-                        keyword: input
-                    })))
-                .subscribe(response => {
-                    setIdentities(response.identities);
-                });
+            const inputSubscription = subscribeToInputEvents(searchBarRef);
+            searchBarRef.dispatchEvent(new Event('input', { bubbles: true }));
             return () => {
-                inputSubscription.unsubscribe();
+                if (inputSubscription) {
+                    inputSubscription.unsubscribe();
+                }
             }
         }
-    }, [ searchBarRef, sortBy, searchBy, order ]);
+    }, [ searchBarRef, searchCriteria.sortBy, searchCriteria.searchBy, searchCriteria.order ]);
 
-    useEffect(() => {
-        if (searchBarRef) {
-            searchBarRef.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-    }, [ sortBy, searchBy, order ]);
+    const subscribeToInputEvents = (searchBar: HTMLInputElement) => 
+        fromEvent<InputEvent>(searchBar, 'input')
+            .pipe(
+                map(event => {
+                    const target = event.target;
+                    if (target && target === searchBarRef) {
+                        return searchBarRef.value;
+                    }
+                }),
+                debounceTime(CONSTANTS.DEBOUNCE_TIME),
+                distinctUntilChanged(),
+                filter(input => {
+                    if (!input) {
+                        identityListDispatch({ type: 'reset' });
+                        return false;
+                    }
+                    dispatch({
+                        type: 'set_keyword',
+                        payload: input
+                    });
+                    return true;
+                }),
+                switchMap(input => BulkEntitiesService.fetchBulkIdentities({
+                    startIndex: 0,
+                    limit: CONSTANTS.IDENTITY_BATCH_SIZE,
+                    searchBy: searchCriteria.searchBy,
+                    sortBy: searchCriteria.sortBy,
+                    order: searchCriteria.order,
+                    keyword: input
+                })))
+            .subscribe(response => {
+                identityListDispatch({ type: 'set_list', payload: response.identities });
+            });
 
     const initSearchBarRef = (ref: HTMLInputElement | null) => {
         if (ref) {
