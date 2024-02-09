@@ -10,6 +10,7 @@ import {
 } from 'chart.js';import DiscountPage from "./pages/discount-page/DiscountPage";
 import MainPage from "./pages/main-page/MainPage"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import FactsPage from './pages/facts-page/FactsPage';
 
 ChartJS.register(
   CategoryScale,
@@ -29,6 +30,9 @@ function App() {
         <Route path="/" element={<MainPage/>}/>
         <Route path="/discount" element={<DiscountPage/>}>
           <Route path=":cik" element={<DiscountPage/>}/>
+        </Route>
+        <Route path='/facts' element={<FactsPage/>}>
+          <Route path=":cik" element={<FactsPage/>}/>
         </Route>
       </Routes>
     </BrowserRouter>

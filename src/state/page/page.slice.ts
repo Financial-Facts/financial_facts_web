@@ -16,7 +16,7 @@ const initialState: PageState = {
     },
     'Facts': {
         active: false,
-        link: ''
+        link: '/facts'
     },
     'API Docs': {
         active: false,

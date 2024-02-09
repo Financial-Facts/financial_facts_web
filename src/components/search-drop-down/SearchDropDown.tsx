@@ -7,6 +7,7 @@ import { map } from 'rxjs/internal/operators/map';
 import { CONSTANTS } from '../constants';
 import BulkEntitiesService from '../../services/bulk-entities/bulk-entities.service';
 import { IdentityListAction, SearchCriteria } from '../expandable-search/expandable-search.typings';
+import { Link } from 'react-router-dom';
 
 
 function SearchDropDown({ identities, identityListDispatch, searchCriteria }: {
@@ -64,16 +65,17 @@ function SearchDropDown({ identities, identityListDispatch, searchCriteria }: {
 
     const renderDropDownItems = () => {
         return identities.map(identity =>
-            <li className={`identity-item`}
-                key={identity.cik}
+            <li key={identity.cik}
                 tabIndex={0}>
-                <span className='cik'>{identity.cik}</span>
-                <div className='identity-info'>
-                    <span>
-                        { identity.symbol }
-                    </span>
-                    <div>{identity.name}</div>
-                </div>
+                <Link className='identity-item' to={`/facts/${identity.cik}`}>
+                    <span className='cik'>{identity.cik}</span>
+                    <div className='identity-info'>
+                        <span>
+                            { identity.symbol }
+                        </span>
+                        <div>{identity.name}</div>
+                    </div>
+                </Link>
             </li>)
     }
 

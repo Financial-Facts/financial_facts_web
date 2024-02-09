@@ -53,11 +53,13 @@
     .identity-item {
         display: flex;
         gap: 16px;
+        color: $dark-gray;
+        cursor: pointer;
+        text-decoration: none;
     }
 
     .identity-item:hover {
         color: $base-purple;
-        cursor: pointer;
     }
 
 }

@@ -5,15 +5,14 @@ import { SimpleDiscount } from '../../services/bulk-entities/bulk-entities.typin
 import Header from '../../sections/header/Header';
 import DiscountService from '../../services/discount/discount.service';
 import { Discount } from '../../services/discount/discount.typings';
-import PeriodicDataTable from '../../components/periodic-data-table/PeriodicDataTable';
-import { TableData } from '../../components/periodic-data-table/PeriodicDataTable.typings';
+import PeriodicDataTable from '../../components/periodic-data-chart/PeriodicDataChart';
+import { TableData } from '../../components/periodic-data-chart/PeriodicDataChart.typings';
 import { useDispatch, useSelector } from 'react-redux';
 import { DiscountState, loadSimpleDiscounts } from '../../state/discounts/discounts.slice';
 import { AppDispatch } from '../../state/store';
 import ContactSection from '../../sections/contact-section/ContactSection';
 import Footer from '../../sections/footer/Footer';
 import { setActivePage } from '../../state/page/page.slice';
-import { CONSTANTS } from '../../components/constants';
 
 
 function DiscountPage() {
@@ -60,7 +59,7 @@ function DiscountPage() {
 
     return (
       <div className='discount-page'>
-        <Header text='Current Discounts' subtext={CONSTANTS.EMPTY}></Header>
+        <Header text='Discounts' subtext='Company valuations and related data'></Header>
         <PeriodicDataTable tableData={ dataSets }></PeriodicDataTable>
         <ContactSection></ContactSection>
         <Footer></Footer>

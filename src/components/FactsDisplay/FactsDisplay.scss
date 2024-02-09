@@ -1,0 +1,43 @@
+@import 'src/variables';
+
+.key-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: $normal-font;
+    font-family: $league-spartan;
+    padding: 0 32px;
+
+    .key {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-width: 100px;
+        padding: 8px 16px;
+        background-color: $light-gray;
+        color: $dark-gray;
+        border: 1px solid rgba(41, 41, 41, .2);
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .key:hover {
+        background-color: $base-purple;
+        color: $off-white;
+    }
+
+    .active {
+        background-color: $base-purple;
+        color: $off-white;
+    }
+}
+
+.vertical {
+    flex-direction: column;
+}
+
+.scrollable {
+    padding: 0 16px 0 32px;
+}

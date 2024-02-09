@@ -1,32 +1,43 @@
+import { SPAN } from '../../sections/facts-display-section/FactsDisplaySection';
+import { filterBySpan } from '../../utilities';
+import { TableData } from '../periodic-data-chart/PeriodicDataChart.typings';
 import './PeriodicDataTable.scss';
-import { Line } from 'react-chartjs-2';
-import { PeriodicData } from '../../services/discount/discount.typings';
-import { ChartDataset } from 'chart.js';
-import { TableData } from './PeriodicDataTable.typings';
-import { normalizeYearOverYear, generateColor } from './PeriodicDataTable.utils';
 
 
-function PeriodicDataTable({ tableData }: { tableData: TableData[] }) {
+function PeriodicDataTable({ tableDataList, span }: { tableDataList: TableData[], span: SPAN }) {
 
-    const buildDataSet = (label: string, periodicData: PeriodicData[]): ChartDataset<"line", any> => ({
-      label: label,
-      data: normalizeYearOverYear(periodicData.map(periodData => periodData.value)),
-      borderWidth: 1,
-      borderColor: generateColor(),
-      backgroundColor: generateColor()
-    });
-
-    const renderTable = () => {
-        if (tableData.length > 0) {
-            const labels = tableData[0].periodicData.map(periodData => periodData.announcedDate).slice(1);
-            return <Line data={{
-              labels: labels,
-              datasets: tableData.map(data => buildDataSet(data.label, data.periodicData))
-            }}/>
-        }
+    const renderDataRows = (tableData: TableData, tableNumber: number) => {
+        const columns = filterBySpan(tableData.periodicData, span).map(periodicData => periodicData.value);
+        let key = 0;
+        return <tbody>
+            <tr>
+                { columns.map(col => <td key={`tableNumber-${tableNumber}-col-${key++}`}> { col ? col.toString() : '' } </td>)}
+            </tr>
+        </tbody>
     }
 
-    return renderTable();
+    const renderHeaderRows = (tableData: TableData, tableNumber: number) => {
+        const columns = filterBySpan(tableData.periodicData, span).map(periodicData => periodicData.announcedDate);
+        let key = 0;
+        return <thead>
+            <tr>
+                { columns.map(col => <th key={`table-${tableNumber}-col-${key++}`}> { col.toString() } </th>)}
+            </tr>
+        </thead>
+    }
+
+    const renderTables = () => tableDataList.map((tableData, index) =>
+        <div className='table-wrapper' key={tableData.label}>
+            <div className='table-title'> {tableData.label} </div>
+            <table key={`table-${index}`} className='periodic-data-table'>
+                { renderHeaderRows(tableData, index) }
+                { renderDataRows(tableData, index) }
+            </table>
+        </div>
+    );
+
+    return renderTables()
+
 }
   
 export default PeriodicDataTable;

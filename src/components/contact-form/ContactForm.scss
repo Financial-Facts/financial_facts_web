@@ -18,15 +18,15 @@
     form {
         display: flex;
         flex-direction: column;
-        flex: 1;
         justify-content: space-between;
-        min-height: 202px;
+        height: 202px;
 
         .text-field {
             border-radius: 4px;
             border: 1px solid $dark-gray;
             background: $magnolia-white;
             font-family: $libre-baskerville;
+            padding-inline: 8px;
         }
         
         textarea {

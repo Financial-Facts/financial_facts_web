@@ -1,0 +1,35 @@
+@import 'src/variables';
+
+.table-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding-right: 16px;
+    width: 100%;
+
+    .table-title {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        padding-bottom: 4px;
+    }
+
+    .periodic-data-table {
+        width: 100%;
+        overflow: auto;
+        display: table-header-group;
+        border-collapse: collapse;
+        padding: 8px;
+        border: 2px solid rgba(41, 41, 41, .2);
+        
+        th {
+            white-space: nowrap;
+            text-decoration: underline;
+            color: $base-purple;
+        }
+    
+        th, td {
+            padding: 8px;
+        }
+    
+    }
+}
