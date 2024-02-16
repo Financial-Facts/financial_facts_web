@@ -60,7 +60,7 @@ function DiscountPage() {
     return (
       <div className='discount-page'>
         <Header text='Discounts' subtext='Company valuations and related data'></Header>
-        <PeriodicDataTable tableData={ dataSets }></PeriodicDataTable>
+        <PeriodicDataTable tableData={ dataSets } span={'ALL'}></PeriodicDataTable>
         <ContactSection></ContactSection>
         <Footer></Footer>
       </div>

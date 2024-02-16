@@ -5,9 +5,10 @@ import { useEffect, useState } from 'react';
 import { SearchCriteria, SearchCriteriaAction } from '../expandable-search/expandable-search.typings';
 
 
-function SearchFilterForm({ searchCriteria, dispatch }: {
+function SearchFilterForm({ searchCriteria, dispatch, renderDelay }: {
     searchCriteria: SearchCriteria,
-    dispatch: (action: SearchCriteriaAction) => void
+    dispatch: (action: SearchCriteriaAction) => void,
+    renderDelay: number
  }) {
     const [ displayForm, setDisplayForm ] = useState(false);
     let timeout: ReturnType<typeof setTimeout>;
@@ -16,7 +17,7 @@ function SearchFilterForm({ searchCriteria, dispatch }: {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
             setDisplayForm(true);
-        }, 400);
+        }, renderDelay);
     }, []);
 
     return (

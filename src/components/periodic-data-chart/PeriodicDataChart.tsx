@@ -3,13 +3,13 @@ import { Line } from 'react-chartjs-2';
 import { PeriodicData } from '../../services/discount/discount.typings';
 import { ChartDataset } from 'chart.js';
 import { TableData } from './PeriodicDataChart.typings';
-import { normalizeYearOverYear, generateColor } from './PeriodicDataChart.utils';
+import { normalizeYearOverYear } from './PeriodicDataChart.utils';
 import { filterBySpan } from '../../utilities';
 import { SPAN } from '../../sections/facts-display-section/FactsDisplaySection';
 
 
 function PeriodicDataChart({ tableData, normalize, span }: {
-    tableData: TableData[],
+    tableData: TableData,
     span: SPAN,
     normalize?: boolean
 }) {
@@ -20,18 +20,16 @@ function PeriodicDataChart({ tableData, normalize, span }: {
           normalizeYearOverYear(periodicData.map(periodData => periodData.value)) :
           periodicData.map(periodData => periodData.value),
       borderWidth: 1,
-      borderColor: generateColor(),
-      backgroundColor: generateColor()
+      borderColor: 'rgb(140, 25, 211)',
+      backgroundColor: 'rgb(247, 238, 253)'
     });
 
     const renderTable = () => {
-        if (tableData.length > 0) {
-            const labels = filterBySpan(tableData[0].periodicData, span).map(periodData => periodData.announcedDate);
-            return <Line data={{
-              labels: labels,
-              datasets: tableData.map(data => buildDataSet(data.label, filterBySpan(data.periodicData, span)))
-            }}/>
-        }
+        const labels = filterBySpan(tableData.periodicData, span).map(periodData => periodData.announcedDate);
+        return <Line data={{
+            labels: labels,
+            datasets: [buildDataSet(tableData.label, filterBySpan(tableData.periodicData, span))]
+        }}/>
     }
 
     return renderTable();

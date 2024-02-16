@@ -1,12 +1,23 @@
 @import 'src/variables';
 
-.search {
+.standalone-search-bar {
+    width: 100%;
+
+    .results-dropdown {
+        height: 300px;
+    }
+}
+
+.sticky-search-bar {
+    width: 450px;
     transition-duration: 0.4s;
+    height: 64px;
+}
+
+.search {
     padding: 0 16px;
     box-sizing: border-box;
     flex-direction: column;
-    height: 64px;
-    width: 450px;
 
     .search-bar-wrapper {
         display: flex;

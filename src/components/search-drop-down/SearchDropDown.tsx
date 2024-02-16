@@ -8,6 +8,7 @@ import { CONSTANTS } from '../constants';
 import BulkEntitiesService from '../../services/bulk-entities/bulk-entities.service';
 import { IdentityListAction, SearchCriteria } from '../expandable-search/expandable-search.typings';
 import { Link } from 'react-router-dom';
+import { initRef } from '../../utilities';
 
 
 function SearchDropDown({ identities, identityListDispatch, searchCriteria }: {
@@ -65,8 +66,7 @@ function SearchDropDown({ identities, identityListDispatch, searchCriteria }: {
 
     const renderDropDownItems = () => {
         return identities.map(identity =>
-            <li key={identity.cik}
-                tabIndex={0}>
+            <li key={identity.cik}>
                 <Link className='identity-item' to={`/facts/${identity.cik}`}>
                     <span className='cik'>{identity.cik}</span>
                     <div className='identity-info'>
@@ -79,12 +79,6 @@ function SearchDropDown({ identities, identityListDispatch, searchCriteria }: {
             </li>)
     }
 
-    const initSearchResultsRef = (ref: HTMLUListElement | null) => {
-        if (ref) {
-            setSearchResultsRef(ref);
-        }
-    };
-
     return (
         <>  
             <div className='search-results-label dropdown-container'>
@@ -95,7 +89,7 @@ function SearchDropDown({ identities, identityListDispatch, searchCriteria }: {
                 </div>
             </div>
             <ul id='search-results' className='results-dropdown dropdown-container' 
-                ref={ (e) => initSearchResultsRef(e) }>
+                ref={ (ref) => initRef(ref, setSearchResultsRef) }>
                 { renderDropDownItems() }
             </ul>
         </>

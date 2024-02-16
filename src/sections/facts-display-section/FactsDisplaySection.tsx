@@ -1,48 +1,60 @@
 import { useEffect, useState } from 'react';
 import './FactsDisplaySection.scss'
 import FactsService from '../../services/facts/facts.service';
-import { Facts, Taxonomy, UnitPeriod } from '../../services/facts/facts.typings';
+import { Facts, Taxonomy } from '../../services/facts/facts.typings';
 import LoadingSpinner from '../../components/loading-spinner/loading-spinner';
-import FactsDisplay from '../../components/FactsDisplay/FactsDisplay';
 import { CONSTANTS } from '../../components/constants';
-import { PeriodicData } from '../../services/discount/discount.typings';
-import { TableData } from '../../components/periodic-data-chart/PeriodicDataChart.typings';
 import PeriodicDataChart from '../../components/periodic-data-chart/PeriodicDataChart';
 import PeriodicDataTable from '../../components/periodic-data-table/PeriodicDataTable';
 import SearchFormToggle from '../../components/search-form-toggle/SearchFormToggle';
+import { buildTableData, initRef } from '../../utilities';
+import ZeroState from '../../components/zero-state/ZeroState';
+import ExpandableSearch from '../../components/expandable-search/expandable-search';
+import { Subject } from 'rxjs/internal/Subject';
+import { ClosurePayload } from '../../components/sticky-menu/StickyMenu';
+import ButtonOptionList from '../../components/ButtonOptionList/ButtonOptionList';
+import ResizeObserverService from '../../services/resize-observer-service/resize-observer.service';
 
 export type SPAN = 'ALL' | 'TTM' | 'TFY' | 'TTY';
 
 function FactsDisplaySection({ cik }: { cik: string | undefined }) {
 
-    const [ isLoading, setIsLoading ] = useState(false);
+    const [ isLoading, setIsLoading ] = useState(true);
     const [ facts, setFacts ] = useState(undefined as Facts | undefined);
     const [ taxonomy, setTaxonomy ] = useState(CONSTANTS.EMPTY as Taxonomy);
-    const [ selectedKey, setKey ] = useState(CONSTANTS.EMPTY);
+    const [ selectedDataKey, setDataKey ] = useState(CONSTANTS.EMPTY);
     const [ span, setSpan ] = useState('ALL' as SPAN);
+    const [ chartWrapperRef, setChartWrapperRef ] = useState(null as HTMLDivElement | null);
+    const [ factsWrapperRef, setFactsWrapperRef ] = useState(null as HTMLDivElement | null);
 
     useEffect(() => {
         if (cik) {
             setTaxonomy(CONSTANTS.EMPTY as Taxonomy);
-            setIsLoading(true);
             const subscription = FactsService.getFacts(cik).subscribe(facts => {
                 setFacts(facts);
+                setIsLoading(false);
             });
             return () => {
                 subscription.unsubscribe();
             }
+        } else {
+            setDataKey(CONSTANTS.EMPTY);
+            setIsLoading(false);
         }
     }, [ cik ]);
 
     useEffect(() => {
-        if (facts) {
-            setIsLoading(false);
-        }
-    }, [ facts ]);
+        setDataKey(CONSTANTS.EMPTY);
+    }, [ taxonomy ]);
 
     useEffect(() => {
-        setKey(CONSTANTS.EMPTY);
-    }, [ taxonomy ]);
+        if (chartWrapperRef && factsWrapperRef) {
+            const observerId = ResizeObserverService.matchHeight(chartWrapperRef, factsWrapperRef);
+            return (() => {
+                ResizeObserverService.disconnectObserver(observerId);
+            })
+        }
+    }, [ chartWrapperRef]);
 
     const getTaxonomyKeys = (): Taxonomy[] => {
         if (facts) {
@@ -58,89 +70,71 @@ function FactsDisplaySection({ cik }: { cik: string | undefined }) {
         return [];
     }
 
-    const renderUnitDataElements = () => {
+    const renderZeroState = () => {
+        let message = CONSTANTS.EMPTY;
+        let support = CONSTANTS.EMPTY;
         if (facts && taxonomy) {
-            const taxonomyData = facts.data.taxonomyReports[taxonomy];
-            if (taxonomyData) {
-                return <FactsDisplay <string>
-                    keys={Object.keys(taxonomyData)}
-                    setter={setKey}
-                    selectedKey={selectedKey}
-                    orientation='vertical'
-                    scrollable={true}/>
-            }
+            message = 'Select a Dataset';
+            support = 'View historical data for selected taxonomy';
+        } else {
+            message = 'Select a Taxonomy';
+            support = 'View information filed using a specific taxonomy';
         }
-        return [];
+        return <ZeroState message={message} supportText={support}/>
     }
 
-    const buildUnitsToDataMap = (units: Record<string, UnitPeriod[]>): Record<string, PeriodicData[]> => {
-        return Object.keys(units).reduce((acc, key) => {
-            const periods = units[key];
-            if (periods.length > 0) {
-                acc[key] = buildPeriodicData(periods);
-            }
-            return acc;
-        }, {} as Record<string, PeriodicData[]>);
-    }
-
-    const buildPeriodicData = (periods: UnitPeriod[]): PeriodicData[] => {
-        if (cik) {
-            return periods ?
-                periods.reduce((acc, period) => {
-                    if (!acc.some(val => val.announcedDate.valueOf() === period.end.valueOf())) {
-                        acc.push({
-                            cik: cik,
-                            announcedDate: period.end,
-                            period: period.fp,
-                            value: period.val
-                        })
-                    }
-                    return acc;
-                }, [] as PeriodicData[]) : []
-        }
-        return [];
-    }
-
-    const buildTableData = (): TableData[] => {
-        if (facts && taxonomy && selectedKey) {
+    const renderDataVisualizations = () => {
+        if (cik && facts && taxonomy && selectedDataKey) {
             const taxonomyReport = facts.data.taxonomyReports[taxonomy];
-            const item = taxonomyReport ? taxonomyReport[selectedKey] : undefined;
-            if (item) {
-                const unitMap = buildUnitsToDataMap(item?.units);
-                return Object.keys(unitMap).map(unit => ({
-                    label: `${item.label} (${unit})`,
-                    periodicData: unitMap[unit]
-                }));
-            }
-        }
-        return [];
+            const item = taxonomyReport ? taxonomyReport[selectedDataKey] : undefined;
+            const tableData = buildTableData(cik, item);
+            return tableData.map((data, index) => {
+                data.index = index;
+                return <div key={`visualizations-${index}`} className='visualizations-container'>
+                    <PeriodicDataTable tableData={ data } span={span}/>
+                    <PeriodicDataChart tableData={ data } span={span}/>
+                </div>
+            });
+        }   
     }
 
     return (
-        <>
+        <section className='facts-display-section'>
             {
-                isLoading ? 
-                <LoadingSpinner size='LARGE' color='PURPLE'/> :
-                <section className='facts-display-section'>
-                    <div className='facts-wrapper'>
-                        <span className='divider-text'>Taxonomy</span>
-                        <FactsDisplay <Taxonomy> keys={getTaxonomyKeys()}
-                            setter={setTaxonomy}
-                            selectedKey={taxonomy}
-                            orientation='vertical'/>
+                isLoading ?
+                    <LoadingSpinner size='LARGE' color='PURPLE'/> :
+                    <>
                         {
-                            taxonomy ? <>
-                                <span className='divider-text'>Data</span>
-                                <div className='data-selection-box'>
-                                    { renderUnitDataElements() }
-                                </div>
-                            </> : undefined
+                            facts ? 
+                                <div className={`facts-wrapper
+                                    ${ !taxonomy || !selectedDataKey ? 'missing-visualizations' : CONSTANTS.EMPTY}`}
+                                    ref={(ref) => initRef(ref, setFactsWrapperRef)}>
+                                    <div className='taxonomy-options-wrapper'>
+                                        <span className='divider-text'>Taxonomy</span>
+                                        <ButtonOptionList <Taxonomy> keys={getTaxonomyKeys()}
+                                            setter={setTaxonomy}
+                                            selectedKey={taxonomy}
+                                            orientation='vertical'/>
+                                    </div>
+                                    {
+                                        facts && taxonomy && facts.data.taxonomyReports[taxonomy] ? <>
+                                            <span className='divider-text'>Data</span>
+                                            <div className='data-selection-box'>
+                                                <ButtonOptionList <string>
+                                                    key={taxonomy}
+                                                    keys={ Object.keys(facts.data.taxonomyReports[taxonomy]) }
+                                                    setter={setDataKey}
+                                                    selectedKey={selectedDataKey}
+                                                    orientation='vertical'
+                                                    includeSearch={true}/>
+                                            </div>
+                                        </> : undefined
+                                    }
+                                </div> : undefined
                         }
-                    </div>
-                    <div className='chart-wrapper'>
                         {
-                            facts && taxonomy && selectedKey ? 
-                                <>
+                            facts && taxonomy && selectedDataKey ?
+                                <div className='chart-wrapper' ref={(ref) => initRef(ref, setChartWrapperRef)}>
                                     <SearchFormToggle <SPAN>
                                         name={'SpanToggle'}
                                         label={''}
@@ -159,15 +153,24 @@ function FactsDisplaySection({ cik }: { cik: string | undefined }) {
                                             input: 'TTY'
                                         }]} 
                                         setter={setSpan}/>
-                                    <PeriodicDataTable tableDataList={ buildTableData() } span={span}/>
-                                    <PeriodicDataChart tableData={ buildTableData() } span={span}/>
+                                    {
+                                        renderDataVisualizations()
+                                    }
+                                </div> :
+                            facts ?
+                                <>
+                                    { renderZeroState() }
                                 </> :
-                                undefined
+                                <div className='company-search-wrapper'>
+                                    <div className='divider-text'>Search for Public Entities</div>
+                                    <div className='search-wrapper'>
+                                        <ExpandableSearch $closeDropdowns={new Subject<ClosurePayload[]>()} isStandalone={true}/>                                
+                                    </div>
+                                </div>
                         }
-                    </div>
-                </section>
+                    </>
             }
-        </>
+        </section>
     )
   }
   

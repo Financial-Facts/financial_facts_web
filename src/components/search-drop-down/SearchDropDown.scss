@@ -5,7 +5,6 @@
     font-family: $league-spartan;
     font-size: $normal-font;
     color: $dark-gray;
-    gap: 16px;
 }
 
 .cik {
@@ -47,7 +46,6 @@
     overflow-x: hidden;
     margin-bottom: 16px;
     flex-direction: column;
-    padding-top: 16px;
     border-top: 1px solid rgba(41, 41, 41, .2);
 
     .identity-item {
@@ -56,12 +54,27 @@
         color: $dark-gray;
         cursor: pointer;
         text-decoration: none;
+        padding: 8px 4px;
+        outline: 0;
     }
 
-    .identity-item:hover {
+    .identity-item:hover, .identity-item:focus {
         color: $base-purple;
+        text-decoration: underline;
     }
 
+}
+
+.results-dropdown :nth-child(odd) {
+    .identity-item {
+        background-color: $light-gray;
+    }
+}
+
+.results-dropdown :nth-child(even) {
+    .identity-item {
+        background-color: $off-white;
+    }
 }
 
 @media only screen and (max-width: 576px) {

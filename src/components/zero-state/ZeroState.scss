@@ -1,0 +1,15 @@
+@import 'src/variables';
+
+.zero-state {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    gap: 16px;
+
+    .message {
+        font-size: $plus-font;
+    }
+
+}

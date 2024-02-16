@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { DiscountState } from '../../state/discounts/discounts.slice'
 import { CONSTANTS } from '../../components/constants'
+import { initRef } from '../../utilities'
 
 export interface DiscountDisplayParams {
   discounts: SimpleDiscount[],
@@ -17,10 +18,6 @@ function DiscountDisplaySection() {
 
     const discounts = useSelector< { discounts: DiscountState }, SimpleDiscount[]>((state) => state.discounts.discounts);
     const loading = useSelector< { discounts: DiscountState }, boolean>((state) => state.discounts.loading);
-
-    const initDiscountListRef = (ref: HTMLUListElement | null) => {
-      if (ref) setDiscountListRef(ref);
-    };
 
     const cardWidth = 210;
     const [numCardsToDisplay, setNumCardsToDisplay] = useState(0);
@@ -102,7 +99,7 @@ function DiscountDisplaySection() {
         ) : (
           <div className={`body ${usingArrowNavigation ? 'body-arrows' : CONSTANTS.EMPTY}`}>
             { renderArrowButton('LEFT') }
-            <ul ref={ (e) => initDiscountListRef(e) }
+            <ul ref={ (ref) => initRef(ref, setDiscountListRef) }
               className='discounts'>
               { renderDiscountCards() }
             </ul>

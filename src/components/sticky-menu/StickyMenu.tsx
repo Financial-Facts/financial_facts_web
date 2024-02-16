@@ -3,6 +3,7 @@ import ExpandableMenu from '../expandable-menu/expandable-menu';
 import ExpandableSearch from '../expandable-search/expandable-search';
 import { useEffect, useState } from 'react';
 import { Subject } from 'rxjs/internal/Subject';
+import { fetchChildren, initRef } from '../../utilities';
 
 export type ClosurePayload = 'ALL' | 'NAV' | 'SEARCH';
 
@@ -46,24 +47,9 @@ function StickyMenu() {
         }
     }
 
-    const initStickyMenuRef = (ref: HTMLElement | null) => {
-        if (ref) {
-            setStickyMenuRef(ref);
-        }
-    };
-    
-    const fetchChildren = (element: Element): Element[] => {
-        let result: Element[] = [];
-        const children = Array.from(element.children);
-        children.forEach(child => {
-            result = [...result, ...fetchChildren(child)];
-        });
-        return [...result, element];
-    }
-
     return (
         <section className='sticky-menu'
-            ref={ (e) => initStickyMenuRef(e) }>
+            ref={ (ref) => initRef(ref, setStickyMenuRef) }>
             <ExpandableSearch $closeDropdowns={$closeDropdowns}/>
             <ExpandableMenu $closeDropdowns={$closeDropdowns}/>
         </section>

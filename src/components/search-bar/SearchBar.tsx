@@ -9,6 +9,7 @@ import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChang
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { CONSTANTS } from '../constants';
 import { IdentityListAction, SearchCriteria, SearchCriteriaAction } from '../expandable-search/expandable-search.typings';
+import { initRef } from '../../utilities';
 
 
 function SearchBar({ identityListDispatch, searchCriteria, dispatch }: {
@@ -65,16 +66,10 @@ function SearchBar({ identityListDispatch, searchCriteria, dispatch }: {
                 identityListDispatch({ type: 'set_list', payload: response.identities });
             });
 
-    const initSearchBarRef = (ref: HTMLInputElement | null) => {
-        if (ref) {
-            setSearchBarRef(ref);
-        }
-    };
-
     return (
         <div className='input-wrapper'>
             <input type='text'
-                ref={ (e) => initSearchBarRef(e) }
+                ref={ (ref) => initRef(ref, setSearchBarRef) }
                 role={'search'}
                 className='search-bar'
                 placeholder='Search...'>    

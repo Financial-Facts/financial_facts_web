@@ -64,7 +64,10 @@ function searchCriteriaReducer(state: SearchCriteria, action: SearchCriteriaActi
     }
 }
 
-function ExpandableSearch({ $closeDropdowns }: { $closeDropdowns: Subject<ClosurePayload[]> }) {
+function ExpandableSearch({ $closeDropdowns, isStandalone }: {
+    $closeDropdowns: Subject<ClosurePayload[]>,
+    isStandalone?: boolean
+}) {
 
     const [ displaySearchBar, setDisplaySearchBar ] = useState(false);
     const [ displaySearchFilter, setDisplaySearchFilter ] = useState(false);
@@ -80,6 +83,22 @@ function ExpandableSearch({ $closeDropdowns }: { $closeDropdowns: Subject<Closur
         identityListDispatch({ type: 'reset' });
     }, [ searchCriteria.order, searchCriteria.searchBy, searchCriteria.sortBy ]);
     
+    useEffect(() => {
+        const watchForClosure = $closeDropdowns
+            .subscribe((payload: ClosurePayload[]) => {
+                if (payload.includes('ALL') || payload.includes('SEARCH')) {
+                    handleCloseEvent();
+                }
+            });
+        if (isStandalone) {
+            setDisplaySearchBar(true);
+            setDisplaySearchFilter(true);
+        }
+        return () => {
+            watchForClosure.unsubscribe();
+        }
+    }, []);
+
     const handleOpenEvent = (): void => {
         clearTimeout(timeout);
         setDisplaySearchBar(true);
@@ -98,23 +117,12 @@ function ExpandableSearch({ $closeDropdowns }: { $closeDropdowns: Subject<Closur
         setDisplaySearchBar(false);
     }
 
-    useEffect(() => {
-        const watchForClosure = $closeDropdowns
-            .subscribe((payload: ClosurePayload[]) => {
-                if (payload.includes('ALL') || payload.includes('SEARCH')) {
-                    handleCloseEvent();
-                }
-            });
-        return () => {
-            watchForClosure.unsubscribe();
-        }
-    }, []);
-
     return (
         <div className={`sticky-menu-option search
             ${ displaySearchBar ? CONSTANTS.EMPTY : 'search-button' } 
-            ${ displaySearchFilter ? 'display-filter-form' : CONSTANTS.EMPTY}
-            ${ identities.length > 0 ? 'display-search-results' : CONSTANTS.EMPTY}`}
+            ${ displaySearchFilter && !isStandalone ? 'display-filter-form' : CONSTANTS.EMPTY}
+            ${ identities.length > 0 && !isStandalone ? 'display-search-results' : CONSTANTS.EMPTY}
+            ${ isStandalone ? 'standalone-search-bar' : 'sticky-search-bar'}`}
             aria-expanded={ displaySearchBar }>
             <div className='search-bar-wrapper'>
                 <img src='/assets/icons/magnifying-glass.svg'
@@ -129,12 +137,16 @@ function ExpandableSearch({ $closeDropdowns }: { $closeDropdowns: Subject<Closur
                             <SearchBar identityListDispatch={identityListDispatch}
                                 searchCriteria={searchCriteria}
                                 dispatch={dispatch}/>
-                            <img role='button'
-                                className='exit-button'
-                                tabIndex={0}
-                                src={`/assets/icons/x.svg`}
-                                onClick={() => handleCloseEvent()}
-                                onKeyDown={(e) => handleEnterKeyEvent(e, handleCloseEvent)}/>
+                            { 
+                                !isStandalone ? 
+                                    <img role='button'
+                                        className='exit-button'
+                                        tabIndex={0}
+                                        src={`/assets/icons/x.svg`}
+                                        onClick={() => handleCloseEvent()}
+                                        onKeyDown={(e) => handleEnterKeyEvent(e, handleCloseEvent)}/> :
+                                    undefined
+                            }
                         </> : undefined
                 }
             </div>
@@ -142,7 +154,8 @@ function ExpandableSearch({ $closeDropdowns }: { $closeDropdowns: Subject<Closur
                 displaySearchFilter ?
                     <SearchFilterForm
                         searchCriteria={searchCriteria}
-                        dispatch={dispatch}/>
+                        dispatch={dispatch}
+                        renderDelay={isStandalone ? 0 : 400}/>
                     : undefined
             }
             {
