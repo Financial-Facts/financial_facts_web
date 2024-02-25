@@ -1,27 +1,8 @@
 @import 'src/variables';
 
-.company-search-wrapper {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
-    height: 750px;
-    
-    div {
-        max-width: 1000px;
-    }
-
-    .divider-text {
-        margin: 32px 0;
-    }
-
-    .search-wrapper {
-        width: calc(80% + 32px);
-    }
-}
-
 .divider-text {
     padding: 4px;
+    font-family: $league-spartan;
     font-size: $plus-font;
     border-bottom: 2px solid rgba(41, 41, 41, .2);
     display: flex;

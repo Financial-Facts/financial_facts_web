@@ -23,6 +23,14 @@ const ResizeObserverService = {
         return id;
     },
 
+    onWidthChange: (element: HTMLElement, callback: () => void): number => {
+        const id = createObserver((entry) => {
+            callback();
+        });
+        observers[id].observe(element);
+        return id;
+    },
+
     disconnectObserver: (id: number) => {
         const observer = observers[id];
         if (observer) {

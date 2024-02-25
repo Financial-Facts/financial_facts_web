@@ -11,7 +11,7 @@ function PeriodicDataTable({ tableData, span }: { tableData: TableData, span: SP
         let key = 0;
         return <tbody key={`table-${tableData.index}-body`}>
             <tr>
-                { columns.map(col => <td key={`col-${key++}`}> { col ? col.toString() : '' } </td>)}
+                { columns.map(col => <td key={`col-${key++}`}> { col } </td>)}
             </tr>
         </tbody>
     }

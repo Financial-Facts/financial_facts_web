@@ -9,9 +9,6 @@ import PeriodicDataTable from '../../components/periodic-data-table/PeriodicData
 import SearchFormToggle from '../../components/search-form-toggle/SearchFormToggle';
 import { buildTableData, initRef } from '../../utilities';
 import ZeroState from '../../components/zero-state/ZeroState';
-import ExpandableSearch from '../../components/expandable-search/expandable-search';
-import { Subject } from 'rxjs/internal/Subject';
-import { ClosurePayload } from '../../components/sticky-menu/StickyMenu';
 import ButtonOptionList from '../../components/ButtonOptionList/ButtonOptionList';
 import ResizeObserverService from '../../services/resize-observer-service/resize-observer.service';
 
@@ -37,9 +34,6 @@ function FactsDisplaySection({ cik }: { cik: string | undefined }) {
             return () => {
                 subscription.unsubscribe();
             }
-        } else {
-            setDataKey(CONSTANTS.EMPTY);
-            setIsLoading(false);
         }
     }, [ cik ]);
 
@@ -157,16 +151,9 @@ function FactsDisplaySection({ cik }: { cik: string | undefined }) {
                                         renderDataVisualizations()
                                     }
                                 </div> :
-                            facts ?
                                 <>
                                     { renderZeroState() }
-                                </> :
-                                <div className='company-search-wrapper'>
-                                    <div className='divider-text'>Search for Public Entities</div>
-                                    <div className='search-wrapper'>
-                                        <ExpandableSearch $closeDropdowns={new Subject<ClosurePayload[]>()} isStandalone={true}/>                                
-                                    </div>
-                                </div>
+                                </> 
                         }
                     </>
             }
