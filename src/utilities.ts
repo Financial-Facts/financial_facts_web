@@ -44,7 +44,7 @@ export const filterBySpan = (periodicData: PeriodicData[], span: SPAN): Periodic
 
 export const buildPeriodicData = (cik: string, periods: UnitPeriod[]): PeriodicData[] => {
     return periods ?
-        periods.reduce((acc, period) => {
+        periods.reduce<PeriodicData[]>((acc, period) => {
             if (!acc.some(val => val.announcedDate.valueOf() === period.end.valueOf())) {
                 acc.push({
                     cik: cik,
@@ -54,17 +54,17 @@ export const buildPeriodicData = (cik: string, periods: UnitPeriod[]): PeriodicD
                 })
             }
             return acc;
-        }, [] as PeriodicData[]) : []
+        }, []) : []
 }
 
 export const buildUnitsToDataMap = (cik: string, units: Record<string, UnitPeriod[]>): Record<string, PeriodicData[]> => {
-    return Object.keys(units).reduce((acc, key) => {
+    return Object.keys(units).reduce<Record<string, PeriodicData[]>>((acc, key) => {
         const periods = units[key];
         if (periods.length > 0) {
             acc[key] = buildPeriodicData(cik, periods);
         }
         return acc;
-    }, {} as Record<string, PeriodicData[]>);
+    }, {});
 }
 
 export const buildTableData = (cik: string, item: UnitData | undefined, index?: number): TableData[] => {

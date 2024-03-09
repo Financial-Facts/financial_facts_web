@@ -20,7 +20,7 @@ const initialState: PageState = {
     },
     'API Docs': {
         active: false,
-        link: ''
+        link: '/api'
     }
 }
 
@@ -29,8 +29,8 @@ export const pageSlice = createSlice({
   initialState,
   reducers: {
     setActivePage: (state, action: PayloadAction<Page>) => {
-        Object.keys(state).forEach(key => {
-            const page: Page = key as Page;
+        const pages = Object.keys(state) as Page[];
+        pages.forEach(page => {
             const pageData: PageData = state[page];
             pageData.active = page === action.payload;
         });

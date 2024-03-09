@@ -15,6 +15,7 @@ export interface SimpleDiscount {
     cik: string,
     name: string,
     symbol: string,
+    lastUpdated: Date,
     active: boolean,
     stickerPrice: number,
     discountedCashFlowPrice: number,

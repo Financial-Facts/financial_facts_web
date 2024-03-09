@@ -1,55 +1,80 @@
 @import 'src/variables';
 
+$discount-card-width: 200px;
+
 .discount-card {
     height: 205px;
-    min-width: 200px;
+    min-width: $discount-card-width;
     box-sizing: border-box;
     background: $light-gray;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    padding: 19px 21px;
-    margin: 0 5px;
     cursor: pointer;
     border: 2px solid $dark-gray;
+    scroll-snap-align: start;
+    transition-duration: 0.4s;
+    padding: 16px;
 
     .company-info {
         display: flex;
         flex-direction: column;
         align-items: center;
+        color: $dark-gray;
+        height: 100%;
+        justify-content: center;
+        gap: 16px;
 
-        .symbol {
-            color: $dark-gray;
+        .symbol, .valuation {
             font-family: $league-spartan;
             font-size: $large-font;
             font-weight: 600;
-            padding-top: 10px;
         }
     
-        .name {
-            color: $dark-gray;
+        .name, .date {
             font-family: $libre-baskerville;
             font-size: $normal-font;
             font-weight: 400;
             text-align: center;
-            padding-top: 16px;
         }
+
     }
 
-    .tty-price {
-        color: $dark-gray;
-        font-family: $league-spartan;
-        font-size: $large-font;
-        font-weight: 600;
+}
+
+.discount-card:hover {
+    border: 2px solid $base-purple;
+    background: $dark-gray;
+
+    .company-info {
+        color: $off-white;
+        font-family: $libre-baskerville;
+        font-size: $normal-font;
+
+        .date {
+            font-size: $below-normal-font;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        .valuation-table {
+            width: 100%;
+            font-family: $league-spartan;
+
+            caption {
+                text-decoration: underline;
+                margin-bottom: 4px;
+            }
+
+            td {
+                text-align: right;
+            }
+        }
     }
 }
 
 @media only screen and (max-width: 576px) {
 
     .discount-card { 
-        height: 205px;
-        min-width: 200px;
+        height: 250px;
+        min-width: $discount-card-width;
         box-sizing: border-box;
         background: $light-gray;
         display: flex;

@@ -4,12 +4,13 @@ import SearchFormToggle from '../search-form-toggle/SearchFormToggle';
 import { useEffect, useState } from 'react';
 import { SearchCriteria, SearchCriteriaAction } from '../expandable-search/expandable-search.typings';
 
-
-function SearchFilterForm({ searchCriteria, dispatch, renderDelay }: {
+export interface SearchFilterFormProps {
     searchCriteria: SearchCriteria,
     dispatch: (action: SearchCriteriaAction) => void,
     renderDelay: number
- }) {
+ }
+
+function SearchFilterForm({ searchCriteria, dispatch, renderDelay }: SearchFilterFormProps) {
     const [ displayForm, setDisplayForm ] = useState(false);
     let timeout: ReturnType<typeof setTimeout>;
 
@@ -40,7 +41,7 @@ function SearchFilterForm({ searchCriteria, dispatch, renderDelay }: {
                     setter={ (searchBy => {
                         dispatch({
                             type: 'set_search_by',
-                            payload: searchBy
+                            payload: { searchBy }
                         })
                     }) }>    
                 </SearchFormToggle>
@@ -61,7 +62,7 @@ function SearchFilterForm({ searchCriteria, dispatch, renderDelay }: {
                     setter={ (sortBy => {
                         dispatch({
                             type: 'set_sort_by',
-                            payload: sortBy
+                            payload: { sortBy }
                         })
                     }) }>    
                 </SearchFormToggle>
@@ -79,7 +80,7 @@ function SearchFilterForm({ searchCriteria, dispatch, renderDelay }: {
                     setter={ (order => {
                         dispatch({
                             type: 'set_order',
-                            payload: order
+                            payload: { order }
                         })
                     }) }>    
                 </SearchFormToggle>

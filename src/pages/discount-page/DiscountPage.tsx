@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom';
-import './DiscountPage.scss'
 import { useEffect, useState } from 'react';
 import { SimpleDiscount } from '../../services/bulk-entities/bulk-entities.typings';
 import Header from '../../sections/header/Header';
@@ -10,18 +9,17 @@ import { TableData } from '../../components/periodic-data-chart/PeriodicDataChar
 import { useDispatch, useSelector } from 'react-redux';
 import { DiscountState, loadSimpleDiscounts } from '../../state/discounts/discounts.slice';
 import { AppDispatch } from '../../state/store';
-import ContactSection from '../../sections/contact-section/ContactSection';
-import Footer from '../../sections/footer/Footer';
 import { setActivePage } from '../../state/page/page.slice';
+import PageLayout from '../../components/PageLayout/page-layout';
 
 
 function DiscountPage() {
 
     const { cik } = useParams();
     const [ selectedDiscount, setSelectedDiscount ] = useState<Discount>();
-    const [ dataSets, setDataSets ] = useState([] as TableData[]);
+    const [ dataSets, setDataSets ] = useState<TableData[]>([]);
     const discounts = useSelector< { discounts: DiscountState }, SimpleDiscount[]>((state) => state.discounts.discounts);
-    const loading = useSelector< { discounts: DiscountState }, boolean>((state) => state.discounts.loading);
+    // const loading = useSelector< { discounts: DiscountState }, boolean>((state) => state.discounts.loading);
     const dispatch = useDispatch<AppDispatch>();
     
     useEffect(() => {
@@ -58,12 +56,11 @@ function DiscountPage() {
     }
 
     return (
-      <div className='discount-page'>
-        <Header text='Discounts' subtext='Company valuations and related data'></Header>
-        <PeriodicDataTable tableData={ dataSets } span={'ALL'}></PeriodicDataTable>
-        <ContactSection></ContactSection>
-        <Footer></Footer>
-      </div>
+      <PageLayout sections={[
+        <Header key={'discounts-header'} text='Discounts' subtext='Company valuations and related data'/>,
+        ...dataSets.map(dataSet =>
+            <PeriodicDataTable key={ dataSet.label } tableData={ dataSet } span={'ALL'}/>)
+      ]}/>
     )
 }
   

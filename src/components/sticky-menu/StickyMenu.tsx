@@ -9,9 +9,9 @@ export type ClosurePayload = 'ALL' | 'NAV' | 'SEARCH';
 
 function StickyMenu() {
 
-    const [ stickyMenuRef, setStickyMenuRef ] = useState(null as HTMLElement | null);
-    const [ _, setChildrenElements ] = useState([] as Element[]);
-    const [ $closeDropdowns ] = useState(new Subject<ClosurePayload[]>());
+    const [ stickyMenuRef, setStickyMenuRef ] = useState<HTMLElement | null>(null);
+    const [ _, setChildrenElements ] = useState<Element[]>([]);
+    const $closeDropdowns = new Subject<ClosurePayload[]>();
 
     useEffect(() => {
         if (stickyMenuRef) {
@@ -37,7 +37,7 @@ function StickyMenu() {
     }
 
     const setDisplayItemsWithTarget = (children: Element[], target: EventTarget | null): void => {
-        if (target && $closeDropdowns) {
+        if (target) {
             const lastClickTarget = target as Element;
             if (!children.some(child =>
                 child.tagName === lastClickTarget.tagName &&

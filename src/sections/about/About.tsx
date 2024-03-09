@@ -7,7 +7,7 @@ function About() {
         <img className="image"></img>
         <div className="body">
             <div className="body-header">
-              <img src="/assets/logo.svg" className="logo"/>
+              <img src="/assets/logo.svg" className="logo hide"/>
               <div className="header-text-wrapper">
                 <h2>About <span>Financial Facts</span></h2>
                 <h3>Our Philosophy</h3>

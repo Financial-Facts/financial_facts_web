@@ -1,18 +1,20 @@
 import { handleEnterKeyEvent } from '../../utilities';
 import './SearchFormToggle.scss';
 
-export interface ToggleOption <T> {
-    id: string,
-    input: T
-}
-
-function SearchFormToggle<T>({ name, label, defaultId, options, setter }: {
+export interface SearchFormToggleProps<T> {
     name: string,
     label: string,
     defaultId: string,
     options: ToggleOption<T>[],
     setter?: (_: T) => void
-}) {
+}
+
+export interface ToggleOption <T> {
+    id: string,
+    input: T
+}
+
+function SearchFormToggle<T>({ name, label, defaultId, options, setter }: SearchFormToggleProps<T>) {
 
     const handleToggleChange = (id: string) => {
         const option = options.find(option => option.id === id);
@@ -28,6 +30,7 @@ function SearchFormToggle<T>({ name, label, defaultId, options, setter }: {
             key={`${name}-state-${index}`}
             onKeyDown={(e) => handleEnterKeyEvent(e, () => handleToggleChange(option.id))}>
             <input id={`${name}-state-${index}`}
+                className='hide'
                 type="radio"
                 name={name}
                 onChange={ () => handleToggleChange(option.id) }

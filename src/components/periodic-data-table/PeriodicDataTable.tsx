@@ -3,13 +3,17 @@ import { filterBySpan } from '../../utilities';
 import { TableData } from '../periodic-data-chart/PeriodicDataChart.typings';
 import './PeriodicDataTable.scss';
 
+export interface PeriodicDataTableProps {
+    tableData: TableData,
+    span: SPAN
+};
 
-function PeriodicDataTable({ tableData, span }: { tableData: TableData, span: SPAN }) {
+function PeriodicDataTable({ tableData, span }: PeriodicDataTableProps) {
 
     const renderDataRows = (tableData: TableData) => {
         const columns = filterBySpan(tableData.periodicData, span).map(periodicData => periodicData.value);
         let key = 0;
-        return <tbody key={`table-${tableData.index}-body`}>
+        return <tbody key={ `${tableData.label}-table-body` }>
             <tr>
                 { columns.map(col => <td key={`col-${key++}`}> { col } </td>)}
             </tr>
@@ -19,7 +23,7 @@ function PeriodicDataTable({ tableData, span }: { tableData: TableData, span: SP
     const renderHeaderRows = (tableData: TableData) => {
         const columns = filterBySpan(tableData.periodicData, span).map(periodicData => periodicData.announcedDate);
         let key = 0;
-        return <thead key={`table-${tableData.index}-header`}>
+        return <thead key={ `${tableData.label}-table-header` }>
             <tr>
                 { columns.map(col => <th key={`col-${key++}`}> { col.toString() } </th>)}
             </tr>

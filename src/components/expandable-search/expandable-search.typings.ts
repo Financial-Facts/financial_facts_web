@@ -11,7 +11,12 @@ export type SearchCriteriaUpdateType = 'set_search_by' | 'set_sort_by' | 'set_or
 
 export interface SearchCriteriaAction {
     type: SearchCriteriaUpdateType,
-    payload?: SearchBy | SortBy | Order | string
+    payload?: {
+        searchBy?: SearchBy
+        sortBy?: SortBy
+        order?: Order
+        keyword?: string
+    }
 }
 
 export type IdentityListUpdateType = 'reset' | 'update_list' | 'set_list';

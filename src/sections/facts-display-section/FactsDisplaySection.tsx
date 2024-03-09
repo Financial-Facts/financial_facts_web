@@ -12,28 +12,30 @@ import ZeroState from '../../components/zero-state/ZeroState';
 import ButtonOptionList from '../../components/ButtonOptionList/ButtonOptionList';
 import ResizeObserverService from '../../services/resize-observer-service/resize-observer.service';
 
+export interface FactsDisplaySectionProps {
+    cik: string
+
+}
 export type SPAN = 'ALL' | 'TTM' | 'TFY' | 'TTY';
 
-function FactsDisplaySection({ cik }: { cik: string | undefined }) {
+function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
 
     const [ isLoading, setIsLoading ] = useState(true);
-    const [ facts, setFacts ] = useState(undefined as Facts | undefined);
-    const [ taxonomy, setTaxonomy ] = useState(CONSTANTS.EMPTY as Taxonomy);
+    const [ facts, setFacts ] = useState<Facts | null>(null);
+    const [ taxonomy, setTaxonomy ] = useState<Taxonomy | undefined>(undefined);
     const [ selectedDataKey, setDataKey ] = useState(CONSTANTS.EMPTY);
-    const [ span, setSpan ] = useState('ALL' as SPAN);
-    const [ chartWrapperRef, setChartWrapperRef ] = useState(null as HTMLDivElement | null);
-    const [ factsWrapperRef, setFactsWrapperRef ] = useState(null as HTMLDivElement | null);
+    const [ span, setSpan ] = useState<SPAN>('ALL');
+    const [ chartWrapperRef, setChartWrapperRef ] = useState<HTMLDivElement | null>(null);
+    const [ factsWrapperRef, setFactsWrapperRef ] = useState<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        if (cik) {
-            setTaxonomy(CONSTANTS.EMPTY as Taxonomy);
-            const subscription = FactsService.getFacts(cik).subscribe(facts => {
-                setFacts(facts);
-                setIsLoading(false);
-            });
-            return () => {
-                subscription.unsubscribe();
-            }
+        setTaxonomy(undefined);
+        const subscription = FactsService.getFacts(cik).subscribe(facts => {
+            setFacts(facts);
+            setIsLoading(false);
+        });
+        return () => {
+            subscription.unsubscribe();
         }
     }, [ cik ]);
 
@@ -53,13 +55,13 @@ function FactsDisplaySection({ cik }: { cik: string | undefined }) {
     const getTaxonomyKeys = (): Taxonomy[] => {
         if (facts) {
             const reports = facts.data.taxonomyReports;
-            return Object.keys(reports).reduce((acc, key) => {
-                const taxonomy = key as Taxonomy;
+            const taxonomies = Object.keys(reports) as Taxonomy[];
+            return taxonomies.reduce<Taxonomy[]>((acc, taxonomy) => {
                 if (reports[taxonomy] && Object.keys(reports[taxonomy]).length > 0) {
                     acc.push(taxonomy);
                 }
                 return acc;
-            }, [] as Taxonomy[]);
+            }, []);
         }
         return [];
     }
@@ -78,13 +80,13 @@ function FactsDisplaySection({ cik }: { cik: string | undefined }) {
     }
 
     const renderDataVisualizations = () => {
-        if (cik && facts && taxonomy && selectedDataKey) {
+        if (facts && taxonomy && selectedDataKey) {
             const taxonomyReport = facts.data.taxonomyReports[taxonomy];
             const item = taxonomyReport ? taxonomyReport[selectedDataKey] : undefined;
             const tableData = buildTableData(cik, item);
             return tableData.map((data, index) => {
                 data.index = index;
-                return <div key={`visualizations-${index}`} className='visualizations-container'>
+                return <div key={`${cik}-facts-visualization`} className='visualizations-container'>
                     <PeriodicDataTable tableData={ data } span={span}/>
                     <PeriodicDataChart tableData={ data } span={span}/>
                 </div>

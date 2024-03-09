@@ -11,7 +11,7 @@ function ContactForm() {
     const [subject, setSubject] = useState(CONSTANTS.EMPTY);
     const [message, setMessage] = useState(CONSTANTS.EMPTY);
     const [loading, setLoading] = useState(false);
-    const [outcome, setOutcome] = useState('neutral' as Outcome);
+    const [outcome, setOutcome] = useState<Outcome>('neutral');
 
     const clearFields = (): void => {
         setName(CONSTANTS.EMPTY);

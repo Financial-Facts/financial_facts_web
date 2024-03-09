@@ -11,14 +11,15 @@ import { CONSTANTS } from '../constants';
 import { IdentityListAction, SearchCriteria, SearchCriteriaAction } from '../expandable-search/expandable-search.typings';
 import { initRef } from '../../utilities';
 
-
-function SearchBar({ identityListDispatch, searchCriteria, dispatch }: {
+export interface SearchBarProps {
     identityListDispatch: (action: IdentityListAction) => void,
     searchCriteria: SearchCriteria,
     dispatch: (action: SearchCriteriaAction) => void
-}) {
+}
 
-    const [ searchBarRef, setSearchBarRef ] = useState(null as HTMLInputElement | null);
+function SearchBar({ identityListDispatch, searchCriteria, dispatch }: SearchBarProps) {
+
+    const [ searchBarRef, setSearchBarRef ] = useState<HTMLInputElement | null>(null);
 
     useEffect(() => {
         if (searchBarRef) {
@@ -50,7 +51,7 @@ function SearchBar({ identityListDispatch, searchCriteria, dispatch }: {
                     }
                     dispatch({
                         type: 'set_keyword',
-                        payload: input
+                        payload: { keyword: input }
                     });
                     return true;
                 }),

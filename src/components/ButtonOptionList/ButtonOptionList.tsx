@@ -2,30 +2,38 @@ import './ButtonOptionList.scss'
 import { CONSTANTS } from '../constants';
 import { useState } from 'react';
 
-const cleanKey = (key: string): string => {
-    return key.replace(/([A-Z])/g, ' $1').trim();
-}
-
-function ButtonOptionList<T extends string>({ keys, setter, selectedKey, orientation, includeSearch }: {
+export interface ButtonOptionListProps <T extends string> {
     keys: T[],
     setter: (v: T) => void,
     selectedKey?: T,
     orientation?: 'vertical',
     includeSearch?: boolean
-}) {
+}
+
+function ButtonOptionList<T extends string>({
+    keys,
+    setter,
+    selectedKey,
+    orientation,
+    includeSearch 
+}: ButtonOptionListProps<T>) {
     const [ keywordFilter, setKeywordFilter ] = useState(CONSTANTS.EMPTY);
 
+    const cleanKey = (key: string): string => {
+        return key.replace(/([A-Z])/g, ' $1').trim();
+    }
+    
     const renderKeys = () => {
         return keys
-            .reduce((acc, key) => {
-                const cleanedKey: string = cleanKey(key as string);
+            .reduce<T[]>((acc, key) => {
+                const cleanedKey: string = cleanKey(key);
                 if (keywordFilter && cleanedKey.toLowerCase().includes(keywordFilter.toLowerCase())) {
-                    acc.push(key as T);
+                    acc.push(key);
                 } else if (!keywordFilter) {
-                    acc.push(key as T);
+                    acc.push(key);
                 }
                 return acc;
-            }, [] as T[])
+            }, [])
             .map(key => 
                 (<button role='listitem'
                     tabIndex={0}

@@ -40,7 +40,7 @@
         padding-top: 100px;
         
         h1 {
-            font-size: $xx-large-font;
+            font-size: clamp($x-large-font, 5vw, $xx-large-font);
             font-weight: 600;
             line-height: normal;
             margin: 25px 0;
@@ -48,7 +48,7 @@
 
         h2 {
             margin: 0;
-            font-size: $x-large-font;
+            font-size: clamp($large-font, 5vw, $x-large-font);
             font-weight: 500;
             line-height: normal;
             padding: 0 25px 25px;
@@ -65,18 +65,6 @@
     
         .title-wrapper {
             flex: 1;
-
-            h1 {
-                font-size: $x-large-font;
-            }
-
-            h2 {
-                font-size: $large-font;
-            }
-    
-            span {
-                font-size: $large-font;
-            }
         }
     }
 }

@@ -19,7 +19,7 @@ export const loadSimpleDiscounts = createAsyncThunk('discounts/load',
 export const discountsSlice = createSlice({
   name: 'discounts',
   initialState: {
-    discounts: [] as SimpleDiscount[],
+    discounts: [],
     loading: false
   } as DiscountState,
   reducers: {},

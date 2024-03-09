@@ -7,7 +7,11 @@ import { Link } from 'react-router-dom';
 import { ClosurePayload } from '../sticky-menu/StickyMenu';
 import { Subject } from 'rxjs/internal/Subject';
 
-function ExpandableMenu({ $closeDropdowns }: { $closeDropdowns: Subject<ClosurePayload[]> }) {
+export interface ExpandableMenuProps  { 
+    $closeDropdowns: Subject<ClosurePayload[]>
+}
+
+function ExpandableMenu({ $closeDropdowns }: ExpandableMenuProps) {
 
     const [ isExpanded, setIsExpanded ] = useState(false);
     const pages = useSelector<{ page: PageState }, PageState>((state) => state.page);

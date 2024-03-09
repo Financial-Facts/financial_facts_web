@@ -10,14 +10,15 @@ import { IdentityListAction, SearchCriteria } from '../expandable-search/expanda
 import { Link } from 'react-router-dom';
 import { initRef } from '../../utilities';
 
-
-function SearchDropDown({ identities, identityListDispatch, searchCriteria }: {
+export interface SearchDropDownProps {
     identities: Identity[],
     identityListDispatch: (action: IdentityListAction) => void,
     searchCriteria: SearchCriteria
-}) {
+}
 
-    const [ searchResultsRef, setSearchResultsRef ] = useState(null as HTMLUListElement | null);
+function SearchDropDown({ identities, identityListDispatch, searchCriteria }: SearchDropDownProps) {
+
+    const [ searchResultsRef, setSearchResultsRef ] = useState<HTMLUListElement | null>(null);
     const [ isLoading, setIsLoading ] = useState(false);
 
     useEffect(() => {

@@ -1,0 +1,24 @@
+@import 'src/variables';
+
+.large {
+    --icon-height: 100px;
+    --icon-width: 100px;
+}
+
+.small {
+    --icon-height: 50px;
+    --icon-width: 50px;
+}
+
+.symbol-icon-wrapper {
+    height: var(--icon-height, 50px);
+    width: var(--icon-width, 50px);
+    border-radius: 50%;
+    overflow: hidden;
+
+    .symbol-icon {
+        height: 100%;
+        aspect-ratio: 1/1;
+        object-fit: contain;
+    }
+}

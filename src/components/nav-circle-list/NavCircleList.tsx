@@ -8,12 +8,14 @@ export interface DiscountDisplayParams {
   loading: boolean
 }
 
-function NavCircleList({ numOfCircles, setCurrentCardIndex }: { 
-    numOfCircles: number,
-    setCurrentCardIndex: (index: number) => void
-}) {
+export interface NavCircleListProps { 
+  numOfCircles: number,
+  setCurrentCardIndex: (index: number) => void
+}
 
-    const [navCircles, setNavCircles] = useState([] as boolean[]);
+function NavCircleList({ numOfCircles, setCurrentCardIndex }: NavCircleListProps) {
+
+    const [navCircles, setNavCircles] = useState<boolean[]>([]);
 
     useEffect(() => {
         generateNavCircles();

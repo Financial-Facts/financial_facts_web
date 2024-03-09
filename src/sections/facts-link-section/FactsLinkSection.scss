@@ -18,7 +18,7 @@
 
     h3 {
         font-family: $league-spartan;
-        font-size: $large-font;
+        font-size: clamp($plus-font, 5vw, $large-font);
         margin: 17px 10% 21px 10%;
         text-align: center;
         line-height: 32px;

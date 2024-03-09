@@ -1,0 +1,38 @@
+@import 'src/variables';
+
+.body-arrows {
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 21px;
+
+    .discounts {
+        margin: 0 15px;
+    }
+    
+    .left-button-placeholder {
+        width: 49px;
+    }
+
+    .right-button-placeholder {
+        width: 49px;
+    }
+
+    .move-button {
+        display: flex;
+        background: $base-purple;
+        padding: 10px;
+        border-radius: 25px;
+        cursor: pointer;
+    }
+
+    .move-button img {
+        height: 25px;
+        width: 25px;
+    }
+
+    .move-left-button img {
+        transform: scale(-1, 1);
+        transform-origin: center;
+    }
+
+}

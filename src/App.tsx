@@ -11,6 +11,7 @@ import {
 import MainPage from "./pages/main-page/MainPage"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FactsPage from './pages/facts-page/FactsPage';
+import ApiDocsPage from './pages/api-docs-page/ApiDocsPage';
 
 ChartJS.register(
   CategoryScale,
@@ -34,6 +35,7 @@ function App() {
         <Route path='/facts' element={<FactsPage/>}>
           <Route path=":cik" element={<FactsPage/>}/>
         </Route>
+        <Route path='/api' element={<ApiDocsPage/>}/>
       </Routes>
     </BrowserRouter>
   );

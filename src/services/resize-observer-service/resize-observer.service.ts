@@ -24,7 +24,7 @@ const ResizeObserverService = {
     },
 
     onWidthChange: (element: HTMLElement, callback: () => void): number => {
-        const id = createObserver((entry) => {
+        const id = createObserver(() => {
             callback();
         });
         observers[id].observe(element);

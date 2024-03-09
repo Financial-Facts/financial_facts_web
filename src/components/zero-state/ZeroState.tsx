@@ -1,11 +1,11 @@
 import './ZeroState.scss';
 
-export interface ToggleOption <T> {
-    id: string,
-    input: T
+export interface ZeroStateProps {
+    message: string,
+    supportText: string
 }
 
-function ZeroState({ message, supportText }: { message: string, supportText: string }) {
+function ZeroState({ message, supportText }: ZeroStateProps) {
 
     return (
         <div className='zero-state'>  

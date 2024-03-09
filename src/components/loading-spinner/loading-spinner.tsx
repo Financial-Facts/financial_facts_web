@@ -2,7 +2,12 @@ import { useEffect, useState } from 'react';
 import './loading-spinner.scss'
 import { Color, Size } from './loading-spinner.typings';
 
-function LoadingSpinner({ size, color }: { size: Size, color: Color }) {
+export interface LoadingSpinnerProps {
+    size: Size,
+    color: Color
+}
+
+function LoadingSpinner({ size, color }: LoadingSpinnerProps) {
 
     const [colorClass, setColorClass] = useState('PURPLE');
     

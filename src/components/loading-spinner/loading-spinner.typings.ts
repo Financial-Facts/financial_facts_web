@@ -1,3 +1,3 @@
-export type Size = 'LARGE' | 'SMALL';
+export type Size = 'LARGE' | 'MEDIUM' | 'SMALL';
 
 export type Color = 'PURPLE' | 'WHITE' | 'BLACK';

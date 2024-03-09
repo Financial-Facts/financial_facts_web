@@ -7,12 +7,13 @@ import { normalizeYearOverYear } from './PeriodicDataChart.utils';
 import { filterBySpan } from '../../utilities';
 import { SPAN } from '../../sections/facts-display-section/FactsDisplaySection';
 
-
-function PeriodicDataChart({ tableData, normalize, span }: {
+export interface PeriodicDataChartProps {
     tableData: TableData,
     span: SPAN,
     normalize?: boolean
-}) {
+}
+
+function PeriodicDataChart({ tableData, normalize, span }: PeriodicDataChartProps) {
 
     const buildDataSet = (label: string, periodicData: PeriodicData[]): ChartDataset<"line", any> => ({
       label: label,

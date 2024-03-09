@@ -3,12 +3,17 @@ import './expandable-search.scss';
 import { ClosurePayload } from '../sticky-menu/StickyMenu';
 import { Subject } from 'rxjs';
 import SearchBar from '../search-bar/SearchBar';
-import { Identity, Order, SearchBy, SortBy } from '../../services/bulk-entities/bulk-entities.typings';
+import { Identity } from '../../services/bulk-entities/bulk-entities.typings';
 import SearchDropDown from '../search-drop-down/SearchDropDown';
 import SearchFilterForm from '../search-filter-form/SearchFilterForm';
 import { IdentityListAction, SearchCriteria, SearchCriteriaAction } from './expandable-search.typings';
 import { CONSTANTS } from '../constants';
 import { handleEnterKeyEvent } from '../../utilities';
+
+export interface ExpandableSearchProps {
+    $closeDropdowns: Subject<ClosurePayload[]>,
+    isStandalone?: boolean
+}
 
 function identityListReducer(state: Identity[], action: IdentityListAction): Identity[] {
     switch (action.type) {
@@ -38,45 +43,58 @@ function searchCriteriaReducer(state: SearchCriteria, action: SearchCriteriaActi
                 sortBy: 'SYMBOL',
                 order: 'ASC',
                 keyword: CONSTANTS.EMPTY
-            } as SearchCriteria
+            }
         }
         case ('set_search_by'): {
-            return { ...state, ...{
-                searchBy: action.payload as SearchBy,
-                sortBy: action.payload as SortBy
-            }}
+            const payload = action.payload;
+            if (payload && payload.searchBy && payload.sortBy) {
+                return { ...state, ...{
+                    searchBy: payload.searchBy,
+                    sortBy: payload.sortBy
+                }}
+            }
+            return state;
         }
         case ('set_sort_by'): {
-            return { ...state, ...{
-                sortBy: action.payload as SortBy
-            }}
+            const payload = action.payload;
+            if (payload && payload.sortBy) {
+                return { ...state, ...{
+                    sortBy: payload.sortBy
+                }}
+            }
+            return state;
         }
         case ('set_order'): {
-            return { ...state, ...{
-                order: action.payload as Order
-            }}
+            const payload = action.payload;
+            if (payload && payload.order) {
+                return { ...state, ...{
+                    order: payload.order
+                }}
+            }
+            return state;
         }
         case ('set_keyword'): {
-            return { ...state, ...{
-                keyword: action.payload as string
-            }}
+            const payload = action.payload;
+            if (payload && payload.keyword) {
+                return { ...state, ...{
+                    keyword: payload.keyword
+                }}
+            }
+            return state;
         }
     }
 }
 
-function ExpandableSearch({ $closeDropdowns, isStandalone }: {
-    $closeDropdowns: Subject<ClosurePayload[]>,
-    isStandalone?: boolean
-}) {
+function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchProps) {
 
     const [ displaySearchBar, setDisplaySearchBar ] = useState(false);
     const [ displaySearchFilter, setDisplaySearchFilter ] = useState(false);
-    const [ identities, identityListDispatch ] = useReducer(identityListReducer, [] as Identity[]);
+    const [ identities, identityListDispatch ] = useReducer(identityListReducer, []);
     const [ searchCriteria, dispatch ] = useReducer(searchCriteriaReducer, {
         searchBy: 'SYMBOL',
         sortBy: 'SYMBOL',
         order: 'ASC'
-    } as SearchCriteria);
+    });
     let timeout: number | undefined;
 
     useEffect(() => {
