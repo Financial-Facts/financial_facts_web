@@ -1,17 +1,11 @@
-import { Observable } from "rxjs/internal/Observable";
 import { environment } from "../../environment";
+import ApiResponseError from "../../errors/ApiResponseError";
 import { Facts } from "./facts.typings";
 
 const FactsService = {
 
-    getFacts: (cik: string): Observable<Facts> => {
-        return new Observable<Facts>(observer => {
-            fetchDiscount(cik).then(discount => {
-                observer.next(discount);
-                observer.unsubscribe();
-            })
-        })
-    }
+    getFacts: (cik: string): Promise<Facts> => fetchDiscount(cik)
+    
 }
 
 async function fetchDiscount(cik: string): Promise<Facts> {
@@ -20,8 +14,13 @@ async function fetchDiscount(cik: string): Promise<Facts> {
         headers: {
             'Content-Type': 'application/json'
         }
-    }).then(response => response.json())
-    .catch(err => { throw err });
+    }).then(async response => {
+        if (response.status === 200) {
+            return response.json();
+        }
+        const text = await response.text();
+        throw new ApiResponseError(text, response.status);
+    });
 }
 
 export default FactsService;

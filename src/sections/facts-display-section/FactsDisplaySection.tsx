@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import './FactsDisplaySection.scss'
-import FactsService from '../../services/facts/facts.service';
-import { Facts, Taxonomy } from '../../services/facts/facts.typings';
+import { Taxonomy } from '../../services/facts/facts.typings';
 import LoadingSpinner from '../../components/loading-spinner/loading-spinner';
 import { CONSTANTS } from '../../components/constants';
 import PeriodicDataChart from '../../components/periodic-data-chart/PeriodicDataChart';
@@ -11,6 +10,7 @@ import { buildTableData, initRef } from '../../utilities';
 import ZeroState from '../../components/zero-state/ZeroState';
 import ButtonOptionList from '../../components/ButtonOptionList/ButtonOptionList';
 import ResizeObserverService from '../../services/resize-observer-service/resize-observer.service';
+import fetchFacts from '../../hooks/fetchFacts';
 
 export interface FactsDisplaySectionProps {
     cik: string
@@ -20,24 +20,12 @@ export type SPAN = 'ALL' | 'TTM' | 'TFY' | 'TTY';
 
 function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
 
-    const [ isLoading, setIsLoading ] = useState(true);
-    const [ facts, setFacts ] = useState<Facts | null>(null);
     const [ taxonomy, setTaxonomy ] = useState<Taxonomy | undefined>(undefined);
     const [ selectedDataKey, setDataKey ] = useState(CONSTANTS.EMPTY);
     const [ span, setSpan ] = useState<SPAN>('ALL');
     const [ chartWrapperRef, setChartWrapperRef ] = useState<HTMLDivElement | null>(null);
     const [ factsWrapperRef, setFactsWrapperRef ] = useState<HTMLDivElement | null>(null);
-
-    useEffect(() => {
-        setTaxonomy(undefined);
-        const subscription = FactsService.getFacts(cik).subscribe(facts => {
-            setFacts(facts);
-            setIsLoading(false);
-        });
-        return () => {
-            subscription.unsubscribe();
-        }
-    }, [ cik ]);
+    const { facts, loading, error, notFound } = fetchFacts(cik);
 
     useEffect(() => {
         setDataKey(CONSTANTS.EMPTY);
@@ -48,9 +36,9 @@ function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
             const observerId = ResizeObserverService.matchHeight(chartWrapperRef, factsWrapperRef);
             return (() => {
                 ResizeObserverService.disconnectObserver(observerId);
-            })
+            });
         }
-    }, [ chartWrapperRef]);
+    }, [ chartWrapperRef ]);
 
     const getTaxonomyKeys = (): Taxonomy[] => {
         if (facts) {
@@ -95,10 +83,14 @@ function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
     }
 
     return (
-        <section className='facts-display-section'>
+        <section className={`facts-display-section
+            ${loading || error ? 'text-container-height' : CONSTANTS.EMPTY}`}>
             {
-                isLoading ?
-                    <LoadingSpinner size='LARGE' color='PURPLE'/> :
+                loading ? <LoadingSpinner size='LARGE' color='PURPLE'/> :
+                error ? <ZeroState message={'Error'}
+                    supportText={`${ notFound ?
+                        `Facts for ${cik} not found` :
+                        'Failed to collect financial facts'}`}/> :
                     <>
                         {
                             facts ? 

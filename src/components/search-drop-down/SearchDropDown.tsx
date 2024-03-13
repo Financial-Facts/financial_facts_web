@@ -1,38 +1,30 @@
 import './SearchDropDown.scss';
-import { Identity } from '../../services/bulk-entities/bulk-entities.typings';
+import { Identity, IdentityRequest } from '../../services/bulk-entities/bulk-entities.typings';
 import { useEffect, useState } from 'react';
 import { fromEvent } from 'rxjs/internal/observable/fromEvent';
 import { filter } from 'rxjs/internal/operators/filter';
 import { map } from 'rxjs/internal/operators/map';
 import { CONSTANTS } from '../constants';
-import BulkEntitiesService from '../../services/bulk-entities/bulk-entities.service';
 import { IdentityListAction, SearchCriteria } from '../expandable-search/expandable-search.typings';
 import { Link } from 'react-router-dom';
 import { initRef } from '../../utilities';
+import fetchIdentities from '../../hooks/fetchIdentities';
 
 export interface SearchDropDownProps {
-    identities: Identity[],
+    allIdentities: Identity[],
     identityListDispatch: (action: IdentityListAction) => void,
     searchCriteria: SearchCriteria
 }
 
-function SearchDropDown({ identities, identityListDispatch, searchCriteria }: SearchDropDownProps) {
+function SearchDropDown({ allIdentities, identityListDispatch, searchCriteria }: SearchDropDownProps) {
 
     const [ searchResultsRef, setSearchResultsRef ] = useState<HTMLUListElement | null>(null);
-    const [ isLoading, setIsLoading ] = useState(false);
+    const [ identityRequest, setIdentityRequest ] = useState<IdentityRequest | null>(null);
+    const { identities, loading } = fetchIdentities(identityRequest);
 
     useEffect(() => {
-        if (isLoading) {
-            BulkEntitiesService.fetchBulkIdentities({
-                startIndex: identities.length,
-                limit: identities.length + CONSTANTS.IDENTITY_BATCH_SIZE,
-                ...searchCriteria
-            }).then(response => {
-                identityListDispatch({ type: 'update_list', payload: response.identities });
-                setIsLoading(false);
-            });
-        }
-    }, [ isLoading ]);
+        identityListDispatch({ type: 'update_list', payload: identities });
+    }, [ identities ]);
 
     useEffect(() => {
         if (searchResultsRef) {
@@ -43,30 +35,34 @@ function SearchDropDown({ identities, identityListDispatch, searchCriteria }: Se
                 }
             }
         }
-    }, [ searchResultsRef, identities ]);
+    }, [ searchResultsRef, allIdentities ]);
 
     const subscribeToScrollEvents = (searchResults: HTMLUListElement) => 
         fromEvent<InputEvent>(searchResults, 'scroll')
-        .pipe(
-            map(event => event.target),
-            filter(target => {
-                if (target &&
-                    identities.length > 0 &&
-                    identities.length % CONSTANTS.IDENTITY_BATCH_SIZE === 0) {
-                    const element = target as HTMLElement;
-                    const percentScrolled = (element.scrollTop / (element.scrollHeight - element.offsetHeight)) * 100;
-                    return percentScrolled > CONSTANTS.SEARCH_SCROLL_FETCH_THRESHOLD;
+            .pipe(
+                map(event => event.target),
+                filter(target => {
+                    if (target &&
+                        allIdentities.length > 0 &&
+                        allIdentities.length % CONSTANTS.IDENTITY_BATCH_SIZE === 0) {
+                        const element = target as HTMLElement;
+                        const percentScrolled = (element.scrollTop / (element.scrollHeight - element.offsetHeight)) * 100;
+                        return percentScrolled > CONSTANTS.SEARCH_SCROLL_FETCH_THRESHOLD;
+                    }
+                    return false;
+                }))
+            .subscribe(() => {
+                if (!loading) {
+                    setIdentityRequest({
+                        startIndex: allIdentities.length,
+                        limit: allIdentities.length + CONSTANTS.IDENTITY_BATCH_SIZE,
+                        ...searchCriteria
+                    })
                 }
-                return false;
-            }))
-        .subscribe(() => {
-            if (!isLoading) {
-                setIsLoading(true);
-            }
-        });
+            });
 
     const renderDropDownItems = () => {
-        return identities.map(identity =>
+        return allIdentities.map(identity =>
             <li key={identity.cik}>
                 <Link className='identity-item' to={`/facts/${identity.cik}`}>
                     <span className='cik'>{identity.cik}</span>

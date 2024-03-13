@@ -20,7 +20,8 @@ function ButtonOptionList<T extends string>({
     const [ keywordFilter, setKeywordFilter ] = useState(CONSTANTS.EMPTY);
 
     const cleanKey = (key: string): string => {
-        return key.replace(/([A-Z])/g, ' $1').trim();
+        return key.charAt(0).toUpperCase() +
+            key.slice(1).replace(/([A-Z])/g, ' $1').trim();
     }
     
     const renderKeys = () => {

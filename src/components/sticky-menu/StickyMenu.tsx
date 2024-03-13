@@ -11,7 +11,7 @@ function StickyMenu() {
 
     const [ stickyMenuRef, setStickyMenuRef ] = useState<HTMLElement | null>(null);
     const [ _, setChildrenElements ] = useState<Element[]>([]);
-    const $closeDropdowns = new Subject<ClosurePayload[]>();
+    const [ $closeDropdowns ] = useState(new Subject<ClosurePayload[]>());
 
     useEffect(() => {
         if (stickyMenuRef) {

@@ -1,33 +1,15 @@
-import { useEffect, useState } from "react"
-import { SimpleDiscount } from "../../services/bulk-entities/bulk-entities.typings"
 import "./NavCircleList.scss"
 import { CONSTANTS } from "../constants"
 
-export interface DiscountDisplayParams {
-  discounts: SimpleDiscount[],
-  loading: boolean
-}
-
 export interface NavCircleListProps { 
-  numOfCircles: number,
-  setCurrentCardIndex: (index: number) => void
+  itemWidth: number,
+  numItemsToDisplay: number,
+  navCircles: boolean[],
+  setNavCircles: (_: boolean[]) => void,
+  setScrollToOptions: (_: (current: ScrollToOptions) => ScrollToOptions) => void
 }
 
-function NavCircleList({ numOfCircles, setCurrentCardIndex }: NavCircleListProps) {
-
-    const [navCircles, setNavCircles] = useState<boolean[]>([]);
-
-    useEffect(() => {
-        generateNavCircles();
-    }, []);
-
-    const generateNavCircles = () => {
-        const circles = [];
-        for (let i = 0; i < numOfCircles; i++) {
-          circles.push(i === 0)
-        }
-        setNavCircles(circles);
-    }
+function NavCircleList({ itemWidth, numItemsToDisplay, navCircles, setNavCircles, setScrollToOptions }: NavCircleListProps) {
 
     const renderNavCircles = () => {
       return navCircles.map((isActive, index) => {
@@ -39,8 +21,13 @@ function NavCircleList({ numOfCircles, setCurrentCardIndex }: NavCircleListProps
     }
 
     const handleCircleSelection = (clickedIndex: number) => {
-        setCurrentCardIndex(clickedIndex);
         setNavCircles(navCircles.map((_navCircle, circleIndex) => circleIndex === clickedIndex));
+        setScrollToOptions(current => ({
+            ...current,
+            ...{
+                left: itemWidth * numItemsToDisplay * clickedIndex
+            }
+        }));
     }
 
     return (

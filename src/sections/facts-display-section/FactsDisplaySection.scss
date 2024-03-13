@@ -1,5 +1,9 @@
 @import 'src/variables';
 
+.text-container-height {
+    min-height: 500px;
+}
+
 .divider-text {
     padding: 4px;
     font-family: $league-spartan;

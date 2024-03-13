@@ -32,8 +32,7 @@ async function fetchBulkEntitiesFromFFS(
         'Content-Type': 'application/json'
         },
         body: JSON.stringify(identityRequest)
-    }).then(response => response.json())
-    .catch(err => { throw err });
+    }).then(response => response.json());
 }
 
 export default BulkEntitiesService;

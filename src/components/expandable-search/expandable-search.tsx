@@ -178,7 +178,7 @@ function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchPro
             }
             {
                 identities.length > 0 ? 
-                    <SearchDropDown identities={identities}
+                    <SearchDropDown allIdentities={identities}
                         identityListDispatch={identityListDispatch}
                         searchCriteria={searchCriteria}/> :
                     undefined

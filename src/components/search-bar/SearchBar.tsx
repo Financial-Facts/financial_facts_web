@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import './SearchBar.scss';
-import BulkEntitiesService from '../../services/bulk-entities/bulk-entities.service';
 import { fromEvent } from 'rxjs/internal/observable/fromEvent';
 import { map } from 'rxjs/internal/operators/map';
 import { filter } from 'rxjs/internal/operators/filter';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChanged';
-import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { CONSTANTS } from '../constants';
 import { IdentityListAction, SearchCriteria, SearchCriteriaAction } from '../expandable-search/expandable-search.typings';
 import { initRef } from '../../utilities';
+import fetchIdentities from '../../hooks/fetchIdentities';
+import { IdentityRequest } from '../../services/bulk-entities/bulk-entities.typings';
 
 export interface SearchBarProps {
     identityListDispatch: (action: IdentityListAction) => void,
@@ -20,6 +20,8 @@ export interface SearchBarProps {
 function SearchBar({ identityListDispatch, searchCriteria, dispatch }: SearchBarProps) {
 
     const [ searchBarRef, setSearchBarRef ] = useState<HTMLInputElement | null>(null);
+    const [ identityRequest, setIdentityRequest ] = useState<IdentityRequest | null>(null);
+    const { identities } = fetchIdentities(identityRequest);
 
     useEffect(() => {
         if (searchBarRef) {
@@ -32,6 +34,10 @@ function SearchBar({ identityListDispatch, searchCriteria, dispatch }: SearchBar
             }
         }
     }, [ searchBarRef, searchCriteria.sortBy, searchCriteria.searchBy, searchCriteria.order ]);
+
+    useEffect(() => {
+        identityListDispatch({ type: 'set_list', payload: identities });
+    }, [ identities ])
 
     const subscribeToInputEvents = (searchBar: HTMLInputElement) => 
         fromEvent<InputEvent>(searchBar, 'input')
@@ -55,7 +61,7 @@ function SearchBar({ identityListDispatch, searchCriteria, dispatch }: SearchBar
                     });
                     return true;
                 }),
-                switchMap(input => BulkEntitiesService.fetchBulkIdentities({
+                map(input => ({
                     startIndex: 0,
                     limit: CONSTANTS.IDENTITY_BATCH_SIZE,
                     searchBy: searchCriteria.searchBy,
@@ -63,9 +69,7 @@ function SearchBar({ identityListDispatch, searchCriteria, dispatch }: SearchBar
                     order: searchCriteria.order,
                     keyword: input
                 })))
-            .subscribe(response => {
-                identityListDispatch({ type: 'set_list', payload: response.identities });
-            });
+            .subscribe((response: IdentityRequest) => setIdentityRequest(response));
 
     return (
         <div className='input-wrapper'>

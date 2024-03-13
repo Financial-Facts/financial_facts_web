@@ -11,6 +11,7 @@ import { DiscountState, loadSimpleDiscounts } from '../../state/discounts/discou
 import { AppDispatch } from '../../state/store';
 import { setActivePage } from '../../state/page/page.slice';
 import PageLayout from '../../components/PageLayout/page-layout';
+import DiscountDataDisplaySection from '../../sections/discount-data-display-section/DiscountDataDisplaySection';
 
 
 function DiscountPage() {
@@ -58,6 +59,9 @@ function DiscountPage() {
     return (
       <PageLayout sections={[
         <Header key={'discounts-header'} text='Discounts' subtext='Company valuations and related data'/>,
+        selectedDiscount ?
+            <DiscountDataDisplaySection key={'discount-data-section'} discount={selectedDiscount}/> :
+            <></>,
         ...dataSets.map(dataSet =>
             <PeriodicDataTable key={ dataSet.label } tableData={ dataSet } span={'ALL'}/>)
       ]}/>

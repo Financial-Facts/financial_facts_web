@@ -10,8 +10,8 @@ export const handleEnterKeyEvent = (e: React.KeyboardEvent<HTMLDivElement>, hand
     }
 }
 
-export const initRef = <T> (ref: T | null, setter: (_: T) => void) => {
-    if (ref) {
+export const initRef = <T> (ref: T | null, setter?: (_: T) => void) => {
+    if (ref && setter) {
         setter(ref);
     }
 };
