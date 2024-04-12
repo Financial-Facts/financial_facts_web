@@ -9,9 +9,10 @@ import {
     Tooltip,
 } from 'chart.js';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import DiscountPage from "./pages/discount-page/DiscountPage";
-import FactsPage from './pages/facts-page/FactsPage';
-import MainPage from "./pages/main-page/MainPage";
+import DiscountPage from './components/pages/discount-page/DiscountPage';
+import FactsPage from './components/pages/facts-page/FactsPage';
+import MainPage from './components/pages/main-page/MainPage';
+
 
 ChartJS.register(
   CategoryScale,

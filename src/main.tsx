@@ -7,7 +7,7 @@ import "@fontsource/libre-baskerville";
 import "@fontsource/libre-baskerville/400.css";
 import './styles.scss'
 import { Provider } from 'react-redux'
-import { store } from './state/store.ts';
+import { store } from './store/store.ts';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
