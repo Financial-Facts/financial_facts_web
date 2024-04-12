@@ -1,16 +1,17 @@
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';import DiscountPage from "./pages/discount-page/DiscountPage";
-import MainPage from "./pages/main-page/MainPage"
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+    CategoryScale,
+    Chart as ChartJS,
+    Legend,
+    LineElement,
+    LinearScale,
+    PointElement,
+    Title,
+    Tooltip,
+} from 'chart.js';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import DiscountPage from "./pages/discount-page/DiscountPage";
 import FactsPage from './pages/facts-page/FactsPage';
+import MainPage from "./pages/main-page/MainPage";
 
 ChartJS.register(
   CategoryScale,
