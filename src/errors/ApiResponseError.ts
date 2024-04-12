@@ -1,8 +1,8 @@
 export default class ApiResponseError extends Error {
 
-    status: number;
+    status: number | string;
     
-    constructor(message: string, status: number){
+    constructor(message: string, status: number | string){
         super(message);
         this.status = status;
     }

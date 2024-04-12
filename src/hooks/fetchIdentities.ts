@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Identity, IdentityRequest } from '../services/bulk-entities/bulk-entities.typings';
-import BulkEntitiesService from '../services/bulk-entities/bulk-entities.service';
+import { supabaseService } from '../services/supabase/supabase.service';
 
 
 const fetchIdentities = (identityRequest: IdentityRequest | null) => {
@@ -12,12 +12,12 @@ const fetchIdentities = (identityRequest: IdentityRequest | null) => {
     useEffect(() => {
         if (!!identityRequest) {
             setLoading(true);
-            BulkEntitiesService.fetchBulkIdentities(identityRequest)
-                .then(response => setIdentities(response.identities))
+            supabaseService.fetchBulkIdentities(identityRequest)
+                .then(response => setIdentities(response))
                 .catch(() => setError(true))
                 .finally(() => setLoading(false));
         }
-    }, [ 
+    }, [
         identityRequest?.startIndex,
         identityRequest?.limit,
         identityRequest?.keyword,

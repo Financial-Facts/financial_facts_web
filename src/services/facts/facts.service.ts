@@ -4,12 +4,12 @@ import { Facts } from "./facts.typings";
 
 const FactsService = {
 
-    getFacts: (cik: string): Promise<Facts> => fetchDiscount(cik)
+    getFacts: (cik: string): Promise<Facts> => fetchFacts(cik)
     
 }
 
-async function fetchDiscount(cik: string): Promise<Facts> {
-    return fetch(`${environment.ffsRestUrl}/v1/facts/${cik}`, {
+async function fetchFacts(cik: string): Promise<Facts> {
+    return fetch(`${environment.factsGatewayUrl}/${cik}.json`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

@@ -1,14 +1,14 @@
-import Header from '../../sections/header/Header'
-import About from '../../sections/about/About'
+import Header from '../../organisms/header/Header'
+import About from '../../atoms/about/About'
 import { useEffect } from 'react'
-import DiscountDisplaySection from '../../sections/discounts-display-section/DiscountDisplaySection';
+import DiscountDisplaySection from '../../organisms/discounts-display-section/DiscountDisplaySection';
 import { SimpleDiscount } from '../../services/bulk-entities/bulk-entities.typings';
-import FactsLinkSection from '../../sections/facts-link-section/FactsLinkSection';
+import FactsLinkSection from '../../atoms/facts-link-section/FactsLinkSection';
 import { useDispatch, useSelector } from 'react-redux';
 import { DiscountState, loadSimpleDiscounts } from '../../state/discounts/discounts.slice';
 import { AppDispatch } from '../../state/store';
 import { setActivePage } from '../../state/page/page.slice';
-import PageLayout from '../../components/PageLayout/page-layout';
+import PageLayout from '../../template/page-layout/page-layout';
 
 
 function MainPage() {

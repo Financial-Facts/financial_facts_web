@@ -1,12 +1,12 @@
-import Header from '../../sections/header/Header'
+import Header from '../../organisms/header/Header'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../state/store';
 import { setActivePage } from '../../state/page/page.slice';
 import { useParams } from 'react-router-dom';
-import FactsDisplaySection from '../../sections/facts-display-section/FactsDisplaySection';
-import CompanySearchSection from '../../sections/company-search-section/CompanySearchSection';
-import PageLayout from '../../components/PageLayout/page-layout';
+import FactsDisplaySection from '../../organisms/facts-display-section/FactsDisplaySection';
+import CompanySearchSection from '../../molecules/company-search-section/CompanySearchSection';
+import PageLayout from '../../template/page-layout/page-layout';
 
 
 function FactsPage() {

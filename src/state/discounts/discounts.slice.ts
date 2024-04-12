@@ -1,20 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { BulkDiscountsWrapper, SimpleDiscount } from '../../services/bulk-entities/bulk-entities.typings'
-import BulkEntitiesService from '../../services/bulk-entities/bulk-entities.service';
+import { BulkDiscountsWrapper } from '../../services/bulk-entities/bulk-entities.typings'
+import { supabaseService } from '../../services/supabase/supabase.service';
 
 export type DiscountState = BulkDiscountsWrapper & {
   loading: boolean
 }
 
 export const loadSimpleDiscounts = createAsyncThunk('discounts/load', 
-  async () => 
-    BulkEntitiesService.fetchBulkDiscounts()
-      .then(response => {
-        if (!response.discounts) {
-          throw new Error(`Error occurred while collecting simple discounts`);
-        }
-        return response.discounts;
-      }));
+  async () => supabaseService.getSimpleDiscounts());
 
 export const discountsSlice = createSlice({
   name: 'discounts',

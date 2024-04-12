@@ -1,14 +1,9 @@
-import { Period } from "../discount/discount.typings"
+import { Period } from "../../types/discount.typings";
 
 export interface Facts {
     cik: string
-    lastSync: Date
-    data: FactsWrapper
-}
-
-export interface FactsWrapper {
     entityName: string
-    taxonomyReports: TaxonomyReports
+    facts: TaxonomyReports
 }
 
 export interface TaxonomyReports {

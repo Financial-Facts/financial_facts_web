@@ -1,8 +1,8 @@
-import { CONSTANTS } from "./components/constants";
-import { TableData } from "./components/periodic-data-chart/PeriodicDataChart.typings";
-import { SPAN } from "./sections/facts-display-section/FactsDisplaySection";
-import { PeriodicData } from "./services/discount/discount.typings";
+import { CONSTANTS } from "./constants/constants";
+import { TableData } from "./atoms/periodic-data-chart/PeriodicDataChart.typings";
+import { SPAN } from "./organisms/facts-display-section/FactsDisplaySection";
 import { UnitData, UnitPeriod } from "./services/facts/facts.typings";
+import { PeriodicData } from "./types/discount.typings";
 
 export const handleEnterKeyEvent = (e: React.KeyboardEvent<HTMLDivElement>, handler: () => void): void => {
     if (e.code === 'Enter') {
@@ -48,7 +48,7 @@ export const buildPeriodicData = (cik: string, periods: UnitPeriod[]): PeriodicD
             if (!acc.some(val => val.announcedDate.valueOf() === period.end.valueOf())) {
                 acc.push({
                     cik: cik,
-                    announcedDate: period.end,
+                    announcedDate: new Date(period.end),
                     period: period.fp,
                     value: period.val
                 })
@@ -77,4 +77,16 @@ export const buildTableData = (cik: string, item: UnitData | undefined, index?: 
         }));
     }
     return [];
+}
+
+export const cleanKey = (key: string): string => {
+    const wordRegex = /[A-Z]+(?![a-z])|[A-Z]?[a-z]+|\d+/g;
+    const keywords = key.trim().match(wordRegex)?.map(word => {
+        word = word.trim();
+        if (word === word.toUpperCase()) {
+            return word.trim();
+        } 
+        return (word[0].toUpperCase() + word.slice(1).toLowerCase()).trim();
+    }) || [];
+    return keywords.join(CONSTANTS.SPACE);
 }
