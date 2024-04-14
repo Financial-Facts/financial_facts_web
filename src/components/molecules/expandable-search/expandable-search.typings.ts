@@ -1,4 +1,4 @@
-import { Identity, Order, SearchBy, SortBy } from "../../services/bulk-entities/bulk-entities.typings";
+import { SearchBy, SortBy, Order, Identity } from "../../../services/bulk-entities/bulk-entities.typings";
 
 export interface SearchCriteria {
     searchBy: SearchBy,

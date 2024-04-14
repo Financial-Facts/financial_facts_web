@@ -1,6 +1,6 @@
+import { TableData } from "./components/atoms/periodic-data-chart/PeriodicDataChart.typings";
+import { SPAN } from "./components/organisms/facts-display-section/FactsDisplaySection";
 import { CONSTANTS } from "./constants/constants";
-import { TableData } from "./atoms/periodic-data-chart/PeriodicDataChart.typings";
-import { SPAN } from "./organisms/facts-display-section/FactsDisplaySection";
 import { UnitData, UnitPeriod } from "./services/facts/facts.typings";
 import { PeriodicData } from "./types/discount.typings";
 
