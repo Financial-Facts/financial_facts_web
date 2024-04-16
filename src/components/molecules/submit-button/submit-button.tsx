@@ -14,7 +14,7 @@ function SubmitButton({ outcome, loading }: SubmitButtonProps) {
             loading ? 
                 <LoadingSpinner size='SMALL' color='BLACK'></LoadingSpinner> : 
                 outcome !== 'neutral' ?
-                    <img src={`/assets/icons/${outcome === 'isSuccess' ? 'check' : 'x'}.svg`}/> :
+                    <img src={`/assets/${outcome === 'isSuccess' ? 'check' : 'x'}.svg`}/> :
                     'Send' 
         }</button>
     )

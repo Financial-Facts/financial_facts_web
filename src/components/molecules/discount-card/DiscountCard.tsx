@@ -53,7 +53,7 @@ function DiscountCard({ discount }: DiscountWrapper ) {
                                     { discount.symbol }
                                     { discount.active ?
                                         <div className="active-icon-wrapper">
-                                            <img src='/assets/icons/check.svg' height={20} width={15}/>
+                                            <img src='/assets/check.svg' height={20} width={15}/>
                                         </div> :
                                         undefined }
                                 </span>

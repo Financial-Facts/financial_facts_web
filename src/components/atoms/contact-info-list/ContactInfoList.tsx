@@ -9,11 +9,11 @@ function ContactInfoList() {
             <img src='/assets/logo.svg' className='logo'/>
             <ul className='contact-list'>
                 <li className='row'>
-                    <img src='/assets/icons/github.svg' className='icon'/>
+                    <img src='/assets/github.svg' className='icon'/>
                     <Link to={ environment.githubUrl }>Financial Facts Github</Link>
                 </li>
                 <li className='row'>
-                    <img src='/assets/icons/linkedin.svg' className='icon'/>
+                    <img src='/assets/linkedin.svg' className='icon'/>
                     <Link to={ environment.linkedInUrl}>Matthew Gabriel LinkedIn</Link>
                 </li>
             </ul>

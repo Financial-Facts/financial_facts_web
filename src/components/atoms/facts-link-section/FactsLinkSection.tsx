@@ -13,7 +13,7 @@ function FactsLinkSection() {
             <button className='search-navigation-button'
               onClick={() => navigate('/facts')}>
                 Search
-                <img src='/assets/icons/magnifying-glass.svg'/>
+                <img src='/assets/magnifying-glass.svg'/>
             </button>
         </div>
         <div role='img' className='company-icon-list-box'/>

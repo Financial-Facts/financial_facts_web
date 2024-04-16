@@ -143,7 +143,7 @@ function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchPro
             ${ isStandalone ? 'standalone-search-bar' : 'sticky-search-bar'}`}
             aria-expanded={ displaySearchBar }>
             <div className='search-bar-wrapper'>
-                <img src='/assets/icons/magnifying-glass.svg'
+                <img src='/assets/magnifying-glass.svg'
                     role={ displaySearchBar ? 'img' : 'button' }
                     className={`search-icon ${displaySearchBar ? 'expanded-search-icon' : CONSTANTS.EMPTY}`}
                     tabIndex={ displaySearchBar ? -1 : 0}
@@ -160,7 +160,7 @@ function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchPro
                                     <img role='button'
                                         className='exit-button'
                                         tabIndex={0}
-                                        src={`/assets/icons/x.svg`}
+                                        src={`/assets/x.svg`}
                                         onClick={() => handleCloseEvent()}
                                         onKeyDown={(e) => handleEnterKeyEvent(e, handleCloseEvent)}/> :
                                     undefined
