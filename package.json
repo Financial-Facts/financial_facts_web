@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "copy_assets": "cp -a ./assets/. ./dist/assets",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "generate_schema": "npx supabase gen types typescript --project-id \"gryjgqyrnxtfsswnyttk\" --schema public > ./src/services/supabase/schema/supabase-schema.ts",
     "preview": "vite preview"
