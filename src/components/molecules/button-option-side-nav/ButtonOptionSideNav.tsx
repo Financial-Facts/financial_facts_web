@@ -24,8 +24,8 @@ function ButtonOptionSideNav({ buttonOptionSideNavConfig, refSetter }: ButtonOpt
 
     const renderScrollableNavSection = (config: ButtonSideNavConfigItem<any>, index: number) =>
         <React.Fragment key={`button-option-list-${index + 1}`}>
-            <span className='divider-text'>{ config.label }</span>
             <div className='data-selection-box'>
+                <span className='divider-text'>{ config.label }</span>
                 <ButtonOptionList <string>
                     keys={ config.keys }
                     setter={ config.selectedKeySetter }
@@ -63,7 +63,7 @@ function ButtonOptionSideNav({ buttonOptionSideNavConfig, refSetter }: ButtonOpt
         }, []);
 
     return (
-        <div className={`facts-wrapper`} ref={(ref) => initRef(ref, refSetter)}>
+        <div className={`side-nav-wrapper`} ref={(ref) => initRef(ref, refSetter)}>
             {
                 renderNavSections()
             }

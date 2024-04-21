@@ -16,6 +16,7 @@
 .facts-display-section {
     display: flex;
     width: 100%;
+    min-height: 500px;
     box-sizing: border-box;
     font-size: $normal-font;
     font-family: $league-spartan;
@@ -32,38 +33,6 @@
         min-height: 500px;
     }
 
-    .facts-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 16px;
-        gap: 16px;
-        width: 25%;
-        height: 500px;
-        max-width: 300px;
-        background: $magnolia-white;
-        border-right: 1px solid rgba(41, 41, 41, .2);
-        box-sizing: border-box;
-        transition-duration: 0.4s;
-
-        .taxonomy-options-wrapper {
-            height: fit-content;
-            gap: 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .data-selection-box {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-            overflow-y: auto;
-        }
-    }
-
     .chart-wrapper {
         width: 75%;
         height: fit-content;
@@ -78,6 +47,17 @@
         
         .visualizations-container {
            width: 100%; 
+        }
+    }
+}
+
+@media only screen and (max-width: 576px) {
+
+    .facts-display-section {
+        flex-direction: column;
+
+        .chart-wrapper {
+            width: 100%;
         }
     }
 }

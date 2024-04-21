@@ -1,6 +1,6 @@
 @import 'src/variables';
 
-.facts-wrapper {
+.side-nav-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -38,5 +38,26 @@
         align-items: center;
         gap: 16px;
         overflow-y: auto;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+
+    .side-nav-wrapper {
+        width: 100%;
+        height: 100%;
+        max-height: 300px;
+        max-width: unset;
+        flex-direction: row;
+        align-items: flex-start;
+
+        .data-selection-box {
+            max-height: 268px;
+            flex: 50%;
+        }
+
+        .side-nav-options-wrapper {
+            flex: 50%;
+        }
     }
 }

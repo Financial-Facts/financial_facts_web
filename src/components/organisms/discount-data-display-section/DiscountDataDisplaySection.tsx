@@ -23,6 +23,7 @@ function DiscountDataDisplaySection({ discount }: DiscountDataDisplaySectionProp
     const [ selectedSpan, setSelectedSpan ] = useState<SPAN>('ALL');
     const [ chartWrapperRef, setChartWrapperRef ] = useState<HTMLDivElement | null>(null);
     const [ optionsWrapperRef, setOptionsWrapperRef ] = useState<HTMLDivElement | null>(null);
+    const [ mobile, setMobile ] = useState<boolean>(false);
 
     const sideConfigItems = [{
         label: 'Valuation',
@@ -43,13 +44,18 @@ function DiscountDataDisplaySection({ discount }: DiscountDataDisplaySectionProp
     }];
 
     useEffect(() => {
-        if (chartWrapperRef && optionsWrapperRef) {
+        if (!mobile && chartWrapperRef && optionsWrapperRef) {
             const observerId = ResizeObserverService.matchHeight(chartWrapperRef, optionsWrapperRef);
             return (() => {
                 ResizeObserverService.disconnectObserver(observerId);
             });
         }
     }, [ chartWrapperRef ]);
+
+    useEffect(() => {
+        const screenWidth = window.screen.width;
+        setMobile(screenWidth < 576);
+    }, []);
 
     useEffect(() => {
         setPeriodicDataKey(undefined);

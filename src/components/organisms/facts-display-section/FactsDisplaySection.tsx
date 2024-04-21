@@ -26,13 +26,19 @@ function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
     const [ chartWrapperRef, setChartWrapperRef ] = useState<HTMLDivElement | null>(null);
     const [ factsWrapperRef, setFactsWrapperRef ] = useState<HTMLDivElement | null>(null);
     const { facts, loading, error, notFound } = fetchFacts(cik);
+    const [ mobile, setMobile ] = useState<boolean>(false);
 
     useEffect(() => {
         setDataKey(CONSTANTS.EMPTY);
     }, [ taxonomy ]);
 
     useEffect(() => {
-        if (chartWrapperRef && factsWrapperRef) {
+        const screenWidth = window.screen.width;
+        setMobile(screenWidth < 576);
+    }, []);
+
+    useEffect(() => {
+        if (!mobile && chartWrapperRef && factsWrapperRef) {
             const observerId = ResizeObserverService.matchHeight(chartWrapperRef, factsWrapperRef);
             return (() => {
                 ResizeObserverService.disconnectObserver(observerId);

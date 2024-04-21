@@ -31,5 +31,15 @@
             }
         }
     }
+}
 
+@media only screen and (max-width: 576px) {
+
+    .discount-data-display-section {
+        flex-direction: column;
+
+        .data-container {
+            width: 100%;
+        }
+    }
 }
