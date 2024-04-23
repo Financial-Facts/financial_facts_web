@@ -17,7 +17,6 @@ function DiscountPage() {
     const { cik } = useParams();
     const { discount, loading, error } = fetchDiscount(cik);
     const discounts = useSelector< { discounts: DiscountState }, SimpleDiscount[]>((state) => state.discounts.discounts);
-    // const loading = useSelector< { discounts: DiscountState }, boolean>((state) => state.discounts.loading);
     const dispatch = useDispatch<AppDispatch>();
     
     useEffect(() => {

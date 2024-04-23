@@ -12,6 +12,10 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DiscountPage from './components/pages/discount-page/DiscountPage';
 import FactsPage from './components/pages/facts-page/FactsPage';
 import MainPage from './components/pages/main-page/MainPage';
+import { useEffect } from 'react';
+import { setMobile } from './store/mobile/mobile.slice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from './store/store';
 
 
 ChartJS.register(
@@ -25,6 +29,21 @@ ChartJS.register(
 );
 
 function App() {
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleWindowSizeChange = () => {
+    const screenWidth = window.screen.width;
+    dispatch(setMobile(screenWidth < 576));
+  }
+
+  useEffect(() => {
+    handleWindowSizeChange();
+    window.addEventListener('resize', handleWindowSizeChange);
+    return (() => {
+      window.removeEventListener('resize', handleWindowSizeChange);
+    })
+  }, []);
 
   return (
     <BrowserRouter>

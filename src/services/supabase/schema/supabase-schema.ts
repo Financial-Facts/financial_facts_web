@@ -693,6 +693,12 @@ export type Database = {
           stickerprice: number
         }[]
       }
+      get_discount: {
+        Args: {
+          discount_cik: string
+        }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never

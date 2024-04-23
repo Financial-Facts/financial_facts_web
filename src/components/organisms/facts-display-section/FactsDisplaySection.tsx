@@ -11,6 +11,7 @@ import fetchFacts from '../../../hooks/fetchFacts';
 import { Taxonomy } from '../../../services/facts/facts.typings';
 import ResizeObserverService from '../../../services/resize-observer-service/resize-observer.service';
 import { cleanKey, buildTableData, initRef } from '../../../utilities';
+import { useSelector } from 'react-redux';
 
 export interface FactsDisplaySectionProps {
     cik: string
@@ -26,16 +27,11 @@ function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
     const [ chartWrapperRef, setChartWrapperRef ] = useState<HTMLDivElement | null>(null);
     const [ factsWrapperRef, setFactsWrapperRef ] = useState<HTMLDivElement | null>(null);
     const { facts, loading, error, notFound } = fetchFacts(cik);
-    const [ mobile, setMobile ] = useState<boolean>(false);
+    const mobile = useSelector<{ mobile: boolean }, boolean>((state) => state.mobile);
 
     useEffect(() => {
         setDataKey(CONSTANTS.EMPTY);
     }, [ taxonomy ]);
-
-    useEffect(() => {
-        const screenWidth = window.screen.width;
-        setMobile(screenWidth < 576);
-    }, []);
 
     useEffect(() => {
         if (!mobile && chartWrapperRef && factsWrapperRef) {

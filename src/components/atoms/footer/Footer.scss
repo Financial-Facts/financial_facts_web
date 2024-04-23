@@ -2,6 +2,7 @@
 
 .footer {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
@@ -10,4 +11,13 @@
     color: $off-white;
     font-family: $libre-baskerville;
     font-size: $normal-font;
+    row-gap: 8px;
+
+    .subtext {
+        font-size: $below-normal-font;
+
+        a {
+            color: $light-purple;
+        }
+    }
 }

@@ -3,9 +3,6 @@ import { Database } from './schema/supabase-schema';
 import { environment } from '../../environment';
 import { Identity, IdentityRequest, SimpleDiscount } from '../bulk-entities/bulk-entities.typings';
 import ApiResponseError from '../../errors/ApiResponseError';
-import { SELECT_DISCOUNT_QUERY } from './queries/discount.queries';
-import { DbDiscount } from './supabase.typings';
-import { mapDbToDiscount } from './supabase.utils';
 import { Discount } from '../../types/discount.typings';
 
 class SupabaseService {
@@ -56,14 +53,9 @@ class SupabaseService {
     }
 
     async fetchDiscount(cik: string): Promise<Discount | null> {
-        const select_discount_query = this.client
-            .from('discount')
-            .select(SELECT_DISCOUNT_QUERY)
-            .eq('cik', cik)
-            .returns<DbDiscount>()
-            .maybeSingle();
-
-        const { data, error } = await select_discount_query;
+        const { data, error } = await this.client
+            .rpc('get_discount', { discount_cik: cik })
+            .returns<Discount>();
 
         if (error) {
             throw new ApiResponseError(`Error occurred fetching discount for ${cik}: ${error.message}`, error.code);
@@ -73,7 +65,7 @@ class SupabaseService {
             return null;
         }
 
-        return mapDbToDiscount(data as DbDiscount);
+        return data;
     }
 
 }

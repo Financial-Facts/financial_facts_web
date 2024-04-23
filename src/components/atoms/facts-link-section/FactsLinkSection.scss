@@ -52,7 +52,7 @@
             img {
                 transition-duration: 0.4s;
                 height: 32px;
-                filter: invert(99%) sepia(50%) saturate(160%) hue-rotate(201deg) brightness(114%) contrast(92%);
+                filter: brightness(0) saturate(100%) invert(94%) sepia(59%) saturate(20%) hue-rotate(346deg) brightness(120%) contrast(92%);
             }
         }
 
@@ -62,7 +62,7 @@
 
             img {
                 height: 32px;
-                filter: invert(9%) sepia(69%) saturate(1%) hue-rotate(314deg) brightness(96%) contrast(85%);
+                filter: brightness(0) saturate(100%) invert(15%) sepia(13%) saturate(0%) hue-rotate(175deg) brightness(101%) contrast(98%);
             }
         }
     }

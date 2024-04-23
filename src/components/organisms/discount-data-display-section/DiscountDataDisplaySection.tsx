@@ -11,6 +11,7 @@ import { DcfPeriodicDataKeys, SpPeriodicDataKeys, Valuation } from './DiscountDa
 import ResizeObserverService from "../../../services/resize-observer-service/resize-observer.service";
 import { Discount, PeriodicData } from "../../../types/discount.typings";
 import { cleanKey, initRef } from "../../../utilities";
+import { useSelector } from "react-redux";
 
 export interface DiscountDataDisplaySectionProps {
     discount: Discount
@@ -23,7 +24,7 @@ function DiscountDataDisplaySection({ discount }: DiscountDataDisplaySectionProp
     const [ selectedSpan, setSelectedSpan ] = useState<SPAN>('ALL');
     const [ chartWrapperRef, setChartWrapperRef ] = useState<HTMLDivElement | null>(null);
     const [ optionsWrapperRef, setOptionsWrapperRef ] = useState<HTMLDivElement | null>(null);
-    const [ mobile, setMobile ] = useState<boolean>(false);
+    const mobile = useSelector<{ mobile: boolean }, boolean>((state) => state.mobile);
 
     const sideConfigItems = [{
         label: 'Valuation',
@@ -53,11 +54,6 @@ function DiscountDataDisplaySection({ discount }: DiscountDataDisplaySectionProp
     }, [ chartWrapperRef ]);
 
     useEffect(() => {
-        const screenWidth = window.screen.width;
-        setMobile(screenWidth < 576);
-    }, []);
-
-    useEffect(() => {
         setPeriodicDataKey(undefined);
     }, [ valuationKey ]);
     
@@ -82,7 +78,7 @@ function DiscountDataDisplaySection({ discount }: DiscountDataDisplaySectionProp
     return (
         <section className="discount-data-display-section">
             <ButtonOptionSideNav buttonOptionSideNavConfig={sideConfigItems}
-            refSetter={setOptionsWrapperRef}/>
+                refSetter={setOptionsWrapperRef}/>
             <div className='data-container'>
                 {
                     valuationKey && periodicDataKey ? 

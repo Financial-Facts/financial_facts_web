@@ -15,7 +15,8 @@ function ExpandableMenu({ $closeDropdowns }: ExpandableMenuProps) {
 
     const [ isExpanded, setIsExpanded ] = useState(false);
     const pages = useSelector<{ page: PageState }, PageState>((state) => state.page);
-
+    const mobile = useSelector<{ mobile: boolean }, boolean>((state) => state.mobile);
+    
     useEffect(() => {
         const watchForClosure = $closeDropdowns
             .subscribe((payload: ClosurePayload[]) => setIsExpanded(
@@ -33,14 +34,25 @@ function ExpandableMenu({ $closeDropdowns }: ExpandableMenuProps) {
     
     const renderDropdownMenuList = () => renderDropdownMenuListItems(Object.keys(pages) as Page[]);
 
-    const renderDropdownMenuListItems = (pageList: Page[]) => 
-        pageList.map(page => {
-            const pageData = pages[page];
-            return (<li key={ page } className={`drop-down-item ${ pageData.active ? 'active' : 'inactive' }`}>
-                <Link className={ pageData.active ? 'active' : 'inactive' } to={ pageData.link }>{ page }</Link>
-            </li>);
-        });
+    const buildListItem = (page: Page) => {
+        const pageData = pages[page];
+        return (<li key={ page } className={`drop-down-item ${ pageData.active ? 'active' : 'inactive' }`}>
+            <Link className={ pageData.active ? 'active' : 'inactive' } to={ pageData.link }>{ page }</Link>
+        </li>)
+    }
 
+    const renderDropdownMenuListItems = (pageList: Page[]) => 
+        mobile ? 
+            pageList.map(page => {
+                return buildListItem(page);
+            }) :
+            pageList.reduce<JSX.Element[]>((acc, page) => {
+                if (page !== 'Main') {
+                    acc.push(buildListItem(page));
+                }
+                return acc;
+            }, []);
+    
     return (
         <nav className={'sticky-menu-option expandable-menu'}
             aria-expanded={isExpanded}>

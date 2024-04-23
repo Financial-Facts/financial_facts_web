@@ -1,3 +1,4 @@
+import { messaging } from "../../../constants/messaging"
 import "./About.scss"
 
 function About() {
@@ -13,8 +14,7 @@ function About() {
                 <h3>Our Philosophy</h3>
               </div>
             </div>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla accumsan quam ac turpis venenatis, in eleifend ligula cursus. Integer consectetur, urna vel tempor rhoncus, mi dolor tincidunt urna, non gravida turpis purus ac justo. 
-Sed at ante eu orci fermentum tincidunt nec nec nisi. Fusce convallis ex eget odio efficitur vulputate. Suspendisse potenti.</p>
+            <p>{ messaging.aboutUs }</p>
             <button className="read-more-button">Read more</button>
         </div>
       </section>

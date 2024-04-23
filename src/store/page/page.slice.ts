@@ -21,7 +21,7 @@ const initialState: PageState = {
 }
 
 export const pageSlice = createSlice({
-  name: 'discounts',
+  name: 'page',
   initialState,
   reducers: {
     setActivePage: (state, action: PayloadAction<Page>) => {

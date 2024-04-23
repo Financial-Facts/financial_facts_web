@@ -26,7 +26,8 @@ function PeriodicDataChart({ tableData, normalize, span }: PeriodicDataChartProp
     });
 
     const renderTable = () => {
-        const labels = filterBySpan(tableData.periodicData, span).map(periodData => periodData.announcedDate.toLocaleDateString());
+        const labels = filterBySpan(tableData.periodicData, span)
+            .map(periodData => new Date(periodData.announcedDate).toLocaleDateString());
         return <Line data={{
             labels: labels,
             datasets: [buildDataSet(tableData.label, filterBySpan(tableData.periodicData, span))]

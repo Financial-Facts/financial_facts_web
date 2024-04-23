@@ -21,7 +21,8 @@ function PeriodicDataTable({ tableData, span }: PeriodicDataTableProps) {
     }
 
     const renderHeaderRows = (tableData: TableData) => {
-        const columns = filterBySpan(tableData.periodicData, span).map(periodicData => periodicData.announcedDate.toLocaleDateString());
+        const columns = filterBySpan(tableData.periodicData, span)
+            .map(periodicData => new Date(periodicData.announcedDate).toLocaleDateString());
         let key = 0;
         return <thead key={ `${tableData.label}-table-header` }>
             <tr>
