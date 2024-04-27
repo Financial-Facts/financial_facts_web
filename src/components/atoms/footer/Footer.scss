@@ -2,22 +2,63 @@
 
 .footer {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 100px;
     background: $dark-gray;
-    color: $off-white;
-    font-family: $libre-baskerville;
-    font-size: $normal-font;
-    row-gap: 8px;
+    padding: 32px 0;
 
-    .subtext {
-        font-size: $below-normal-font;
+    .content-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: $off-white;
+        font-family: $libre-baskerville;
+        font-size: clamp($below-normal-font, 2vw, $normal-font);
+        text-align: center;
+        row-gap: 32px;
 
-        a {
-            color: $light-purple;
+        .column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 16px;
         }
+
+        .information {
+            display: flex;
+            row-gap: 8px;
+        }
+
+        h2 {
+            font-size: clamp($below-normal-font, 2vw, $normal-font);
+        }
+
+        .subtext {
+            font-size: clamp($small-font, 2vw, $below-normal-font);
+            margin: 0;
+
+            a {
+                color: $light-purple;
+            }
+        }
+    
+        .disclaimer {
+            line-height: 24px;
+            max-width: 800px;
+            text-align: justify;
+            
+            h2 {
+                font-size: clamp($below-normal-font, 2vw, $normal-font);
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 576px) {
+
+    .content-wrapper {
+        flex-wrap: wrap;
     }
 }
