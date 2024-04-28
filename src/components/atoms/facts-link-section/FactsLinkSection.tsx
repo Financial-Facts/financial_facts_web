@@ -8,7 +8,7 @@ function FactsLinkSection() {
     return (
       <section className='facts-link-section'>
         <h2>Facts</h2>
-        <h3>Looking for info on a specific company?</h3>
+        <h3>Looking for raw data for a specific company?</h3>
         <div className='search-navigation-button-wrapper'>
             <button className='search-navigation-button'
               onClick={() => navigate('/facts')}>

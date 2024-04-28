@@ -12,6 +12,7 @@ import { Taxonomy } from '../../../services/facts/facts.typings';
 import ResizeObserverService from '../../../services/resize-observer-service/resize-observer.service';
 import { cleanKey, buildTableData, initRef } from '../../../utilities';
 import { useSelector } from 'react-redux';
+import { MobileState } from '../../../store/mobile/mobile.slice';
 
 export interface FactsDisplaySectionProps {
     cik: string
@@ -27,20 +28,22 @@ function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
     const [ chartWrapperRef, setChartWrapperRef ] = useState<HTMLDivElement | null>(null);
     const [ factsWrapperRef, setFactsWrapperRef ] = useState<HTMLDivElement | null>(null);
     const { facts, loading, error, notFound } = fetchFacts(cik);
-    const mobile = useSelector<{ mobile: boolean }, boolean>((state) => state.mobile);
+    const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
 
     useEffect(() => {
         setDataKey(CONSTANTS.EMPTY);
     }, [ taxonomy ]);
 
     useEffect(() => {
-        if (!mobile && chartWrapperRef && factsWrapperRef) {
+        if (!mobile.mobile && chartWrapperRef && factsWrapperRef) {
             const observerId = ResizeObserverService.matchHeight(chartWrapperRef, factsWrapperRef);
             return (() => {
                 ResizeObserverService.disconnectObserver(observerId);
             });
+        } else if (factsWrapperRef) {
+            factsWrapperRef.style.height = CONSTANTS.EMPTY;
         }
-    }, [ chartWrapperRef ]);
+    }, [ chartWrapperRef, mobile ]);
 
     const getTaxonomyKeys = (): Taxonomy[] => {
         if (facts) {

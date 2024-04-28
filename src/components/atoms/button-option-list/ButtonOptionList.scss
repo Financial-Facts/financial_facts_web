@@ -1,7 +1,7 @@
 @import 'src/variables';
 
 .data-search-bar {
-    width: calc(100% - 80px);
+    width: calc(100% - 64px);
     padding: 8px;
     outline: 1px solid;
     border-radius: 4px;
@@ -15,8 +15,7 @@
     gap: 16px;
     overflow: auto;
     scrollbar-gutter: stable;
-    padding-left: 16px;
-    width: calc(100% - 32px);
+    margin-left: 24px;
 
     .key {
         padding: 8px 16px;
@@ -42,4 +41,5 @@
 
 .vertical {
     flex-direction: column;
+    width: calc(100% - 24px);
 }

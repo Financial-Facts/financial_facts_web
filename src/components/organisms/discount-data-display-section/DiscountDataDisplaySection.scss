@@ -3,16 +3,21 @@
 .discount-data-display-section {
     display: flex;
     width: 100%;
-    min-height: 500px;
     font-size: $normal-font;
     font-family: $league-spartan;
     color: $dark-gray;
     
     .data-container {
         display: flex;
+        flex-direction: column;
         width: 75%;
         flex: 1;
         border-top: 1px solid rgba(41, 41, 41, 0.2);
+        padding: 16px 32px;
+    
+        .zero-state {
+            min-height: 300px;
+        }
 
         .periodic-data-container {
             width: 100%;
@@ -21,11 +26,10 @@
             display: flex;
             align-items: center;
             flex-direction: column;
-            padding: 16px;
             gap: 16px;
             box-sizing: border-box;
-    
-            
+            margin-top: 32px;
+
             .visualizations-container {
                 width: 100%; 
             }
@@ -33,13 +37,14 @@
     }
 }
 
-@media only screen and (max-width: 576px) {
+@media only screen and (max-width: 1024px) {
 
     .discount-data-display-section {
         flex-direction: column;
 
         .data-container {
             width: 100%;
+            box-sizing: border-box;
         }
     }
 }

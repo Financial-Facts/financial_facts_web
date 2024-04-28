@@ -13,7 +13,7 @@ import DiscountPage from './components/pages/discount-page/DiscountPage';
 import FactsPage from './components/pages/facts-page/FactsPage';
 import MainPage from './components/pages/main-page/MainPage';
 import { useEffect } from 'react';
-import { setMobile } from './store/mobile/mobile.slice';
+import { MobileSize, setMobile } from './store/mobile/mobile.slice';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from './store/store';
 
@@ -33,8 +33,16 @@ function App() {
   const dispatch = useDispatch<AppDispatch>();
 
   const handleWindowSizeChange = () => {
-    const screenWidth = window.screen.width;
-    dispatch(setMobile(screenWidth < 576));
+    const screenWidth = window.innerWidth;
+    const mobileSize: MobileSize | undefined =
+      screenWidth < 576 ? 'SMALL' :
+      screenWidth < 768 ? 'MEDIUM' :
+      screenWidth < 1024 ? 'LARGE' :
+      undefined;
+    dispatch(setMobile({
+      mobile: !!mobileSize,
+      size: mobileSize
+    }));
   }
 
   useEffect(() => {

@@ -6,6 +6,7 @@ import { Subject } from 'rxjs/internal/Subject';
 import { ClosurePayload } from '../../organisms/sticky-menu/StickyMenu';
 import './expandable-menu.scss';
 import { PageState, Page } from '../../../store/page/page.typings';
+import { MobileState } from '../../../store/mobile/mobile.slice';
 
 export interface ExpandableMenuProps  { 
     $closeDropdowns: Subject<ClosurePayload[]>
@@ -15,7 +16,7 @@ function ExpandableMenu({ $closeDropdowns }: ExpandableMenuProps) {
 
     const [ isExpanded, setIsExpanded ] = useState(false);
     const pages = useSelector<{ page: PageState }, PageState>((state) => state.page);
-    const mobile = useSelector<{ mobile: boolean }, boolean>((state) => state.mobile);
+    const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
     
     useEffect(() => {
         const watchForClosure = $closeDropdowns
@@ -42,7 +43,7 @@ function ExpandableMenu({ $closeDropdowns }: ExpandableMenuProps) {
     }
 
     const renderDropdownMenuListItems = (pageList: Page[]) => 
-        mobile ? 
+        mobile.size === 'SMALL' ? 
             pageList.map(page => {
                 return buildListItem(page);
             }) :

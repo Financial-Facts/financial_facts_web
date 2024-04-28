@@ -52,12 +52,11 @@ function ButtonOptionList<T extends string>({
     return (
         <>
             {
-                includeSearch ? 
+                includeSearch &&
                     <input className='data-search-bar'
                         type='text'
                         placeholder='Filter by keyword...'
-                        onInput={ (e) => setKeywordFilter((e.target as HTMLInputElement).value) }/> :
-                    undefined
+                        onInput={ (e) => setKeywordFilter((e.target as HTMLInputElement).value) }/>
             }
             <ul className={`key-group
                 ${orientation ? orientation : CONSTANTS.EMPTY}`}>

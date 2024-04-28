@@ -6,6 +6,7 @@ import './StickyMenu.scss';
 import { fetchChildren, initRef } from '../../../utilities';
 import HomeButton from '../../atoms/home-button/HomeButton';
 import { useSelector } from 'react-redux';
+import { MobileState } from '../../../store/mobile/mobile.slice';
 
 export type ClosurePayload = 'ALL' | 'NAV' | 'SEARCH';
 
@@ -14,7 +15,7 @@ function StickyMenu() {
     const [ stickyMenuRef, setStickyMenuRef ] = useState<HTMLElement | null>(null);
     const [ _, setChildrenElements ] = useState<Element[]>([]);
     const [ $closeDropdowns ] = useState(new Subject<ClosurePayload[]>());
-    const mobile = useSelector<{ mobile: boolean }, boolean>((state) => state.mobile);
+    const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
 
     useEffect(() => {
         if (stickyMenuRef) {
@@ -53,7 +54,7 @@ function StickyMenu() {
     return (
         <section className='sticky-menu'
             ref={ (ref) => initRef(ref, setStickyMenuRef) }>
-            { !mobile ? <HomeButton/> : undefined }
+            { mobile.size !== 'SMALL' && <HomeButton/> }
             <ExpandableSearch $closeDropdowns={$closeDropdowns}/>
             <ExpandableMenu $closeDropdowns={$closeDropdowns}/>
         </section>

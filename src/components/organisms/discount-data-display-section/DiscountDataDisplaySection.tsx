@@ -12,6 +12,9 @@ import ResizeObserverService from "../../../services/resize-observer-service/res
 import { Discount, PeriodicData } from "../../../types/discount.typings";
 import { cleanKey, initRef } from "../../../utilities";
 import { useSelector } from "react-redux";
+import DiscountSingularData from "../../atoms/discount-singular-data/discount-singular-data";
+import { MobileState } from "../../../store/mobile/mobile.slice";
+import { CONSTANTS } from "../../../constants/constants";
 
 export interface DiscountDataDisplaySectionProps {
     discount: Discount
@@ -24,7 +27,7 @@ function DiscountDataDisplaySection({ discount }: DiscountDataDisplaySectionProp
     const [ selectedSpan, setSelectedSpan ] = useState<SPAN>('ALL');
     const [ chartWrapperRef, setChartWrapperRef ] = useState<HTMLDivElement | null>(null);
     const [ optionsWrapperRef, setOptionsWrapperRef ] = useState<HTMLDivElement | null>(null);
-    const mobile = useSelector<{ mobile: boolean }, boolean>((state) => state.mobile);
+    const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
 
     const sideConfigItems = [{
         label: 'Valuation',
@@ -45,17 +48,22 @@ function DiscountDataDisplaySection({ discount }: DiscountDataDisplaySectionProp
     }];
 
     useEffect(() => {
-        if (!mobile && chartWrapperRef && optionsWrapperRef) {
+        if (!mobile.mobile && periodicDataKey && chartWrapperRef && optionsWrapperRef) {
             const observerId = ResizeObserverService.matchHeight(chartWrapperRef, optionsWrapperRef);
             return (() => {
                 ResizeObserverService.disconnectObserver(observerId);
             });
+        } else if (optionsWrapperRef) {
+            optionsWrapperRef.style.height = CONSTANTS.EMPTY;
         }
-    }, [ chartWrapperRef ]);
+    }, [ chartWrapperRef, mobile, periodicDataKey]);
 
     useEffect(() => {
         setPeriodicDataKey(undefined);
     }, [ valuationKey ]);
+
+    const valuationHasPeriodicData = (valuationKey: Valuation) => Object.keys(discount[valuationKey].input)
+        .some(key => DcfPeriodicDataKeys.includes(key) || SpPeriodicDataKeys.includes(key));
     
     const buildVisualizations = (tableData: TableData) => 
         <div key={`${valuationKey}-visualization`} className='visualizations-container'>
@@ -79,10 +87,14 @@ function DiscountDataDisplaySection({ discount }: DiscountDataDisplaySectionProp
         <section className="discount-data-display-section">
             <ButtonOptionSideNav buttonOptionSideNavConfig={sideConfigItems}
                 refSetter={setOptionsWrapperRef}/>
-            <div className='data-container'>
+            <div className='data-container'  ref={(ref) => initRef(ref, setChartWrapperRef)}>
+                { valuationKey && <DiscountSingularData valuation={discount[valuationKey]}/> }
+                { valuationKey && !periodicDataKey && valuationHasPeriodicData(valuationKey) &&
+                    <ZeroState message='Select periodic data' supportText="Select option to see time series data"/>
+                }
                 {
                     valuationKey && periodicDataKey ? 
-                        <div className='periodic-data-container' ref={(ref) => initRef(ref, setChartWrapperRef)}>
+                        <div className='periodic-data-container'>
                             <SearchFormToggle <SPAN>
                                 name={'SpanToggle'}
                                 label={''}

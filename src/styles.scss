@@ -1,3 +1,5 @@
+@import 'src/variables';
+
 body {
     margin: 0;
     background: #F5F5F5; 
@@ -24,4 +26,22 @@ ul {
 
 .hide {
     display: none;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: $magnolia-white;
+}
+
+::-webkit-scrollbar-thumb {
+    background: $light-purple;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: $base-purple;
 }

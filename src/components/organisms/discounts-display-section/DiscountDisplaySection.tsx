@@ -51,12 +51,10 @@ function DiscountDisplaySection({ simplify = false }: DiscountDisplayParams) {
     return (
       <section className={`discount-display-section ${ simplify ? 'simplify' : 'full'}`}>
         {
-            simplify ?
-              undefined : 
-              <>
-                <h2>Discounts</h2>
-                <h3>See existing discounts and their <span>sale price</span></h3>
-              </>
+            !simplify && <>
+              <h2>Discounts</h2>
+              <h3>See firms that achieve our criteria and their <span>valuations</span></h3>
+            </>
         }
         { loading ? (
           <LoadingSpinner size='LARGE' color='PURPLE'></LoadingSpinner>

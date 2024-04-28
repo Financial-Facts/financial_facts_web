@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import ButtonOptionList from "../../atoms/button-option-list/ButtonOptionList";
 import './ButtonOptionSideNav.scss';
 import { initRef } from '../../../utilities';
@@ -23,7 +23,7 @@ export interface ButtonOptionSideNavProps {
 function ButtonOptionSideNav({ buttonOptionSideNavConfig, refSetter }: ButtonOptionSideNavProps) {
 
     const renderScrollableNavSection = (config: ButtonSideNavConfigItem<any>, index: number) =>
-        <React.Fragment key={`button-option-list-${index + 1}`}>
+        <div className='data-selection-box-wrapper' key={`button-option-list-${index + 1}`}>
             <div className='data-selection-box'>
                 <span className='divider-text'>{ config.label }</span>
                 <ButtonOptionList <string>
@@ -34,7 +34,7 @@ function ButtonOptionSideNav({ buttonOptionSideNavConfig, refSetter }: ButtonOpt
                     includeSearch={ config.includeSearch }
                     deselectable={config.deselectable}/>
             </div>
-        </React.Fragment>;
+        </div>;
 
     const renderStaticNavSection = (config: ButtonSideNavConfigItem<any>, index: number) =>
         <div className='side-nav-options-wrapper' key={config.label}>
