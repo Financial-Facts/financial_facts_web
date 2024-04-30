@@ -22,27 +22,25 @@ export interface ButtonOptionSideNavProps {
 
 function ButtonOptionSideNav({ buttonOptionSideNavConfig, refSetter }: ButtonOptionSideNavProps) {
 
-    const renderScrollableNavSection = (config: ButtonSideNavConfigItem<any>, index: number) =>
-        <div className='data-selection-box-wrapper' key={`button-option-list-${index + 1}`}>
-            <div className='data-selection-box'>
-                <span className='divider-text'>{ config.label }</span>
-                <ButtonOptionList <string>
-                    keys={ config.keys }
-                    setter={ config.selectedKeySetter }
-                    selectedKey={ config.selectedKey }
-                    orientation='vertical'
-                    includeSearch={ config.includeSearch }
-                    deselectable={config.deselectable}/>
-            </div>
+    const renderScrollableNavSection = (config: ButtonSideNavConfigItem<any>) =>
+        <div className='data-selection-box' key={config.label}>
+            <ButtonOptionList <string>
+                keys={ config.keys }
+                setter={ config.selectedKeySetter }
+                title={ config.label }
+                selectedKey={ config.selectedKey }
+                orientation='vertical'
+                includeSearch={ config.includeSearch }
+                deselectable={config.deselectable}/>
         </div>;
 
     const renderStaticNavSection = (config: ButtonSideNavConfigItem<any>, index: number) =>
         <div className='side-nav-options-wrapper' key={config.label}>
-            <span className='divider-text'>{ config.label }</span>
             <ButtonOptionList <string>
                 key={`button-option-list-${index + 1}`}
                 keys={ config.keys }
                 setter={ config.selectedKeySetter }
+                title={ config.label }
                 selectedKey={ config.selectedKey }
                 orientation='vertical'
                 includeSearch={ config.includeSearch }
@@ -56,7 +54,7 @@ function ButtonOptionSideNav({ buttonOptionSideNavConfig, refSetter }: ButtonOpt
             }
             if (config.displayCondition !== false && config.keys.length > 0) {
                 acc.push(config.isScrollable ?
-                    renderScrollableNavSection(config, index) :
+                    renderScrollableNavSection(config) :
                     renderStaticNavSection(config, index))
             }
             return acc;

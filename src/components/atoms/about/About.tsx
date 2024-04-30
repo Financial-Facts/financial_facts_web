@@ -15,7 +15,7 @@ function About() {
               </div>
             </div>
             <p>{ messaging.aboutUs }</p>
-            <button className="read-more-button">Read more</button>
+            <button className="league-spartan read-more-button">Read more</button>
         </div>
       </section>
     )

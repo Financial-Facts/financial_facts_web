@@ -10,6 +10,7 @@ import { DiscountState, loadSimpleDiscounts } from '../../../store/discounts/dis
 import { setActivePage } from '../../../store/page/page.slice';
 import { AppDispatch } from '../../../store/store';
 import PageLayout from '../../templates/page-layout/page-layout';
+import DiscountIdentityDisplay from '../../atoms/discount-identity-display/DiscountIdentityDisplay';
 
 
 function DiscountPage() {
@@ -31,6 +32,9 @@ function DiscountPage() {
       <PageLayout sections={[
         <Header key={'discounts-header'} text='Discounts' subtext='Company valuations and related data'/>,
         <DiscountDisplaySection simplify={true} key='discount-display-section'/>,
+        !loading && !error && !!discount ?
+            <DiscountIdentityDisplay key={'discount-identity-section'} identity={discount}/> :
+            undefined,
         !loading && !error && !!discount ?
             <DiscountDataDisplaySection key={'discount-data-section'} discount={discount}/> :
             undefined

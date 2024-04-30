@@ -6,6 +6,7 @@ import { cleanKey } from '../../../utilities';
 export interface ButtonOptionListProps <T extends string> {
     keys: T[],
     setter: (v: T | undefined) => void,
+    title?: string,
     selectedKey?: T,
     orientation?: 'vertical',
     includeSearch?: boolean,
@@ -15,6 +16,7 @@ export interface ButtonOptionListProps <T extends string> {
 function ButtonOptionList<T extends string>({
     keys,
     setter,
+    title,
     selectedKey,
     orientation,
     includeSearch,
@@ -37,7 +39,7 @@ function ButtonOptionList<T extends string>({
                 (<button role='listitem'
                     tabIndex={0}
                     key={key}
-                    className={`key ${ key === selectedKey ? 'active' : CONSTANTS.EMPTY}`}
+                    className={`league-spartan key ${ key === selectedKey ? 'active' : CONSTANTS.EMPTY}`}
                     onClick={() => {
                         if (deselectable && selectedKey === key) {
                             setter(undefined);
@@ -51,17 +53,20 @@ function ButtonOptionList<T extends string>({
 
     return (
         <>
-            {
-                includeSearch &&
-                    <input className='data-search-bar'
-                        type='text'
-                        placeholder='Filter by keyword...'
-                        onInput={ (e) => setKeywordFilter((e.target as HTMLInputElement).value) }/>
-            }
-            <ul className={`key-group
-                ${orientation ? orientation : CONSTANTS.EMPTY}`}>
-                { renderKeys() }
-            </ul>
+            { !!title && <span className='title-text'>{ title }</span> }
+            <div className='key-group-wrapper'>
+                {
+                    includeSearch &&
+                        <input className='league-spartan data-search-bar'
+                            type='text'
+                            placeholder='Filter by keyword...'
+                            onInput={ (e) => setKeywordFilter((e.target as HTMLInputElement).value) }/>
+                }
+                <ul className={`key-group
+                    ${orientation ? orientation : CONSTANTS.EMPTY}`}>
+                    { renderKeys() }
+                </ul>
+            </div>
         </>
     )
   }

@@ -7,6 +7,10 @@
     .body .discounts {
         margin-bottom: 15px;
     }
+    
+    .body-arrows {
+        padding-top: 0;
+    }
 }
 
 .full {
@@ -30,14 +34,12 @@
 
     h2 {
         color: $base-purple;
-        font-family: $league-spartan;
         font-size: $x-large-font;
         margin: 0 5%;
         text-align: center;
     }
 
     h3 {
-        font-family: $league-spartan;
         font-size: clamp($plus-font, 5vw, $large-font);
         margin: 17px 10% 21px 10%;
         text-align: center;

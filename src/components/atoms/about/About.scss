@@ -26,8 +26,6 @@
         flex-direction: column;
         justify-content: space-between;
         align-items: flex-start;
-        color: $dark-gray;
-        font-family: $league-spartan;
         margin-right: 50px;
 
         h2 {
@@ -55,12 +53,10 @@
             height: 50px;
             width: 200px;
             font-size: $large-font;
-            font-family: $league-spartan;
             border-radius: 4px;
             border: 2px solid $dark-gray;
             transition-duration: 0.4s;
             background: $off-white;
-            color: $dark-gray;
             cursor: pointer;
         }
 

@@ -2,7 +2,9 @@
 
 body {
     margin: 0;
-    background: #F5F5F5; 
+    background: #F5F5F5;
+    font-family: $league-spartan;
+    color: $dark-gray;
 }
 
 button {
@@ -33,10 +35,6 @@ ul {
     height: 8px;
 }
 
-::-webkit-scrollbar-track {
-    background: $magnolia-white;
-}
-
 ::-webkit-scrollbar-thumb {
     background: $light-purple;
     border-radius: 4px;
@@ -44,4 +42,9 @@ ul {
 
 ::-webkit-scrollbar-thumb:hover {
     background: $base-purple;
+}
+
+.league-spartan {
+    font-family: $league-spartan;
+    color: $dark-gray;
 }

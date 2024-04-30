@@ -4,7 +4,6 @@
     list-style-type: none;
     line-height: 24px;
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
     column-gap: 8px;
     
@@ -31,4 +30,17 @@
 
 .data-list :nth-child(even) {
     background: $light-gray;
+}
+
+@media only screen and (max-width: 576px) {
+
+    .data-list {
+        flex-direction: column;
+        
+        .data-list-item {
+            flex: 1;
+            width: 100%;
+            max-width: none;
+        }
+    }
 }
