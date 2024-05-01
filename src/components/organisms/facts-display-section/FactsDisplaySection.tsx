@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react';
 import LoadingSpinner from '../../atoms/loading-spinner/loading-spinner';
-import PeriodicDataChart from '../../atoms/periodic-data-chart/PeriodicDataChart';
-import PeriodicDataTable from '../../atoms/periodic-data-table/PeriodicDataTable';
-import SearchFormToggle from '../../atoms/search-form-toggle/SearchFormToggle';
 import ZeroState from '../../atoms/zero-state/ZeroState';
 import ButtonOptionSideNav from '../../molecules/button-option-side-nav/ButtonOptionSideNav';
 import './FactsDisplaySection.scss';
@@ -10,9 +7,10 @@ import { CONSTANTS } from '../../../constants/constants';
 import fetchFacts from '../../../hooks/fetchFacts';
 import { Taxonomy } from '../../../services/facts/facts.typings';
 import ResizeObserverService from '../../../services/resize-observer-service/resize-observer.service';
-import { cleanKey, buildTableData, initRef } from '../../../utilities';
+import { initRef } from '../../../utilities';
 import { useSelector } from 'react-redux';
 import { MobileState } from '../../../store/mobile/mobile.slice';
+import PeriodicDataVisualization from '../../molecules/periodic-data-visualization/PeriodicDataVisualization';
 
 export interface FactsDisplaySectionProps {
     cik: string
@@ -24,7 +22,6 @@ function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
 
     const [ taxonomy, setTaxonomy ] = useState<Taxonomy | undefined>(undefined);
     const [ selectedDataKey, setDataKey ] = useState(CONSTANTS.EMPTY);
-    const [ span, setSpan ] = useState<SPAN>('ALL');
     const [ chartWrapperRef, setChartWrapperRef ] = useState<HTMLDivElement | null>(null);
     const [ factsWrapperRef, setFactsWrapperRef ] = useState<HTMLDivElement | null>(null);
     const { facts, loading, error, notFound } = fetchFacts(cik);
@@ -72,24 +69,6 @@ function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
         return <ZeroState message={message} supportText={support}/>
     }
 
-    const renderDataVisualizations = () => {
-        if (facts && taxonomy && selectedDataKey) {
-            const taxonomyReport = facts.facts[taxonomy];
-            const item = taxonomyReport ? taxonomyReport[selectedDataKey] : undefined;
-            if (!!item && !item.label) {
-                item.label = cleanKey(selectedDataKey);
-            }
-            const tableData = buildTableData(cik, item);
-            return tableData.map((data, index) => {
-                data.index = index;
-                return <div key={`${cik}-facts-visualization`} className='visualizations-container'>
-                    <PeriodicDataTable tableData={ data } span={span}/>
-                    <PeriodicDataChart tableData={ data } span={span}/>
-                </div>
-            });
-        }   
-    }
-
     return (
         <section className={`facts-display-section
             ${loading || error ? 'text-container-height' : CONSTANTS.EMPTY}`}>
@@ -115,33 +94,16 @@ function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
                                         selectedKeySetter: setDataKey,
                                         includeSearch: true,
                                         isScrollable: true
-                                    }]} refSetter={setFactsWrapperRef}/> :
+                                    }]} orientation='vertical' refSetter={setFactsWrapperRef}/> :
                                 undefined
                         }
                         {
                             facts && taxonomy && selectedDataKey ?
                                 <div className='chart-wrapper' ref={(ref) => initRef(ref, setChartWrapperRef)}>
-                                    <SearchFormToggle <SPAN>
-                                        name={'SpanToggle'}
-                                        label={''}
-                                        defaultId={'All'}
-                                        options={[{
-                                            id: 'All',
-                                            input: 'ALL'
-                                        }, {
-                                            id: '1 year',
-                                            input: 'TTM'
-                                        }, {
-                                            id: '5 years',
-                                            input: 'TFY'
-                                        }, {
-                                            id: '10 years',
-                                            input: 'TTY'
-                                        }]} 
-                                        setter={setSpan}/>
-                                    {
-                                        renderDataVisualizations()
-                                    }
+                                    <PeriodicDataVisualization
+                                        cik={cik}
+                                        data={facts.facts[taxonomy]}
+                                        periodicDataKey={selectedDataKey}/> 
                                 </div> :
                                 renderZeroState()
                         }

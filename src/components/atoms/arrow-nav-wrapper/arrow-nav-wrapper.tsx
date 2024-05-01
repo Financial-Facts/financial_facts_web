@@ -55,7 +55,7 @@ function ArrowNavWrapper({
             .subscribe((target) => {
                 if (target && maxScrollWidth) {
                     const element = target as HTMLElement;
-                    setShowLeftArrow(element.scrollLeft - itemWidth > 0);
+                    setShowLeftArrow(element.scrollLeft - itemWidth >= 0);
                     setShowRightArrow(element.scrollLeft + itemWidth < maxScrollWidth);
                 }
             });
@@ -89,11 +89,11 @@ function ArrowNavWrapper({
     };
 
     return (
-        <>
+        <div className='nav-wrapper-body'>
             { renderArrowButton('LEFT', showLeftArrow) }
             { element }
             { renderArrowButton('RIGHT', showRightArrow) }
-        </>
+        </div>
     )
   }
   

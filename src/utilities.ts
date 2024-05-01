@@ -1,7 +1,5 @@
-import { TableData } from "./components/atoms/periodic-data-chart/PeriodicDataChart.typings";
 import { SPAN } from "./components/organisms/facts-display-section/FactsDisplaySection";
 import { CONSTANTS } from "./constants/constants";
-import { UnitData, UnitPeriod } from "./services/facts/facts.typings";
 import { PeriodicData } from "./types/discount.typings";
 
 export const handleEnterKeyEvent = (e: React.KeyboardEvent<HTMLDivElement>, handler: () => void): void => {
@@ -40,43 +38,6 @@ export const filterBySpan = (periodicData: PeriodicData[], span: SPAN): Periodic
         }
         return daysSince < CONSTANTS.SPAN_YEARS[span];
     });
-}
-
-export const buildPeriodicData = (cik: string, periods: UnitPeriod[]): PeriodicData[] => {
-    return periods ?
-        periods.reduce<PeriodicData[]>((acc, period) => {
-            if (!acc.some(val => val.announcedDate.valueOf() === period.end.valueOf())) {
-                acc.push({
-                    cik: cik,
-                    announcedDate: new Date(period.end),
-                    period: period.fp,
-                    value: period.val
-                })
-            }
-            return acc;
-        }, []) : []
-}
-
-export const buildUnitsToDataMap = (cik: string, units: Record<string, UnitPeriod[]>): Record<string, PeriodicData[]> => {
-    return Object.keys(units).reduce<Record<string, PeriodicData[]>>((acc, key) => {
-        const periods = units[key];
-        if (periods.length > 0) {
-            acc[key] = buildPeriodicData(cik, periods);
-        }
-        return acc;
-    }, {});
-}
-
-export const buildTableData = (cik: string, item: UnitData | undefined, index?: number): TableData[] => {
-    if (item) {
-        const unitMap = buildUnitsToDataMap(cik, item?.units);
-        return Object.keys(unitMap).map(unit => ({
-            index: index,
-            label: `${item.label} (${unit})`,
-            periodicData: unitMap[unit]
-        }));
-    }
-    return [];
 }
 
 export const cleanKey = (key: string): string => {

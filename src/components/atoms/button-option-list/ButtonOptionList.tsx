@@ -2,13 +2,14 @@ import { useState } from 'react';
 import './ButtonOptionList.scss';
 import { CONSTANTS } from '../../../constants/constants';
 import { cleanKey } from '../../../utilities';
+import { Orientation } from '../../molecules/button-option-side-nav/ButtonOptionSideNav';
 
 export interface ButtonOptionListProps <T extends string> {
     keys: T[],
     setter: (v: T | undefined) => void,
     title?: string,
     selectedKey?: T,
-    orientation?: 'vertical',
+    orientation: Orientation,
     includeSearch?: boolean,
     deselectable?: boolean
 }
@@ -63,7 +64,7 @@ function ButtonOptionList<T extends string>({
                             onInput={ (e) => setKeywordFilter((e.target as HTMLInputElement).value) }/>
                 }
                 <ul className={`key-group
-                    ${orientation ? orientation : CONSTANTS.EMPTY}`}>
+                    ${orientation}`}>
                     { renderKeys() }
                 </ul>
             </div>

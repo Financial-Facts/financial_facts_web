@@ -3,6 +3,8 @@ import ButtonOptionList from "../../atoms/button-option-list/ButtonOptionList";
 import './ButtonOptionSideNav.scss';
 import { initRef } from '../../../utilities';
 
+export type Orientation = 'vertical' | 'horizontal';
+
 export interface ButtonSideNavConfigItem<T extends string> {
     label: string,
     keys: T[],
@@ -16,11 +18,12 @@ export interface ButtonSideNavConfigItem<T extends string> {
 
 export interface ButtonOptionSideNavProps {
     buttonOptionSideNavConfig: ButtonSideNavConfigItem<any>[],
+    orientation: Orientation
     refSetter?: (_: HTMLDivElement | null) => void
 }
 
 
-function ButtonOptionSideNav({ buttonOptionSideNavConfig, refSetter }: ButtonOptionSideNavProps) {
+function ButtonOptionSideNav({ buttonOptionSideNavConfig, orientation, refSetter }: ButtonOptionSideNavProps) {
 
     const renderScrollableNavSection = (config: ButtonSideNavConfigItem<any>) =>
         <div className='data-selection-box' key={config.label}>
@@ -29,7 +32,7 @@ function ButtonOptionSideNav({ buttonOptionSideNavConfig, refSetter }: ButtonOpt
                 setter={ config.selectedKeySetter }
                 title={ config.label }
                 selectedKey={ config.selectedKey }
-                orientation='vertical'
+                orientation={ orientation }
                 includeSearch={ config.includeSearch }
                 deselectable={config.deselectable}/>
         </div>;
@@ -42,7 +45,7 @@ function ButtonOptionSideNav({ buttonOptionSideNavConfig, refSetter }: ButtonOpt
                 setter={ config.selectedKeySetter }
                 title={ config.label }
                 selectedKey={ config.selectedKey }
-                orientation='vertical'
+                orientation={ orientation }
                 includeSearch={ config.includeSearch }
                 deselectable={ config.deselectable }/>
         </div>
@@ -61,7 +64,7 @@ function ButtonOptionSideNav({ buttonOptionSideNavConfig, refSetter }: ButtonOpt
         }, []);
 
     return (
-        <div className={`side-nav-wrapper`} ref={(ref) => initRef(ref, refSetter)}>
+        <div className={`side-nav-wrapper ${orientation}`} ref={(ref) => initRef(ref, refSetter)}>
             {
                 renderNavSections()
             }

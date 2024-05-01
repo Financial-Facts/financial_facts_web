@@ -23,21 +23,20 @@ function SearchFormToggle<T>({ name, label, defaultId, options, setter }: Search
         }
     }
     
-    const renderToggleOptions = () => {
-        return options.map((option, index) =>
-        <div className='toggle-option'
-            tabIndex={0}
-            key={`${name}-state-${index}`}
-            onKeyDown={(e) => handleEnterKeyEvent(e, () => handleToggleChange(option.id))}>
-            <input id={`${name}-state-${index}`}
-                className='hide'
-                type="radio"
-                name={name}
-                onChange={ () => handleToggleChange(option.id) }
-                defaultChecked={ option.id === defaultId }/>
-            <label htmlFor={`${name}-state-${index}`}>{ option.id }</label>
-        </div>)
-    }
+    const renderToggleOptions = () => 
+        options.map((option, index) =>
+            <div className='toggle-option'
+                tabIndex={0}
+                key={`${name}-state-${index}`}
+                onKeyDown={(e) => handleEnterKeyEvent(e, () => handleToggleChange(option.id))}>
+                <input id={`${name}-state-${index}`}
+                    className='hide'
+                    type="radio"
+                    name={name}
+                    onChange={ () => handleToggleChange(option.id) }
+                    defaultChecked={ option.id === defaultId }/>
+                <label htmlFor={`${name}-state-${index}`}>{ option.id }</label>
+            </div>)
 
     return (
         <div className='multi-toggle'>  

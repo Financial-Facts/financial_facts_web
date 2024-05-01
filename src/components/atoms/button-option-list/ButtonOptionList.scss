@@ -53,5 +53,14 @@
         flex-direction: column;
     }
 
+    .horizontal {
+        flex-direction: row;
+        column-gap: 16px;
+
+        .key {
+            flex: 33%;
+        }
+    }
+
 }
 

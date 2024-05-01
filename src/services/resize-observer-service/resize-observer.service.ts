@@ -17,7 +17,9 @@ const ResizeObserverService = {
         const id = createObserver((entry) => {
             const cr = entry.contentRect;
             const leadingHeight = cr.height + cr.top * 2;
-            followingElement.style.height = leadingHeight !== 0 ? `${leadingHeight}px` : '';
+            if (Math.abs(followingElement.offsetHeight - leadingHeight) > 1) {
+                followingElement.style.height = leadingHeight !== 0 ? `${leadingHeight}px` : '';
+            }
         });
         observers[id].observe(leadingElement);
         return id;

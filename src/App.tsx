@@ -9,13 +9,14 @@ import {
     Tooltip,
 } from 'chart.js';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import DiscountPage from './components/pages/discount-page/DiscountPage';
+import DiscountSelectionPage from './components/pages/discount-selection-page/DiscountSelectionPage';
 import FactsPage from './components/pages/facts-page/FactsPage';
 import MainPage from './components/pages/main-page/MainPage';
 import { useEffect } from 'react';
 import { MobileSize, setMobile } from './store/mobile/mobile.slice';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from './store/store';
+import DiscountDataPage from './components/pages/discount-data-page/DiscountDataPage';
 
 
 ChartJS.register(
@@ -57,9 +58,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainPage/>}/>
-        <Route path="/discount" element={<DiscountPage/>}>
-          <Route path=":cik" element={<DiscountPage/>}/>
-        </Route>
+        <Route path="/discount" element={<DiscountSelectionPage/>}/>
+        <Route path="/discount/:cik" element={<DiscountDataPage/>}/>
         <Route path='/facts' element={<FactsPage/>}>
           <Route path=":cik" element={<FactsPage/>}/>
         </Route>

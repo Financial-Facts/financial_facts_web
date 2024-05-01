@@ -1,0 +1,29 @@
+@import 'src/variables';
+
+.key-option-list {
+    width: 250px;
+    display: flex;
+    list-style-type: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+
+    .key-option {
+        min-width: 250px;
+        scroll-snap-align: start;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.key-option-list::-webkit-scrollbar {
+    display: none;
+}
+  
+.key-option-list {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

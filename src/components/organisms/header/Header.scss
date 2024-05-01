@@ -1,9 +1,5 @@
 @import 'src/variables';
 
-.fixed-header-height {
-    height: 500px;
-}
-
 .header {
     display: flex;
     flex-wrap: wrap;
@@ -31,25 +27,59 @@
     .title-wrapper {
         display: flex;
         flex: 0.8;
-        flex-direction: column;
         align-items: center;
         text-align: center;
         justify-content: center;
-        padding-top: 100px;
-        
+        gap: 16px;
+        flex-wrap: wrap;
+        margin: 176px 32px 64px 32px;
+
+        .text-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+
+            h1 {
+                margin: 0;
+                font-weight: 600;
+                line-height: normal;
+            }
+    
+            h2 {
+                margin: 0;
+                font-weight: 500;
+                line-height: normal;
+            }
+        }
+    }
+
+    .LARGE {
         h1 {
             font-size: clamp($x-large-font, 5vw, $xx-large-font);
-            font-weight: 600;
-            line-height: normal;
-            margin: 25px 0;
         }
 
         h2 {
-            margin: 0;
             font-size: clamp($large-font, 5vw, $x-large-font);
-            font-weight: 500;
-            line-height: normal;
-            padding: 0 25px 25px;
+        }
+    }
+
+    .MEDIUM {
+        h1 {
+            font-size: clamp($large-font, 5vw, $x-large-font);
+        }
+
+        h2 {
+            font-size: clamp($plus-font, 5vw, $large-font);
+        }
+    }
+
+    .SMALL {
+        h1 {
+            font-size: clamp($plus-font, 5vw, $large-font);
+        }
+
+        h2 {
+            font-size: clamp($normal-font, 5vw, $plus-font);
         }
     }
 }

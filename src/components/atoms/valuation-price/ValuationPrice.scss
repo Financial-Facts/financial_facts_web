@@ -1,0 +1,15 @@
+@import 'src/variables';
+
+.valuation-price {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    
+    .value {
+        color: $base-purple;
+        font-size: $plus-font;
+    }
+}
