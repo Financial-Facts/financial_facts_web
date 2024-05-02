@@ -24,6 +24,7 @@ function DiscountDataDisplaySection({ discount }: DiscountDataDisplaySectionProp
     const [ periodicDataKey, setPeriodicDataKey ] = useState<string | undefined>(undefined);
     const [ chartWrapperRef, setChartWrapperRef ] = useState<HTMLDivElement | null>(null);
     const [ optionsWrapperRef, setOptionsWrapperRef ] = useState<HTMLDivElement | null>(null);
+    const [ keyOptions, setKeyOptions ] = useState<string[]>([]);
     const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
     const allSideConfigItems = [{
         label: 'Valuation',
@@ -32,11 +33,7 @@ function DiscountDataDisplaySection({ discount }: DiscountDataDisplaySectionProp
         selectedKeySetter: setValuationKey
     }, {
         label: 'Periodic Data',
-        keys: valuationKey ? 
-            Object.keys(discount[valuationKey].input).filter(key => 
-                SpPeriodicDataKeys.includes(key) || DcfPeriodicDataKeys.includes(key)
-            ) :
-            [],
+        keys: keyOptions,
         selectedKey: periodicDataKey,
         selectedKeySetter: setPeriodicDataKey,
         isScrollable: true,
@@ -44,16 +41,25 @@ function DiscountDataDisplaySection({ discount }: DiscountDataDisplaySectionProp
     }];
     const [ sideConfigItems, setSideConfigItems ] = useState<any[]>(allSideConfigItems);
 
-    const valuationHasPeriodicData = (valuationKey: Valuation) => Object.keys(discount[valuationKey].input)
-        .some(key => DcfPeriodicDataKeys.includes(key) || SpPeriodicDataKeys.includes(key));
+    const valuationHasPeriodicData = () => keyOptions.length > 0;
 
     useEffect(() => {
         setPeriodicDataKey(undefined);
+        
+        if (valuationKey) {
+            setKeyOptions(Object
+                .keys(discount[valuationKey].input)
+                .filter(key => 
+                    SpPeriodicDataKeys.includes(key) || DcfPeriodicDataKeys.includes(key)
+                ));
+        } else {
+            setKeyOptions([]);
+        }
     }, [ valuationKey ]);
 
     useEffect(() => {
         setSideConfigItems(mobile.mobile ? allSideConfigItems.slice(0, 1) : [...allSideConfigItems]);
-    }, [ mobile, valuationKey, periodicDataKey ]);
+    }, [ mobile, valuationKey, periodicDataKey, keyOptions ]);
 
     useEffect(() => {
         if (!mobile.mobile && chartWrapperRef && optionsWrapperRef) {
@@ -83,15 +89,11 @@ function DiscountDataDisplaySection({ discount }: DiscountDataDisplaySectionProp
                 }
                 {   
                     !mobile.mobile ? 
-                        valuationKey && !periodicDataKey && valuationHasPeriodicData(valuationKey) &&
+                        valuationKey && !periodicDataKey && valuationHasPeriodicData() &&
                             <ZeroState message='Select periodic data' supportText="Select option to see time series data"/> 
-                        : valuationKey && valuationHasPeriodicData(valuationKey) &&
-                            <div className="periodic-data-arrow-nav" key={valuationKey}>
-                                <ArrowKeyNavigator keySetter={setPeriodicDataKey} keyOptions={Object
-                                    .keys(discount[valuationKey].input)
-                                    .filter(key => 
-                                        SpPeriodicDataKeys.includes(key) || DcfPeriodicDataKeys.includes(key)
-                                    )}/>
+                        : valuationKey && valuationHasPeriodicData() &&
+                            <div className="periodic-data-arrow-nav">
+                                <ArrowKeyNavigator keySetter={setPeriodicDataKey} keyOptions={keyOptions}/>
                             </div>
                 }
                 {
