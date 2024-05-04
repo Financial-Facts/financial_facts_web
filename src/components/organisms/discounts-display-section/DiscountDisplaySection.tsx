@@ -71,10 +71,9 @@ function DiscountDisplaySection({ simplify = false }: DiscountDisplayParams) {
                             className='discounts'>
                             { renderDiscountCards() }
                         </ul>}/> :
-                <ArrowNavWrapper listLength={discounts.length}
+                <ArrowNavWrapper
                     elementRef={discountListRef}
                     itemWidth={CARD_WIDTH}
-                    numItemsToDisplay={numCardsToDisplay}
                     element={
                         <ul ref={(ref) => initRef(ref, setDiscountListRef)}
                             className='discounts'>
