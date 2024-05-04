@@ -55,11 +55,10 @@ function ArrowKeyNavigator({ keyOptions, keySetter }: ArrowKeyNavigatorProps) {
         </ul>
 
     return (
-        <ArrowNavWrapper element={renderKeyList()}
+        <ArrowNavWrapper
+            element={renderKeyList()}
             elementRef={keyListRef}
-            listLength={keyOptions.length}
-            itemWidth={250}
-            numItemsToDisplay={1}/>
+            itemWidth={250}/>
     )
   }
   

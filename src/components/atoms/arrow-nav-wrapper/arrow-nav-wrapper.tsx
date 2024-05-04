@@ -8,9 +8,7 @@ export type Direction = 'LEFT' | 'RIGHT';
 export interface ArrowNavWrapperProps {
     element: JSX.Element
     elementRef: HTMLUListElement | null
-    listLength: number,
-    itemWidth: number,
-    numItemsToDisplay: number 
+    itemWidth: number
 }
 
 function ArrowNavWrapper({
@@ -38,7 +36,7 @@ function ArrowNavWrapper({
         if (elementRef) {
             setMaxScrollWidth(elementRef.scrollWidth - (elementRef.scrollWidth % itemWidth));
         }
-    }, [ elementRef ]);
+    }, [ elementRef, element ]);
 
     useEffect(() => {
         if (elementRef && maxScrollWidth) {
