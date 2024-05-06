@@ -3,6 +3,7 @@ import './ButtonOptionList.scss';
 import { CONSTANTS } from '../../../constants/constants';
 import { cleanKey } from '../../../utilities';
 import { Orientation } from '../../molecules/button-option-side-nav/ButtonOptionSideNav';
+import SearchFilterInput from '../search-filter-input/SearchFilterInput';
 
 export interface ButtonOptionListProps <T extends string> {
     keys: T[],
@@ -58,10 +59,7 @@ function ButtonOptionList<T extends string>({
             <div className='key-group-wrapper'>
                 {
                     includeSearch &&
-                        <input className='league-spartan data-search-bar'
-                            type='text'
-                            placeholder='Filter by keyword...'
-                            onInput={ (e) => setKeywordFilter((e.target as HTMLInputElement).value) }/>
+                        <SearchFilterInput setKeywordFilter={setKeywordFilter}/>
                 }
                 <ul className={`key-group
                     ${orientation}`}>

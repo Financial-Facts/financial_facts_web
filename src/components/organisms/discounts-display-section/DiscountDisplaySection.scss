@@ -1,17 +1,29 @@
 @import 'src/variables';
 
 .simplify {
-    padding: 15px 0;
+    padding: 0 0 32px 0;
     background: $magnolia-white;
 
-    .body .discounts {
-        margin-bottom: 15px;
-    }
-    
-    .body-arrows {
-        padding-top: 0;
+    .body {
+        .discounts {
+            margin-bottom: 15px;
+        } 
+
+        .standalone-list {
+            display: flex;
+            flex-wrap: wrap;
+            list-style: none;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 0 32px;
+            
+            .discount-card {
+                flex: 1;
+            }
+        }
     }
 }
+    
 
 .full {
     height: 500px;

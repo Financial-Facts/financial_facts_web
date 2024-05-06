@@ -14,7 +14,7 @@ function ValuationPrice({ price, lastUpdated }: ValuationProps) {
                 <h2>Fair Value</h2>
                 <span className='value'>{ FormatService.formatToDollarValue(price) }</span>
             </div>
-            <div>
+            <div className='last-updated'>
                 <h2>Last Updated</h2>
                 <span className='value'>{ lastUpdated.toDateString() }</span>
             </div>

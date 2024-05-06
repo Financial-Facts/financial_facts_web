@@ -1,0 +1,14 @@
+@import 'src/variables';
+
+.discount-search {
+    display: flex;
+    background: $magnolia-white;
+    width: 100%;
+    justify-content: flex-end;
+    padding: 16px 0;
+
+    .data-search-bar {
+        margin-right: 32px;
+        width: 300px;
+    }
+}

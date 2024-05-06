@@ -11,10 +11,11 @@ import { DiscountState } from '../../../store/discounts/discounts.slice'
 import { initRef } from '../../../utilities'
 
 export interface DiscountDisplayParams {
-    simplify?: boolean
+    simplify?: boolean,
+    keyword?: string
 }
 
-function DiscountDisplaySection({ simplify = false }: DiscountDisplayParams) {
+function DiscountDisplaySection({ simplify = false, keyword }: DiscountDisplayParams) {
 
     const discounts = useSelector< { discounts: DiscountState }, SimpleDiscount[]>((state) => state.discounts.discounts);
     const loading = useSelector< { discounts: DiscountState }, boolean>((state) => state.discounts.loading);
@@ -38,8 +39,12 @@ function DiscountDisplaySection({ simplify = false }: DiscountDisplayParams) {
         setUsingArrowNavigation(numCardsToDisplay === 1);
     }, [ numCardsToDisplay, discountListRef ]);
     
+    const checkIncludesKeyword = (discount: SimpleDiscount, value: string): boolean => 
+        discount.name.includes(value) || discount.cik.includes(value) || discount.symbol.includes(value);
+    
     const renderDiscountCards = () => {
         return [...discounts]
+            .filter(discount => keyword ? checkIncludesKeyword(discount, keyword) : true)
             .map(discount => <DiscountCard key={discount.cik} discount={ discount }></DiscountCard>);
     }
 
@@ -61,6 +66,9 @@ function DiscountDisplaySection({ simplify = false }: DiscountDisplayParams) {
         ) : (
           <div className={`body ${usingArrowNavigation ? 'body-arrows' : CONSTANTS.EMPTY}`}>
             { 
+              simplify ? <ul className='standalone-list'>
+                { renderDiscountCards() }
+              </ul> :
               !usingArrowNavigation ? 
                 <CircleNavWrapper listLength={discounts.length}
                     numItemsToDisplay={numCardsToDisplay}
