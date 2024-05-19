@@ -1,0 +1,68 @@
+@import 'src/variables';
+
+.header-text {
+    display: inline-block;
+    width: calc(100% - 31px);
+}
+
+.sortArrow {
+    position: relative;
+    top: 2px;
+    height: 15px;
+    width: 15px;
+    padding: 0 8px;
+}
+
+.discount-table-wrapper {
+    height: 100%;
+    width: 75%;
+    overflow: auto;
+    box-sizing: border-box;
+
+    .discount-table {
+        border-spacing: 0;
+        table-layout: fixed;
+    
+        th {
+            padding: 16px 16px;
+            box-sizing: border-box;
+            text-wrap: nowrap;
+            vertical-align: middle;
+            line-height: 32px;
+        }
+    
+        td {
+            padding: 16px;
+            box-sizing: border-box;
+            border-bottom: 1px solid $light-gray;
+        }
+    
+        thead {
+            position: sticky;
+            top: 0;
+            background: $base-purple;
+            color: $off-white;
+            border-bottom: 1px solid $dark-gray;
+    
+            th {
+                text-align: left;
+                cursor: pointer;
+            }
+    
+            th:hover {
+                background-color: $light-purple;
+            }
+        }
+    
+        tbody {
+    
+            tr {
+                cursor: pointer;
+            }
+    
+            tr:hover {
+                background: $magnolia-white;
+            }
+        }
+    }    
+}

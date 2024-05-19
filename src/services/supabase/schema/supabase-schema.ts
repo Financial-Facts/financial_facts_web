@@ -693,6 +693,10 @@ export type Database = {
           stickerprice: number
         }[]
       }
+      get_bulk_simple_discounts_json: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       get_discount: {
         Args: {
           discount_cik: string

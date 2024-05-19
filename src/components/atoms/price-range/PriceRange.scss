@@ -1,0 +1,51 @@
+@import 'src/variables';
+
+.price-range {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+    width: 100%;
+
+    .price-indicators {
+        display: flex;
+        justify-content: space-between;
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        .bound {
+            width: 50%;
+            padding-inline: 0;
+            text-align: right;
+            background-color: $magnolia-white;
+            color: $base-purple;
+        }
+
+        .lower {
+            text-align: left;
+        }
+
+        .upper {
+            text-align: right;
+        }
+    }
+
+    .range-slider.price-ranges-slider {
+        background: $light-gray;
+    
+        .range-slider__thumb {
+            background: $base-purple;
+        }
+    
+        .range-slider__range {
+            background: $light-purple;
+        }
+    }
+}

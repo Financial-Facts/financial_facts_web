@@ -17,17 +17,15 @@ class SupabaseService {
     }
 
     async getSimpleDiscounts(): Promise<SimpleDiscount[]> {
-        const { data, error } = await this.client.rpc('get_bulk_simple_discounts');
+        const { data, error } = await this.client
+            .rpc('get_bulk_simple_discounts_json')
+            .returns<SimpleDiscount[]>();
+            
         if (error) {
             throw new ApiResponseError(`Error occurred fetching simple discounts: ${error.message}`, error.code);
         }
-        return data.map(dbSimpleDiscount => ({
-            lastUpdated: dbSimpleDiscount.last_updated,
-            stickerPrice: dbSimpleDiscount.stickerprice,
-            discountedCashFlowPrice: dbSimpleDiscount.discountedcashflowprice,
-            benchmarkRatioPrice: dbSimpleDiscount.benchmarkratioprice,
-            ...dbSimpleDiscount
-        }));
+        
+        return data;
     }
 
     async fetchBulkIdentities(identityRequest: IdentityRequest): Promise<Identity[]> {

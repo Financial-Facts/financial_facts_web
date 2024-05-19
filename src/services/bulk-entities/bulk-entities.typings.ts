@@ -20,6 +20,7 @@ export interface SimpleDiscount {
     stickerPrice: number,
     discountedCashFlowPrice: number,
     benchmarkRatioPrice: number,
+    marketPrice: number
 }
 
 export interface BulkIdentitiesWrapper {
