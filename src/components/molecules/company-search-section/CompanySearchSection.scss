@@ -47,6 +47,12 @@
         
             .search-wrapper {
                 width: calc(80% + 32px);
+                height: calc(100% - 96px);
+            }
+
+            .standalone-search-bar {
+                height: 100%;
+                display: flex;
             }
         }
     }

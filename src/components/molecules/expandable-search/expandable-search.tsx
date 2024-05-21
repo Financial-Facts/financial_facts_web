@@ -105,7 +105,7 @@ function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchPro
     }, [ searchCriteria.order, searchCriteria.searchBy, searchCriteria.sortBy ]);
 
     useEffect(() => {
-        setDisplaySearchResults(!!searchCriteria.keyword);
+        setDisplaySearchResults(isStandalone || !!searchCriteria.keyword);
     }, [ searchCriteria.keyword ]);
     
     useEffect(() => {
