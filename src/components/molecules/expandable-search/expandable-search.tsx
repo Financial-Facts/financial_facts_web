@@ -9,6 +9,7 @@ import { IdentityListAction, SearchCriteria, SearchCriteriaAction } from './expa
 import { CONSTANTS } from '../../../constants/constants';
 import { Identity } from '../../../services/bulk-entities/bulk-entities.typings';
 import { handleEnterKeyEvent } from '../../../utilities';
+import LoadingSpinner from '../../atoms/loading-spinner/loading-spinner';
 
 export interface ExpandableSearchProps {
     $closeDropdowns: Subject<ClosurePayload[]>,
@@ -75,7 +76,7 @@ function searchCriteriaReducer(state: SearchCriteria, action: SearchCriteriaActi
         }
         case ('set_keyword'): {
             const payload = action.payload;
-            if (payload && payload.keyword) {
+            if (payload) {
                 return { ...state, ...{
                     keyword: payload.keyword
                 }}
@@ -89,6 +90,8 @@ function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchPro
 
     const [ displaySearchBar, setDisplaySearchBar ] = useState(false);
     const [ displaySearchFilter, setDisplaySearchFilter ] = useState(false);
+    const [ displaySearchResults, setDisplaySearchResults ] = useState(false);
+    const [ isLoading, setIsLoading ] = useState(false);
     const [ identities, identityListDispatch ] = useReducer(identityListReducer, []);
     const [ searchCriteria, dispatch ] = useReducer(searchCriteriaReducer, {
         searchBy: 'SYMBOL',
@@ -100,6 +103,10 @@ function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchPro
     useEffect(() => {
         identityListDispatch({ type: 'reset' });
     }, [ searchCriteria.order, searchCriteria.searchBy, searchCriteria.sortBy ]);
+
+    useEffect(() => {
+        setDisplaySearchResults(!!searchCriteria.keyword);
+    }, [ searchCriteria.keyword ]);
     
     useEffect(() => {
         const watchForClosure = $closeDropdowns
@@ -139,7 +146,7 @@ function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchPro
         <div className={`sticky-menu-option search
             ${ displaySearchBar ? CONSTANTS.EMPTY : 'search-button' } 
             ${ displaySearchFilter && !isStandalone ? 'display-filter-form' : CONSTANTS.EMPTY}
-            ${ identities.length > 0 && !isStandalone ? 'display-search-results' : CONSTANTS.EMPTY}
+            ${ displaySearchResults && !isStandalone ? 'display-search-results' : CONSTANTS.EMPTY}
             ${ isStandalone ? 'standalone-search-bar' : 'sticky-search-bar'}`}
             aria-expanded={ displaySearchBar }>
             <div className='search-bar-wrapper'>
@@ -154,7 +161,8 @@ function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchPro
                         <>
                             <SearchBar identityListDispatch={identityListDispatch}
                                 searchCriteria={searchCriteria}
-                                dispatch={dispatch}/>
+                                dispatch={dispatch}
+                                setIsLoading={setIsLoading}/>
                             { 
                                 !isStandalone ? 
                                     <img role='button'
@@ -177,10 +185,12 @@ function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchPro
                     : undefined
             }
             {
-                identities.length > 0 ? 
-                    <SearchDropDown allIdentities={identities}
-                        identityListDispatch={identityListDispatch}
-                        searchCriteria={searchCriteria}/> :
+                displaySearchResults ?
+                    isLoading ? 
+                        <LoadingSpinner size={'SMALL'} color={'PURPLE'}/> : 
+                        <SearchDropDown allIdentities={identities}
+                            identityListDispatch={identityListDispatch}
+                            searchCriteria={searchCriteria}/> :
                     undefined
             }
         </div>

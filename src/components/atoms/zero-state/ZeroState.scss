@@ -8,7 +8,11 @@
     flex: 1;
     gap: 16px;
     min-height: 200px;
-
+    text-align: center;
+    position: sticky;
+    left: 0;
+    top: 0;
+    
     .message {
         font-size: $plus-font;
     }

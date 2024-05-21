@@ -1,12 +1,12 @@
 import './DiscountTable.scss';
 import { Order, SimpleDiscount } from '../../../services/bulk-entities/bulk-entities.typings'
-import ZeroState from '../../atoms/zero-state/ZeroState'
 import { cleanKey } from '../../../utilities';
 import FormatService from '../../../services/format/format.service';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import { MultiValue } from 'react-select';
 import { Option } from '../../atoms/multi-select/MultiSelect';
+import ResponsiveTable from '../../atoms/responsive-table/ResponsiveTable';
 
 export interface DiscountTableProps {
     discounts: SimpleDiscount[],
@@ -75,7 +75,7 @@ function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
             </tr>
         </thead>
 
-    const renderTableData = () => 
+    const renderTableBody = () => 
         <tbody>
             {
                 [...discounts]
@@ -98,16 +98,11 @@ function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
         </tbody>
 
     return (
-        <div className='discount-table-wrapper'>
-            <table className='discount-table'>
-                { renderTableHeader() }
-                { discounts.length > 0 && displayedFields.length > 0 && renderTableData() }
-            </table>
-            { 
-                (discounts.length === 0 || displayedFields.length === 0) &&
-                    <ZeroState message={'There are no discounts that match this criteria'} supportText={''}/>
-            }
-        </div>
+        <ResponsiveTable
+            className='discount-table'
+            renderTableHeader={renderTableHeader}
+            renderTableBody={renderTableBody}
+            zeroStateCondition={discounts.length === 0 || displayedFields.length === 0}/>
     )
   }
   

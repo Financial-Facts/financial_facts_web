@@ -1,86 +1,40 @@
 @import 'src/variables';
 
-.dropdown-container {
-    display: flex;
-    font-family: $league-spartan;
-    font-size: $normal-font;
-    color: $dark-gray;
-}
 
-.cik {
-    min-width: 108px;
-    width: 108px;
-}
+.search-results-table {
 
-.identity-info {
-    display: flex;
-    width: 100%;
-    overflow: hidden;
-    justify-content: space-between;
-    gap: 16px;
-    padding-right: 16px;
-
-    div {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-    }
+    table {
     
-    :first-child {
-        white-space: nowrap;
-        display: flex;
-        justify-content: center;
-    }
-}
+        .company-name {
+            text-align: right;
+        }
 
-.search-results-label {
-    margin-bottom: 4px;
+        td {
+            word-break: break-word;
+        }
 
-    div {
-        display: flex;
-    }
-}
+        thead {
+            background: $light-gray;
+            
+            th {
+                padding: 4px 8px;
+                border-bottom: 1px solid $dark-gray;
+            }
+        }
+    
+        tbody {
+    
+            tr:hover {
+                background: $magnolia-white;
+            }
 
-.results-dropdown {
-    overflow-y: auto;
-    overflow-x: hidden;
-    margin-bottom: 16px;
-    flex-direction: column;
-    border-top: 1px solid rgba(41, 41, 41, .2);
+            td {
+                padding: 16px 8px;
+            }
+        }
 
-    .identity-item {
-        display: flex;
-        gap: 16px;
-        color: $dark-gray;
-        cursor: pointer;
-        text-decoration: none;
-        padding: 8px 0;
-        outline: 0;
-    }
-
-    .identity-item:hover, .identity-item:focus {
-        color: $base-purple;
-        text-decoration: underline;
-    }
-
-}
-
-.results-dropdown :nth-child(odd) {
-    .identity-item {
-        background-color: $light-gray;
-    }
-}
-
-.results-dropdown :nth-child(even) {
-    .identity-item {
-        background-color: $off-white;
-    }
-}
-
-@media only screen and (max-width: 576px) {
-
-    .results-dropdown .identity-item div {
-        width: 100%;
-    }
-
+        tbody :not(:last-child) td {
+            border-bottom: 1px solid $light-purple;
+        }
+    }    
 }

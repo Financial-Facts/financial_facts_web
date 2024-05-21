@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { fromEvent } from 'rxjs/internal/observable/fromEvent';
 import { filter } from 'rxjs/internal/operators/filter';
 import { map } from 'rxjs/internal/operators/map';
@@ -8,7 +7,9 @@ import './SearchDropDown.scss';
 import { CONSTANTS } from '../../../constants/constants';
 import fetchIdentities from '../../../hooks/fetchIdentities';
 import { Identity, IdentityRequest } from '../../../services/bulk-entities/bulk-entities.typings';
-import { initRef } from '../../../utilities';
+import { distinctUntilChanged } from 'rxjs/operators';
+import { useNavigate } from 'react-router-dom';
+import ResponsiveTable from '../responsive-table/ResponsiveTable';
 
 export interface SearchDropDownProps {
     allIdentities: Identity[],
@@ -18,9 +19,10 @@ export interface SearchDropDownProps {
 
 function SearchDropDown({ allIdentities, identityListDispatch, searchCriteria }: SearchDropDownProps) {
 
-    const [ searchResultsRef, setSearchResultsRef ] = useState<HTMLUListElement | null>(null);
+    const navigate = useNavigate();
+    const [ searchResultsRef, setSearchResultsRef ] = useState<HTMLDivElement | null>(null);
     const [ identityRequest, setIdentityRequest ] = useState<IdentityRequest | null>(null);
-    const { identities, loading } = fetchIdentities(identityRequest);
+    const { identities, loading } = fetchIdentities(identityRequest, false);
 
     useEffect(() => {
         identityListDispatch({ type: 'update_list', payload: identities });
@@ -37,12 +39,13 @@ function SearchDropDown({ allIdentities, identityListDispatch, searchCriteria }:
         }
     }, [ searchResultsRef, allIdentities ]);
 
-    const subscribeToScrollEvents = (searchResults: HTMLUListElement) => 
+    const subscribeToScrollEvents = (searchResults: HTMLDivElement) => 
         fromEvent<InputEvent>(searchResults, 'scroll')
             .pipe(
                 map(event => event.target),
                 filter(target => {
-                    if (target &&
+                    if (!loading &&
+                        target &&
                         allIdentities.length > 0 &&
                         allIdentities.length % CONSTANTS.IDENTITY_BATCH_SIZE === 0) {
                         const element = target as HTMLElement;
@@ -50,46 +53,45 @@ function SearchDropDown({ allIdentities, identityListDispatch, searchCriteria }:
                         return percentScrolled > CONSTANTS.SEARCH_SCROLL_FETCH_THRESHOLD;
                     }
                     return false;
-                }))
-            .subscribe(() => {
-                if (!loading) {
-                    setIdentityRequest({
-                        startIndex: allIdentities.length,
-                        limit: allIdentities.length + CONSTANTS.IDENTITY_BATCH_SIZE - 1,
-                        ...searchCriteria
-                    })
-                }
-            });
+                }),
+                map(() => allIdentities.length),
+                distinctUntilChanged())
+            .subscribe(startIndex => setIdentityRequest({
+                startIndex: startIndex,
+                limit: CONSTANTS.IDENTITY_BATCH_SIZE - 1,
+                ...searchCriteria
+            }));
 
-    const renderDropDownItems = () => {
+    const renderTableHeader = () =>
+        <thead>
+            <tr>
+                <th>CIK</th>
+                <th>Symbol</th>
+                <th className='company-name'>Company Name</th>
+            </tr>
+        </thead>
+
+    const renderTableBody = () =>
+        <tbody>
+            { renderTableRows() }
+        </tbody>
+    
+    const renderTableRows = () => {
         return allIdentities.map(identity =>
-            <li key={identity.cik}>
-                <Link className='identity-item' to={`/facts/${identity.cik}`}>
-                    <span className='cik'>{identity.cik}</span>
-                    <div className='identity-info'>
-                        <span>
-                            { identity.symbol }
-                        </span>
-                        <div>{identity.name}</div>
-                    </div>
-                </Link>
-            </li>)
+            <tr key={identity.cik} onClick={() => navigate(`/facts/${identity.cik}`)}>
+                <td>{ identity.cik }</td>
+                <td>{ identity.symbol }</td>
+                <td className='company-name'>{ identity.name }</td>
+            </tr>)
     }
 
     return (
-        <>  
-            <div className='search-results-label dropdown-container'>
-                <span className='cik'>CIK</span>
-                <div className='identity-info'>
-                    <span>Symbol</span>
-                    <span>Company Name</span>
-                </div>
-            </div>
-            <ul id='search-results' className='results-dropdown dropdown-container' 
-                ref={ (ref) => initRef(ref, setSearchResultsRef) }>
-                { renderDropDownItems() }
-            </ul>
-        </>
+        <ResponsiveTable
+            className='search-results-table'
+            renderTableHeader={renderTableHeader}
+            renderTableBody={renderTableBody}
+            zeroStateCondition={ allIdentities.length === 0}
+            wrapperRefSetter={setSearchResultsRef}/>
     )
   }
   

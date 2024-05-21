@@ -1,39 +1,48 @@
 import { useEffect, useState } from 'react';
-import { fromEvent } from 'rxjs/internal/observable/fromEvent';
-import { debounceTime } from 'rxjs/internal/operators/debounceTime';
-import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChanged';
-import { filter } from 'rxjs/internal/operators/filter';
-import { map } from 'rxjs/internal/operators/map';
 import { IdentityListAction, SearchCriteria, SearchCriteriaAction } from '../../molecules/expandable-search/expandable-search.typings';
 import './SearchBar.scss';
 import fetchIdentities from '../../../hooks/fetchIdentities';
 import { CONSTANTS } from '../../../constants/constants';
 import { IdentityRequest } from '../../../services/bulk-entities/bulk-entities.typings';
 import { initRef } from '../../../utilities';
+import { fromEvent } from 'rxjs/internal/observable/fromEvent';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 export interface SearchBarProps {
     identityListDispatch: (action: IdentityListAction) => void,
     searchCriteria: SearchCriteria,
-    dispatch: (action: SearchCriteriaAction) => void
+    dispatch: (action: SearchCriteriaAction) => void,
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function SearchBar({ identityListDispatch, searchCriteria, dispatch }: SearchBarProps) {
+function SearchBar({ identityListDispatch, searchCriteria, dispatch, setIsLoading }: SearchBarProps) {
 
     const [ searchBarRef, setSearchBarRef ] = useState<HTMLInputElement | null>(null);
     const [ identityRequest, setIdentityRequest ] = useState<IdentityRequest | null>(null);
-    const { identities } = fetchIdentities(identityRequest);
+    const { identities, loading } = fetchIdentities(identityRequest);
+
+    useEffect(() => {
+        setIsLoading(loading);
+    }, [ loading ]);
 
     useEffect(() => {
         if (searchBarRef) {
             const inputSubscription = subscribeToInputEvents(searchBarRef);
-            searchBarRef.dispatchEvent(new Event('input', { bubbles: true }));
             return () => {
                 if (inputSubscription) {
                     inputSubscription.unsubscribe();
                 }
             }
         }
-    }, [ searchBarRef, searchCriteria ]);
+    }, [ searchBarRef ]);
+
+    useEffect(() => {
+        setIdentityRequest(() => ({
+            ...searchCriteria,
+            startIndex: 0,
+            limit: CONSTANTS.IDENTITY_BATCH_SIZE - 1
+        }));
+    }, [ searchCriteria ]);
 
     useEffect(() => {
         identityListDispatch({ type: 'set_list', payload: identities });
@@ -53,21 +62,18 @@ function SearchBar({ identityListDispatch, searchCriteria, dispatch }: SearchBar
                 filter(input => {
                     if (!input) {
                         identityListDispatch({ type: 'reset' });
+                        dispatch({
+                            type: 'set_keyword',
+                            payload: { keyword: undefined }
+                        });
                         return false;
                     }
-                    dispatch({
-                        type: 'set_keyword',
-                        payload: { keyword: input }
-                    });
                     return true;
-                }),
-                map(input => ({
-                    startIndex: 0,
-                    limit: CONSTANTS.IDENTITY_BATCH_SIZE - 1,
-                    keyword: input,
-                    ...searchCriteria
-                })))
-            .subscribe((response: IdentityRequest) => setIdentityRequest(response));
+                }))
+                .subscribe((input) => dispatch({
+                    type: 'set_keyword',
+                    payload: { keyword: input }
+                }));
 
     return (
         <div className='input-wrapper'>
