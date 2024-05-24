@@ -8,6 +8,10 @@ const FormatService = {
 
     formatToDollarValue: (value: number): string => {
         return formatter.format(value);
+    },
+
+    roundToDollarValue: (value: number): number => {
+        return Math.round(value * 100)  / 100;
     }
 
 }

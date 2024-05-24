@@ -15,7 +15,8 @@ export interface PriceRange {
     type: 'PRICE_RANGE'
     label: string
     minimum: number,
-    maximum: number
+    maximum: number,
+    defaultValues: number[]
     boundSetter: React.Dispatch<React.SetStateAction<Bounds>>
 }
 
@@ -31,6 +32,7 @@ export interface Toggle<T> {
 export interface KeywordSearch {
     type: 'SEARCH',
     label: string,
+    defaultValue: string,
     keywordSetter: (_: string) => void
 }
 

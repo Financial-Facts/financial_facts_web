@@ -2,11 +2,13 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { Order, SimpleDiscount } from '../../services/bulk-entities/bulk-entities.typings'
 import { supabaseService } from '../../services/supabase/supabase.service';
 import { Bounds } from '../../components/atoms/price-range/PriceRange';
+import { CONSTANTS } from '../../constants/constants';
 
 export type DiscountState = {
   allDiscounts: SimpleDiscount[]
   filteredDiscounts: SimpleDiscount[]
   filteredSort: DiscountSort
+  filteredFilter: DiscountFilter
   loading: boolean
 }
 
@@ -40,26 +42,28 @@ const getSortFunction = (
   }
 }
 
-const filterDiscountState = (discounts: SimpleDiscount[], filter: DiscountFilter) =>
-    discounts.filter(discount => {
-      if (filter.hideInactive && !discount.active) {
-          return false;
-      }
+const filterDiscountState = (discounts: SimpleDiscount[], filter: DiscountFilter) => {
+  if (filter.hideInactive) {
+    discounts = discounts.filter(discount => discount.active);
+  }
 
-      if (!!filter.keyword) {
-          const lowerKeyword = filter.keyword.toLowerCase();
+  if (!!filter.keyword) {
+    discounts = discounts.filter(discount => {
+      const lowerKeyword = filter.keyword.toLowerCase();
           return discount.cik.toLowerCase().includes(lowerKeyword) ||
               discount.symbol.toLowerCase().includes(lowerKeyword) || 
               discount.name.toLowerCase().includes(lowerKeyword);
-      }
+    });
+  }
 
-      if (filter.priceBounds.lowerBound !== 0 && filter.priceBounds.upperBound !== 0) {
-          return discount.marketPrice >= filter.priceBounds.lowerBound &&
-              discount.marketPrice <= filter.priceBounds.upperBound;
-      }
-      
-      return true;
-  });
+  if (filter.priceBounds.lowerBound !== 0 && filter.priceBounds.upperBound !== 0) {
+    discounts = discounts.filter(discount =>
+      discount.marketPrice >= filter.priceBounds.lowerBound &&
+      discount.marketPrice <= filter.priceBounds.upperBound);
+  }
+
+  return discounts;
+}
 
 export const loadSimpleDiscounts = createAsyncThunk('discounts/load', 
   async () => supabaseService.getSimpleDiscounts());
@@ -73,6 +77,14 @@ export const discountsSlice = createSlice({
       sortBy: 'name',
       sortOrder: 'ASC'
     },
+    filteredFilter: {
+      hideInactive: false,
+      keyword: CONSTANTS.EMPTY,
+      priceBounds: {
+        lowerBound: 0,
+        upperBound: 0
+      }
+    },
     loading: false
   } as DiscountState,
   reducers: {
@@ -82,11 +94,24 @@ export const discountsSlice = createSlice({
       state.filteredDiscounts.sort(getSortFunction(sortBy, sortOrder));
     },
     filterDiscounts: (state, action: PayloadAction<DiscountFilter>) => {
-      state.filteredDiscounts = filterDiscountState(state.allDiscounts, action.payload);
+      state.filteredFilter = action.payload;
+      state.filteredDiscounts = filterDiscountState([...state.allDiscounts], action.payload);
       state.filteredDiscounts.sort(getSortFunction(state.filteredSort.sortBy, state.filteredSort.sortOrder));
     },
     resetFilteredDiscounts: (state) => {
       state.filteredDiscounts = [...state.allDiscounts];
+      state.filteredSort = {
+        sortBy: 'name',
+        sortOrder: 'ASC'
+      }
+      state.filteredFilter = {
+        hideInactive: false,
+        keyword: CONSTANTS.EMPTY,
+        priceBounds: {
+          lowerBound: 0,
+          upperBound: 0
+        }
+      }
     }
   },
   extraReducers: (builder) => {

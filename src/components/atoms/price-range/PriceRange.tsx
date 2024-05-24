@@ -11,15 +11,13 @@ export interface Bounds {
 export interface PriceRangeProps {
     boundSetter: React.Dispatch<React.SetStateAction<Bounds>>,
     minimum: number,
-    maximum: number
+    maximum: number,
+    defaultValues: number[]
 }
 
-function PriceRange({ boundSetter, minimum, maximum }: PriceRangeProps) {
+function PriceRange({ boundSetter, minimum, maximum, defaultValues }: PriceRangeProps) {
 
-    const [ bounds, setBounds ] = useState<Bounds>({
-        lowerBound: minimum,
-        upperBound: maximum
-    });
+    const [ values, setValues ] = useState<number[]>(defaultValues);
 
     const updateBounds = (ev: number[]) => {
         const newBounds: Bounds = {
@@ -27,7 +25,7 @@ function PriceRange({ boundSetter, minimum, maximum }: PriceRangeProps) {
             upperBound: ev[1]
         }
         boundSetter(newBounds);
-        setBounds(newBounds);
+        setValues(ev);
     }
 
     return (
@@ -35,12 +33,12 @@ function PriceRange({ boundSetter, minimum, maximum }: PriceRangeProps) {
             <RangeSlider
                 min={minimum}
                 max={maximum}
-                defaultValue={[minimum, maximum]}
+                value={values}
                 className={'price-ranges-slider'}
                 onInput={updateBounds}/>
             <div className='price-indicators'>
-                <span className='bound lower'>${ bounds.lowerBound }</span>
-                <span className='bound upper'>${ bounds.upperBound }</span>
+                <span className='bound lower'>${ values[0] }</span>
+                <span className='bound upper'>${ values[1] }</span>
             </div>
         </div>
     )

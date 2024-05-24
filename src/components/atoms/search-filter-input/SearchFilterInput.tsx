@@ -1,16 +1,28 @@
+import { useState } from 'react';
+import { CONSTANTS } from '../../../constants/constants';
 import './SearchFilterInput.scss';
 
 export interface SearchFilterInputProps {
-    setKeywordFilter: (_: string) => void
+    setKeywordFilter: (_: string) => void,
+    defaultValue?: string
 }
 
-function SearchFilterInput({ setKeywordFilter }: SearchFilterInputProps) {
+function SearchFilterInput({ setKeywordFilter, defaultValue }: SearchFilterInputProps) {
+
+    const [ value, setValue ] = useState<string>(defaultValue || CONSTANTS.EMPTY);
+
+    const handleInput = (e: React.FormEvent<HTMLInputElement>): void => {
+        const updatedValue = (e.target as HTMLInputElement).value;
+        setKeywordFilter(updatedValue);
+        setValue(updatedValue);
+    };
 
     return (
         <input className='league-spartan data-search-bar'
             type='text'
             placeholder='Filter by keyword...'
-            onInput={ (e) => setKeywordFilter((e.target as HTMLInputElement).value) }/>
+            value={value}
+            onInput={handleInput}/>
     );
   }
   

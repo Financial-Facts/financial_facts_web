@@ -9,7 +9,7 @@ import { Option } from '../../atoms/multi-select/MultiSelect';
 import ResponsiveTable from '../../atoms/responsive-table/ResponsiveTable';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../store/store';
-import { resetFilteredDiscounts, sortDiscounts } from '../../../store/discounts/discounts.slice';
+import { sortDiscounts } from '../../../store/discounts/discounts.slice';
 
 export interface DiscountTableProps {
     discounts: SimpleDiscount[],
@@ -34,7 +34,6 @@ function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
     }, [ fieldOptions ]);
 
     useEffect(() => {
-        dispatch(resetFilteredDiscounts());
         dispatch(sortDiscounts({
             sortBy: sortByKey,
             sortOrder: sortOrder

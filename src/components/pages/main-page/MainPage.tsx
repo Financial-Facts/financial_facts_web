@@ -8,7 +8,6 @@ import { setActivePage } from '../../../store/page/page.slice';
 import { AppDispatch } from '../../../store/store';
 import PageLayout from '../../templates/page-layout/page-layout';
 import loadDiscounts from '../../../hooks/loadDiscounts';
-import { resetFilteredDiscounts } from '../../../store/discounts/discounts.slice';
 
 
 function MainPage() {
@@ -18,7 +17,6 @@ function MainPage() {
 
     useEffect(() => {
       dispatch(setActivePage('Main'));
-      dispatch(resetFilteredDiscounts());
     }, []);
 
     return (

@@ -27,7 +27,8 @@ function MultiFunctionSideNav({ label, items, orientation }: MultiFunctionSideNa
                 return <PriceRange  
                     boundSetter={item.boundSetter}
                     minimum={item.minimum}
-                    maximum={item.maximum}/>
+                    maximum={item.maximum}
+                    defaultValues={item.defaultValues}/>
             }
             case 'TOGGLE': {
                 return <SearchFormToggle
@@ -38,7 +39,9 @@ function MultiFunctionSideNav({ label, items, orientation }: MultiFunctionSideNa
                     setter={item.selectionSetter}/>
             }
             case 'SEARCH': {
-                return <SearchFilterInput setKeywordFilter={item.keywordSetter}/>
+                return <SearchFilterInput
+                    defaultValue={item.defaultValue}
+                    setKeywordFilter={item.keywordSetter}/>
             }
             default: {
                 return undefined;

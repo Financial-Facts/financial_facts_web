@@ -8,7 +8,6 @@ import { Option } from '../../atoms/multi-select/MultiSelect';
 import { cleanKey } from '../../../utilities';
 import { useEffect, useMemo, useState } from 'react';
 import { MultiValue } from 'react-select';
-import { CONSTANTS } from '../../../constants/constants';
 import { Bounds } from '../../atoms/price-range/PriceRange';
 import { MobileState } from '../../../store/mobile/mobile.slice';
 import { AppDispatch } from '../../../store/store';
@@ -43,17 +42,14 @@ const defaultSelectedKeys: MultiValue<DiscountOption> = [
 function DiscountListingSection() {
 
     const dispatch = useDispatch<AppDispatch>();
-    const { allDiscounts, filteredDiscounts, loading } = useSelector< { discounts: DiscountState }, DiscountState>((state) => state.discounts);
+    const { allDiscounts, filteredDiscounts, loading, filteredFilter } = useSelector< { discounts: DiscountState }, DiscountState>((state) => state.discounts);
     const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
     const absoluteMinimumPrice = useMemo(() => getExtreme(allDiscounts, 'MIN'), [ allDiscounts ]);
     const absoluteMaximumPrice = useMemo(() => getExtreme(allDiscounts, 'MAX'), [ allDiscounts ]);
     const [ selectedTableKeys, setSelectedTableKeys ] = useState<MultiValue<Option>>(defaultSelectedKeys);
-    const [ hideInactive, setHideInactive ] = useState<boolean>(false);
-    const [ keyword, setKeyword ] = useState<string>(CONSTANTS.EMPTY);
-    const [ priceBounds, setPriceBounds ] = useState<Bounds>({
-        lowerBound: absoluteMinimumPrice,
-        upperBound: absoluteMaximumPrice
-    });
+    const [ hideInactive, setHideInactive ] = useState<boolean>(filteredFilter.hideInactive);
+    const [ keyword, setKeyword ] = useState<string>(filteredFilter.keyword);
+    const [ priceBounds, setPriceBounds ] = useState<Bounds>(filteredFilter.priceBounds);
 
     const tableFieldOptions = useMemo((): Option[] =>
         filteredDiscounts.length > 0 ? 
@@ -69,7 +65,7 @@ function DiscountListingSection() {
     const sideNavItems: SideNavItem[] = useMemo(() => [{
         type: 'TOGGLE',
         label: 'Hide Inactive',
-        defaultSelected: 'false',
+        defaultSelected: String(hideInactive),
         options: [{
             id: 'true',
             input: 'true'
@@ -81,13 +77,18 @@ function DiscountListingSection() {
     }, {
         type: 'SEARCH',
         label: 'Keyword Search',
+        defaultValue: keyword,
         keywordSetter: setKeyword
     }, {
         type: 'PRICE_RANGE',
         label: 'Market Price Range',
         boundSetter: setPriceBounds,
         minimum: absoluteMinimumPrice,
-        maximum: absoluteMaximumPrice
+        maximum: absoluteMaximumPrice,
+        defaultValues: [
+            priceBounds.lowerBound || absoluteMinimumPrice,
+            priceBounds.upperBound || absoluteMaximumPrice
+        ]
     }, {
         type: 'MULTI_SELECT',
         label: 'Display Fields',
