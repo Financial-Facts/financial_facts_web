@@ -73,6 +73,7 @@ export interface Discount {
     name: string
     lastUpdated: Date
     active: boolean
+    marketPrice: number
     stickerPrice: StickerPrice
     benchmarkRatioPrice: BenchmarkRatioPrice
     discountedCashFlowPrice: DiscountedCashFlowPrice

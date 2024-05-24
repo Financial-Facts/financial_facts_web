@@ -4,6 +4,11 @@
     display: flex;
     width: 100%;
     font-size: $normal-font;
+    min-height: 500px;
+    
+    .side-nav-wrapper {
+        height: auto;
+    }
     
     .data-container {
         display: flex;

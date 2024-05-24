@@ -50,7 +50,6 @@ function CompanySearchSection() {
     }, []);
 
     useEffect(() => {  
-        console.log(loading);
         if (!loading && !error) {
             setIdentityImages(identities.map(identity =>
                 <SymbolIcon 

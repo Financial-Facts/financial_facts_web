@@ -6,19 +6,16 @@ import CircleNavWrapper from '../../molecules/circle-nav-wrapper/circle-nav-wrap
 import DiscountCard from '../../molecules/discount-card/DiscountCard'
 import './DiscountDisplaySection.scss'
 import { CONSTANTS } from '../../../constants/constants'
-import { SimpleDiscount } from '../../../services/bulk-entities/bulk-entities.typings'
 import { DiscountState } from '../../../store/discounts/discounts.slice'
 import { initRef } from '../../../utilities'
 
 export interface DiscountDisplayParams {
-    simplify?: boolean,
-    keyword?: string
+    simplify?: boolean
 }
 
-function DiscountDisplaySection({ simplify = false, keyword }: DiscountDisplayParams) {
+function DiscountDisplaySection({ simplify = false }: DiscountDisplayParams) {
 
-    const discounts = useSelector< { discounts: DiscountState }, SimpleDiscount[]>((state) => state.discounts.discounts);
-    const loading = useSelector< { discounts: DiscountState }, boolean>((state) => state.discounts.loading);
+    const { allDiscounts, loading } = useSelector< { discounts: DiscountState }, DiscountState>((state) => state.discounts);
 
     const CARD_WIDTH = 200;
     const CARD_GAP = 10;
@@ -33,18 +30,23 @@ function DiscountDisplaySection({ simplify = false, keyword }: DiscountDisplayPa
     }, [ loading ]);
 
     useEffect(() => {
+      if (discountListRef) {
+        discountListRef.scrollTo({
+          left: 0,
+          behavior: 'instant'
+        });
+      }
+    }, [ discountListRef ]);
+
+    useEffect(() => {
         if (discountListRef) {
             discountListRef.style.width = `${numCardsToDisplay * CARD_WIDTH + ((numCardsToDisplay - 1) * CARD_GAP)}px`;
         }
         setUsingArrowNavigation(numCardsToDisplay === 1);
     }, [ numCardsToDisplay, discountListRef ]);
     
-    const checkIncludesKeyword = (discount: SimpleDiscount, value: string): boolean => 
-        discount.name.includes(value) || discount.cik.includes(value) || discount.symbol.includes(value);
-    
     const renderDiscountCards = () => {
-        return [...discounts]
-            .filter(discount => keyword ? checkIncludesKeyword(discount, keyword) : true)
+        return allDiscounts
             .map(discount => <DiscountCard key={discount.cik} discount={ discount }></DiscountCard>);
     }
 
@@ -70,7 +72,7 @@ function DiscountDisplaySection({ simplify = false, keyword }: DiscountDisplayPa
                 { renderDiscountCards() }
               </ul> :
               !usingArrowNavigation ? 
-                <CircleNavWrapper listLength={discounts.length}
+                <CircleNavWrapper listLength={allDiscounts.length}
                     numItemsToDisplay={numCardsToDisplay}
                     elementRef={discountListRef}
                     itemWidth={CARD_WIDTH}

@@ -7,6 +7,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { MultiValue } from 'react-select';
 import { Option } from '../../atoms/multi-select/MultiSelect';
 import ResponsiveTable from '../../atoms/responsive-table/ResponsiveTable';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../store/store';
+import { resetFilteredDiscounts, sortDiscounts } from '../../../store/discounts/discounts.slice';
 
 export interface DiscountTableProps {
     discounts: SimpleDiscount[],
@@ -16,7 +19,8 @@ export interface DiscountTableProps {
 function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
 
     const navigate = useNavigate();
-    const [ sortByKey, setSortByKey ] = useState<keyof SimpleDiscount>('lastUpdated');
+    const dispatch = useDispatch<AppDispatch>();
+    const [ sortByKey, setSortByKey ] = useState<keyof SimpleDiscount>('name');
     const [ sortOrder, setSortOrder ] = useState<Order>('ASC');
 
     const currencyKeys = new Set<string>([
@@ -29,30 +33,20 @@ function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
         }
     }, [ fieldOptions ]);
 
+    useEffect(() => {
+        dispatch(resetFilteredDiscounts());
+        dispatch(sortDiscounts({
+            sortBy: sortByKey,
+            sortOrder: sortOrder
+        }));
+    }, [ sortByKey, sortOrder ]);
+
     const displayedFields = useMemo(() =>
             discounts.length > 0 ? 
             Object
                 .keys(discounts[0])
                 .filter(key => fieldOptions.some(option => option.value === key)
         ) : [], [ fieldOptions ])
-
-    const compare = (a: string | number | boolean, b: string | number | boolean) => 
-        sortOrder === 'ASC' ? 
-            a < b ? 1 : -1 :
-            a > b ? 1 : -1;
-
-    const getSortFunction = (
-        sortByKey: keyof SimpleDiscount
-    ): (a: SimpleDiscount, b: SimpleDiscount) => number => {
-        switch(sortByKey) {
-            case 'lastUpdated': {
-                return (a, b) => compare(new Date(a.lastUpdated).valueOf(), new Date(b.lastUpdated).valueOf());
-            }
-            default: {
-                return (a, b) => compare(a[sortByKey], b[sortByKey]);
-            }
-        }
-    }
 
     const renderTableHeader = () =>
         <thead>
@@ -78,22 +72,20 @@ function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
     const renderTableBody = () => 
         <tbody>
             {
-                [...discounts]
-                    .sort(getSortFunction(sortByKey))
-                    .map(discount => 
-                        <tr key={discount.cik}
-                            onClick={() => navigate(`/discount/${discount.cik}`)}>
-                            {
-                                displayedFields
-                                    .map(key => {
-                                        let value = discount[key as keyof SimpleDiscount]; 
-                                        if (currencyKeys.has(key)) {
-                                            value = FormatService.formatToDollarValue(value as number);
-                                        }
-                                        return <td key={`${discount.cik}-${key}`} className={`${key}-flex`}>{ String(value) }</td>
-                                    })
-                            }
-                        </tr>)
+                discounts.map(discount => 
+                    <tr key={discount.cik}
+                        onClick={() => navigate(`/discount/${discount.cik}`)}>
+                        {
+                            displayedFields
+                                .map(key => {
+                                    let value = discount[key as keyof SimpleDiscount]; 
+                                    if (currencyKeys.has(key)) {
+                                        value = FormatService.formatToDollarValue(value as number);
+                                    }
+                                    return <td key={`${discount.cik}-${key}`} className={`${key}-flex`}>{ String(value) }</td>
+                                })
+                        }
+                    </tr>)
             }
         </tbody>
 
