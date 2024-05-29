@@ -1,0 +1,28 @@
+@import '/src/styles.scss';
+
+.definitions-section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1000px;
+    padding: 25px 50px 65px;
+    box-sizing: border-box;
+
+    --definition-list-item-default-height: 33px;
+
+    h2 {
+        margin: 20px 0;
+    }
+
+    .definitions-list {
+        list-style-type: disclosure-closed;
+        display: flex;
+        flex-direction: column;
+        row-gap: 32px;
+        
+        li.expanded {
+            list-style-type: disclosure-open;
+            height: var(--list-item-expanded-height);
+        }
+    }
+}

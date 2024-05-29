@@ -1,0 +1,55 @@
+@import '/src/styles.scss';
+
+
+.definitions-list-item {
+    width: 100%;
+    border: 1px solid $light-gray;
+    cursor: pointer;
+    -webkit-transition: height 0.4s ease;
+    -moz-transition: height 0.4s ease;
+    -o-transition: height 0.4s ease;
+    transition: height 0.4s ease;
+    height: var(--definition-list-item-default-height);
+    box-sizing: border-box;
+
+    div.expanded {
+        border-bottom: 1px solid $base-purple;
+    }
+
+    .word-container {
+        padding: 8px 16px;
+        background: $light-gray;
+        height: var(--definition-list-item-default-height);
+        box-sizing: inherit;
+
+        h3 {
+            margin: 0;
+            text-decoration: underline;
+        }
+    }
+
+    .word-container:hover {
+        background: $base-purple;
+        color: $off-white;
+    }
+
+    .definition-container {
+        display: flex;
+        justify-content: center;
+        height: calc(100% - var(--definition-list-item-default-height));
+        background: $magnolia-white;
+        padding: 24px 16px;
+        box-sizing: inherit;
+
+        .discounts-definition {
+            display: flex;
+            flex-direction: column;
+            row-gap: 8px;
+            list-style-position: inside;
+
+            .criteria-list-header {
+                text-decoration: underline;
+            }
+        }
+    }
+}
