@@ -8,7 +8,7 @@ const initialState: PageState = {
     },
     'About': {
         active: false,
-        link: ''
+        link: '/about'
     },
     'Discount': {
         active: false,

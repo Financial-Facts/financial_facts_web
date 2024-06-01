@@ -1,7 +1,7 @@
 import './DiscountListingSection.scss';
 import { useDispatch, useSelector } from 'react-redux'
 import LoadingSpinner from '../../atoms/loading-spinner/loading-spinner'
-import { DiscountState, filterDiscounts } from '../../../store/discounts/discounts.slice'
+import { DiscountState, HideValuationPrices, filterDiscounts } from '../../../store/discounts/discounts.slice'
 import DiscountTable from '../../molecules/discount-table/DiscountTable'
 import MultiFunctionSideNav from '../../molecules/multi-function-side-nav/MultiFunctionSideNav';
 import { Option } from '../../atoms/multi-select/MultiSelect';
@@ -47,7 +47,7 @@ function DiscountListingSection() {
     const absoluteMinimumPrice = useMemo(() => getExtreme(allDiscounts, 'MIN'), [ allDiscounts ]);
     const absoluteMaximumPrice = useMemo(() => getExtreme(allDiscounts, 'MAX'), [ allDiscounts ]);
     const [ selectedTableKeys, setSelectedTableKeys ] = useState<MultiValue<Option>>(defaultSelectedKeys);
-    const [ hideInactive, setHideInactive ] = useState<boolean>(filteredFilter.hideInactive);
+    const [ hideValuesAbove, setHideValuesAbove ] = useState<HideValuationPrices>(filteredFilter.hideValuesAbove);
     const [ keyword, setKeyword ] = useState<string>(filteredFilter.keyword);
     const [ priceBounds, setPriceBounds ] = useState<Bounds>(filteredFilter.priceBounds);
 
@@ -63,17 +63,54 @@ function DiscountListingSection() {
             , [ filteredDiscounts ]);
 
     const sideNavItems: SideNavItem[] = useMemo(() => [{
-        type: 'TOGGLE',
-        label: 'Hide Inactive',
-        defaultSelected: String(hideInactive),
-        options: [{
-            id: 'true',
-            input: 'true'
+       type: 'TOGGLE_GROUP',
+       label: 'Hide discounts priced above...',
+       toggles: [{
+            type: 'TOGGLE',
+            label: 'Sticker Price',
+            defaultSelected: String(hideValuesAbove.stickerPrice),
+            options: [{
+                id: 'true',
+                input: 'true'
+            }, {
+                id: 'false',
+                input: 'false'
+            }],
+            selectionSetter: (val) => setHideValuesAbove(current => ({
+                ...current,
+                stickerPrice: 'true' === val
+            }))
         }, {
-            id: 'false',
-            input: 'false'
-        }],
-        selectionSetter: (val) => setHideInactive(val === 'true')
+            type: 'TOGGLE',
+            label: 'DCF Price',
+            defaultSelected: String(hideValuesAbove.discountedCashFlowPrice),
+            options: [{
+                id: 'true',
+                input: 'true'
+            }, {
+                id: 'false',
+                input: 'false'
+            }],
+            selectionSetter: (val) => setHideValuesAbove(current => ({
+                ...current,
+                discountedCashFlowPrice: 'true' === val
+            }))
+        }, {
+            type: 'TOGGLE',
+            label: 'BR Price',
+            defaultSelected: String(hideValuesAbove.benchmarkRatioPrice),
+            options: [{
+                id: 'true',
+                input: 'true'
+            }, {
+                id: 'false',
+                input: 'false'
+            }],
+            selectionSetter: (val) => setHideValuesAbove(current => ({
+                ...current,
+                benchmarkRatioPrice: 'true' === val
+            }))
+        }]
     }, {
         type: 'SEARCH',
         label: 'Keyword Search',
@@ -99,11 +136,11 @@ function DiscountListingSection() {
                
     useEffect(() => {
         dispatch(filterDiscounts({
-            hideInactive: hideInactive,
+            hideValuesAbove: hideValuesAbove,
             keyword: keyword,
             priceBounds: priceBounds
         }));
-    }, [ hideInactive, keyword, priceBounds ]);
+    }, [ hideValuesAbove, keyword, priceBounds ]);
 
     return (
         <section className={`discount-listing-section`}>

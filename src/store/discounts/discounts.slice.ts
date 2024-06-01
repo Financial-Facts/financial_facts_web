@@ -4,6 +4,12 @@ import { supabaseService } from '../../services/supabase/supabase.service';
 import { Bounds } from '../../components/atoms/price-range/PriceRange';
 import { CONSTANTS } from '../../constants/constants';
 
+export interface HideValuationPrices {
+  stickerPrice: boolean,
+  discountedCashFlowPrice: boolean,
+  benchmarkRatioPrice: boolean
+}
+
 export type DiscountState = {
   allDiscounts: SimpleDiscount[]
   filteredDiscounts: SimpleDiscount[]
@@ -18,7 +24,7 @@ export interface DiscountSort {
 }
 
 export interface DiscountFilter {
-  hideInactive: boolean
+  hideValuesAbove: HideValuationPrices
   keyword: string
   priceBounds: Bounds
 }
@@ -42,9 +48,23 @@ const getSortFunction = (
   }
 }
 
+const filterForValuation = (
+  discounts: SimpleDiscount[],
+  valuationKey: 'stickerPrice' | 'discountedCashFlowPrice' | 'benchmarkRatioPrice'
+): SimpleDiscount[] =>
+    discounts.filter(discount => discount.marketPrice < discount[valuationKey]);
+
 const filterDiscountState = (discounts: SimpleDiscount[], filter: DiscountFilter) => {
-  if (filter.hideInactive) {
-    discounts = discounts.filter(discount => discount.active);
+  if (filter.hideValuesAbove.benchmarkRatioPrice) {
+    discounts = filterForValuation(discounts, 'benchmarkRatioPrice');
+  }
+
+  if (filter.hideValuesAbove.discountedCashFlowPrice) {
+    discounts = filterForValuation(discounts, 'discountedCashFlowPrice');
+  }
+
+  if (filter.hideValuesAbove.stickerPrice) {
+    discounts = filterForValuation(discounts, 'stickerPrice');
   }
 
   if (!!filter.keyword) {
@@ -78,7 +98,11 @@ export const discountsSlice = createSlice({
       sortOrder: 'ASC'
     },
     filteredFilter: {
-      hideInactive: false,
+      hideValuesAbove: {
+        stickerPrice: false,
+        discountedCashFlowPrice: false,
+        benchmarkRatioPrice: false
+      },
       keyword: CONSTANTS.EMPTY,
       priceBounds: {
         lowerBound: 0,
@@ -105,7 +129,11 @@ export const discountsSlice = createSlice({
         sortOrder: 'ASC'
       }
       state.filteredFilter = {
-        hideInactive: false,
+        hideValuesAbove: {
+          benchmarkRatioPrice: true,
+          discountedCashFlowPrice: true,
+          stickerPrice: true
+        },
         keyword: CONSTANTS.EMPTY,
         priceBounds: {
           lowerBound: 0,

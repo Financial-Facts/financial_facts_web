@@ -81,7 +81,7 @@ function SearchBar({ identityListDispatch, searchCriteria, dispatch, setIsLoadin
                 ref={ (ref) => initRef(ref, setSearchBarRef) }
                 role={'search'}
                 className='search-bar'
-                placeholder='Search...'>    
+                placeholder='Search for facts...'>    
             </input>
         </div>
     )

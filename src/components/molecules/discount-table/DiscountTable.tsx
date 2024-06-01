@@ -10,6 +10,7 @@ import ResponsiveTable from '../../atoms/responsive-table/ResponsiveTable';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../store/store';
 import { sortDiscounts } from '../../../store/discounts/discounts.slice';
+import SvgIcon from '../../atoms/svg-icon/SvgIcon';
 
 export interface DiscountTableProps {
     discounts: SimpleDiscount[],
@@ -57,12 +58,25 @@ function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
                                 onClick={() => sortByKey === key ?
                                         setSortOrder(current => current === 'ASC' ? 'DESC' : 'ASC') :
                                         setSortByKey(key as keyof SimpleDiscount)}>
-                                <span className='header-text'>{ cleanKey(key) }</span>
-                                { 
-                                    sortByKey === key &&
-                                        <img src='/assets/sort-arrows-icon.svg'
-                                            className={`sortArrow`}/>
-                                }
+                                <div className='table-header-content'>
+                                    <span className='header-text'>
+                                        { cleanKey(key) }
+                                        { 
+                                            key === 'active' &&
+                                                <SvgIcon
+                                                    src='/assets/info-icon.svg'
+                                                    height='16px'
+                                                    width='16px'
+                                                    color='#F5F5F5'
+                                                    tooltipMessage='A discount is considered active when the market price is below all valuation prices'/>
+                                        }
+                                    </span>
+                                    { 
+                                        sortByKey === key &&
+                                            <img src='/assets/sort-arrows-icon.svg'
+                                                className={`sortArrow`}/>
+                                    }
+                                </div>
                             </th>) 
                 }
             </tr>
@@ -73,7 +87,11 @@ function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
             {
                 discounts.map(discount => 
                     <tr key={discount.cik}
-                        onClick={() => navigate(`/discount/${discount.cik}`)}>
+                        onClick={() => navigate(`/discount/${discount.cik}`, {
+                            state: {
+                                useFilteredDiscounts: true
+                            }
+                        })}>
                         {
                             displayedFields
                                 .map(key => {

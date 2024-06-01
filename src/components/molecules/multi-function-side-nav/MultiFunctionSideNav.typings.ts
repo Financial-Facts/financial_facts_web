@@ -3,6 +3,11 @@ import { Bounds } from "../../atoms/price-range/PriceRange"
 import { ToggleOption } from "../../atoms/search-form-toggle/SearchFormToggle"
 import { Option } from '../../atoms/multi-select/MultiSelect';
 
+export interface Title {
+    type: 'TITLE',
+    label: string
+}
+
 export interface MultiSelect {
     type: 'MULTI_SELECT',
     label: string,
@@ -29,6 +34,12 @@ export interface Toggle<T> {
     showToggleLabel?: boolean
 }
 
+export interface ToggleGroup<T> {
+    type: 'TOGGLE_GROUP',
+    label: string
+    toggles: Toggle<T>[]
+}
+
 export interface KeywordSearch {
     type: 'SEARCH',
     label: string,
@@ -36,4 +47,4 @@ export interface KeywordSearch {
     keywordSetter: (_: string) => void
 }
 
-export type SideNavItem = MultiSelect | PriceRange | Toggle<string> | KeywordSearch;
+export type SideNavItem = MultiSelect | PriceRange | Toggle<string> | KeywordSearch | Title | ToggleGroup<string>;

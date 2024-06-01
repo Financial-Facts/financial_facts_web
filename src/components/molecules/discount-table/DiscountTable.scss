@@ -1,16 +1,20 @@
 @import 'src/variables';
 
-.header-text {
-    display: inline-block;
-    width: calc(100% - 31px);
+.table-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .header-text {
+        display: flex;
+        flex-wrap: nowrap;
+    }
 }
 
 .sortArrow {
-    position: relative;
-    top: 2px;
     height: 15px;
     width: 15px;
-    padding: 0 8px;
+    margin: 0 8px;
 }
 
 .discount-table {

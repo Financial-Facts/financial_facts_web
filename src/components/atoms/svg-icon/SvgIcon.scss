@@ -1,0 +1,27 @@
+@import '/src/styles.scss';
+
+.svg-button-wrapper {
+    cursor: pointer;
+}
+
+.svg-icon-wrapper {
+    display: flex;
+    padding: var(--svg-wrapper-padding, 8px);
+    height: fit-content;
+
+    .svg-component {
+        display: contents;
+
+        div {
+            display: flex;
+            align-items: center;
+        }
+
+        svg {
+            fill: var(--svg-color, currentColor);
+            height: var(--svg-height, 16px);
+            width: var(--svg-width, 16px);
+        }
+    }
+
+}

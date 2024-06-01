@@ -17,6 +17,7 @@ import { MobileSize, setMobile } from './store/mobile/mobile.slice';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from './store/store';
 import DiscountDataPage from './components/pages/discount-data-page/DiscountDataPage';
+import AboutPage from './components/pages/about-page/AboutPage';
 
 
 ChartJS.register(
@@ -63,6 +64,7 @@ function App() {
         <Route path='/facts' element={<FactsPage/>}>
           <Route path=":cik" element={<FactsPage/>}/>
         </Route>
+        <Route path='/about' element={<AboutPage/>}/>
       </Routes>
     </BrowserRouter>
   );

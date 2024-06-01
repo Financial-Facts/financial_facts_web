@@ -5,11 +5,11 @@ function DefinitionsSection() {
 
     return (
         <section className='definitions-section'>
-            <h2>Definitions</h2>
+            <h3>Definitions</h3>
             <ul className='definitions-list'>
                 <DefinitionListItem
                     word={'Facts'}
-                    expandedHeight={105}
+                    expandedHeight={100}
                     definitionElement={
                         <span> 
                             Raw filings data spanning multiple taxonomies that contains a
@@ -18,17 +18,23 @@ function DefinitionsSection() {
                     }/>
                 <DefinitionListItem
                     word={'Discounts'}
-                    expandedHeight={250}
+                    expandedHeight={200}
                     definitionElement={
                         <div className='discounts-definition'>
-                            <span>
-                                Companies whose historical growth meets our criteria going back 10 years and have had their 
-                                valuations calculated successfully. Strict minimum financial requirements must be met before 
+                            <span className='discounts-description'>
+                                A publicly traded company that has historical growth meeting our criteria going back at least 10 
+                                years and has been successfully evaluated. Strict minimum financial requirements must be met before 
                                 our calculations are performed to assure the the public entity is a viable value investment.
                             </span>
-                            <span className='criteria-list-header'>Minimum Criteria</span>
-                            <ul>
-                                <li>10% growth</li>
+                            <label htmlFor='criteria' className='criteria-list-header'>
+                                Following values must be 10% or greater over the past 10 years
+                            </label>
+                            <ul id='criteria'>
+                                <li>Average annual return on invested capital (ROIC)</li>
+                                <li>Average annual revenue growth</li>
+                                <li>Average annual earnings per share (EPS) growth</li>
+                                <li>Average annual equity growth</li>
+                                <li>Average annual operating cash flow growth</li>
                             </ul>
                         </div>
                     }/>

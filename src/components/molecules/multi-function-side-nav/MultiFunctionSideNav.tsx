@@ -43,6 +43,16 @@ function MultiFunctionSideNav({ label, items, orientation }: MultiFunctionSideNa
                     defaultValue={item.defaultValue}
                     setKeywordFilter={item.keywordSetter}/>
             }
+            case 'TOGGLE_GROUP': {
+                return item.toggles.map(toggleConfig => 
+                    <SearchFormToggle
+                        key={`${toggleConfig.label}`}
+                        name={toggleConfig.label}
+                        label={toggleConfig.label}
+                        defaultId={toggleConfig.defaultSelected}
+                        options={toggleConfig.options}
+                        setter={toggleConfig.selectionSetter}/>)
+            }
             default: {
                 return undefined;
             }

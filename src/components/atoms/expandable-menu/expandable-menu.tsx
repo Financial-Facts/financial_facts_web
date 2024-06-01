@@ -7,6 +7,7 @@ import { ClosurePayload } from '../../organisms/sticky-menu/StickyMenu';
 import './expandable-menu.scss';
 import { PageState, Page } from '../../../store/page/page.typings';
 import { MobileState } from '../../../store/mobile/mobile.slice';
+import watchForMenuClosure from '../../../hooks/watchForMenuClosure';
 
 export interface ExpandableMenuProps  { 
     $closeDropdowns: Subject<ClosurePayload[]>
@@ -17,15 +18,7 @@ function ExpandableMenu({ $closeDropdowns }: ExpandableMenuProps) {
     const [ isExpanded, setIsExpanded ] = useState(false);
     const pages = useSelector<{ page: PageState }, PageState>((state) => state.page);
     const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
-    
-    useEffect(() => {
-        const watchForClosure = $closeDropdowns
-            .subscribe((payload: ClosurePayload[]) => setIsExpanded(
-                !payload.includes('ALL') && !payload.includes('NAV')));
-        return () => {
-            watchForClosure.unsubscribe();
-        }
-    }, []);
+    watchForMenuClosure($closeDropdowns, (payload) => setIsExpanded(!payload.includes('ALL') && !payload.includes('NAV')));
 
     useEffect(() => {
         if (isExpanded) {

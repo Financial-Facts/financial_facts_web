@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import './AdjacentNavigationArrows.scss';
+import SvgIcon from '../svg-icon/SvgIcon';
 
 export interface NavigationItem {
     id: string
@@ -25,7 +26,11 @@ function AdjacentNavigationArrows({ adjacentNavigationState }: AdjacentNavigatio
         <button className={`adjacent-nav-button adjacent-nav-button-${direction}`} 
             onClick={() => navigate(`${uri}/${navigationItem.id}`)}>
             <span>{ navigationItem.label }</span>
-            <img src={`/assets/navigation-arrow-${direction}.svg`} height={25} width={25}/>
+            <SvgIcon
+                src={`/assets/navigation-arrow-${direction}.svg`}
+                height='25px'
+                width='25px'
+                wrapperPadding={'0'}/>
         </button>
 
     const renderAdjacentNavigation = (adjacentNavigationState: AdjacentNavigationState) => 

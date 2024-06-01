@@ -9,35 +9,25 @@
 }
 
 .sticky-search-bar {
-    width: 450px;
     transition-duration: 0.4s;
-    height: 64px;
+    width: var(--sticky-search-bar-width, 64px);
+    height: var(--sticky-search-bar-height, 64px);
 }
 
 .search {
-    padding: 0 16px 16px;
     box-sizing: border-box;
     flex-direction: column;
 
     .search-bar-wrapper {
         display: flex;
+        color: $base-purple;
         align-items: center;
-        height: 64px;
-        flex: none;
     }
+}
 
-    .search-icon {
-        margin: 0px 9px;
-        background-image: url('/assets/magnifying-glass.svg');
-    }
-
-    .exit-button {
-        height: 30px;
-        width: 30px;
-        margin: 9px;
-        cursor: pointer;
-        filter: invert(13%) sepia(54%) saturate(7494%) hue-rotate(280deg) brightness(103%) contrast(98%);
-    }
+.display-search-bar {
+    width: 450px;
+    padding: 0 16px;
 }
 
 .display-filter-form {
@@ -46,11 +36,4 @@
 
 .display-search-results {
     height: 410px;
-}
-
-.search-button {
-    padding: 0;
-    margin: 0;
-    cursor: pointer;
-    width: 64px;
 }

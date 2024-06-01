@@ -5,91 +5,28 @@ import SearchDropDown from '../../atoms/search-drop-down/SearchDropDown';
 import { ClosurePayload } from '../../organisms/sticky-menu/StickyMenu';
 import SearchFilterForm from '../search-filter-form/SearchFilterForm';
 import './expandable-search.scss';
-import { IdentityListAction, SearchCriteria, SearchCriteriaAction } from './expandable-search.typings';
 import { CONSTANTS } from '../../../constants/constants';
-import { Identity } from '../../../services/bulk-entities/bulk-entities.typings';
-import { handleEnterKeyEvent } from '../../../utilities';
 import LoadingSpinner from '../../atoms/loading-spinner/loading-spinner';
+import SvgIcon from '../../atoms/svg-icon/SvgIcon';
+import watchForMenuClosure from '../../../hooks/watchForMenuClosure';
+import { searchCriteriaReducer } from './reducers/search-criteria.reducer';
+import { identityListReducer } from './reducers/identity-list.reducer';
 
 export interface ExpandableSearchProps {
     $closeDropdowns: Subject<ClosurePayload[]>,
     isStandalone?: boolean
 }
 
-function identityListReducer(state: Identity[], action: IdentityListAction): Identity[] {
-    switch (action.type) {
-        case ('reset'): {
-            return [];
-        }
-        case ('set_list'): {
-            if (action.payload) {
-                return action.payload;
-            }
-            return state;
-        }
-        case ('update_list'): {
-            if (action.payload) {
-                return [...state, ...action.payload];
-            }
-            return state;
-        }
-    }
-}
-
-function searchCriteriaReducer(state: SearchCriteria, action: SearchCriteriaAction): SearchCriteria {
-    switch (action.type) {
-        case ('reset_all'): {
-            return {
-                searchBy: 'SYMBOL',
-                sortBy: 'SYMBOL',
-                order: 'ASC',
-                keyword: CONSTANTS.EMPTY
-            }
-        }
-        case ('set_search_by'): {
-            const payload = action.payload;
-            if (payload && payload.searchBy) {
-                return { ...state, ...{
-                    searchBy: payload.searchBy,
-                    sortBy: payload.searchBy
-                }}
-            }
-            return state;
-        }
-        case ('set_sort_by'): {
-            const payload = action.payload;
-            if (payload && payload.sortBy) {
-                return { ...state, ...{
-                    sortBy: payload.sortBy
-                }}
-            }
-            return state;
-        }
-        case ('set_order'): {
-            const payload = action.payload;
-            if (payload && payload.order) {
-                return { ...state, ...{
-                    order: payload.order
-                }}
-            }
-            return state;
-        }
-        case ('set_keyword'): {
-            const payload = action.payload;
-            if (payload) {
-                return { ...state, ...{
-                    keyword: payload.keyword
-                }}
-            }
-            return state;
-        }
-    }
-}
-
 function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchProps) {
 
-    const [ displaySearchBar, setDisplaySearchBar ] = useState(false);
-    const [ displaySearchFilter, setDisplaySearchFilter ] = useState(false);
+    watchForMenuClosure($closeDropdowns, (payload) => {
+        if (payload.includes('ALL') || payload.includes('SEARCH')) {
+            handleCloseEvent();
+        }
+    });
+
+    const [ displaySearchBar, setDisplaySearchBar ] = useState(isStandalone);
+    const [ displaySearchFilter, setDisplaySearchFilter ] = useState(isStandalone);
     const [ displaySearchResults, setDisplaySearchResults ] = useState(false);
     const [ isLoading, setIsLoading ] = useState(false);
     const [ identities, identityListDispatch ] = useReducer(identityListReducer, []);
@@ -107,22 +44,6 @@ function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchPro
     useEffect(() => {
         setDisplaySearchResults(isStandalone || !!searchCriteria.keyword);
     }, [ searchCriteria.keyword ]);
-    
-    useEffect(() => {
-        const watchForClosure = $closeDropdowns
-            .subscribe((payload: ClosurePayload[]) => {
-                if (payload.includes('ALL') || payload.includes('SEARCH')) {
-                    handleCloseEvent();
-                }
-            });
-        if (isStandalone) {
-            setDisplaySearchBar(true);
-            setDisplaySearchFilter(true);
-        }
-        return () => {
-            watchForClosure.unsubscribe();
-        }
-    }, []);
 
     const handleOpenEvent = (): void => {
         clearTimeout(timeout);
@@ -144,45 +65,41 @@ function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchPro
 
     return (
         <div className={`sticky-menu-option search
-            ${ displaySearchBar ? CONSTANTS.EMPTY : 'search-button' } 
+            ${ isStandalone ? 'standalone-search-bar' : 'sticky-search-bar'}
+            ${ displaySearchBar ? 'display-search-bar' : CONSTANTS.EMPTY }
             ${ displaySearchFilter && !isStandalone ? 'display-filter-form' : CONSTANTS.EMPTY}
-            ${ displaySearchResults && !isStandalone ? 'display-search-results' : CONSTANTS.EMPTY}
-            ${ isStandalone ? 'standalone-search-bar' : 'sticky-search-bar'}`}
+            ${ displaySearchResults && !isStandalone ? 'display-search-results' : CONSTANTS.EMPTY}`}
             aria-expanded={ displaySearchBar }>
             <div className='search-bar-wrapper'>
-                <img src='/assets/magnifying-glass.svg'
-                    role={ displaySearchBar ? 'img' : 'button' }
-                    className={`search-icon ${displaySearchBar ? 'expanded-search-icon' : CONSTANTS.EMPTY}`}
-                    tabIndex={ displaySearchBar ? -1 : 0}
-                    onClick={() => handleOpenEvent()}
-                    onKeyDown={(e) => handleEnterKeyEvent(e, handleOpenEvent)}/>
+                <SvgIcon src='/assets/magnifying-glass.svg'
+                    height='48px'
+                    width='48px'
+                    isButton={!displaySearchBar}
+                    onClick={handleOpenEvent}/>
                 {
-                    displaySearchBar ? 
+                    displaySearchBar &&
                         <>
                             <SearchBar identityListDispatch={identityListDispatch}
                                 searchCriteria={searchCriteria}
                                 dispatch={dispatch}
                                 setIsLoading={setIsLoading}/>
                             { 
-                                !isStandalone ? 
-                                    <img role='button'
-                                        className='exit-button'
-                                        tabIndex={0}
-                                        src={`/assets/x.svg`}
-                                        onClick={() => handleCloseEvent()}
-                                        onKeyDown={(e) => handleEnterKeyEvent(e, handleCloseEvent)}/> :
-                                    undefined
+                                !isStandalone &&
+                                    <SvgIcon src='/assets/x.svg'
+                                        height='30px'
+                                        width='30px'
+                                        isButton={true}
+                                        onClick={handleCloseEvent}/>
                             }
-                        </> : undefined
+                        </>
                 }
             </div>
             {
-                displaySearchFilter ?
+                displaySearchFilter &&
                     <SearchFilterForm
                         searchCriteria={searchCriteria}
                         dispatch={dispatch}
                         renderDelay={isStandalone ? 0 : 400}/>
-                    : undefined
             }
             {
                 displaySearchResults ?

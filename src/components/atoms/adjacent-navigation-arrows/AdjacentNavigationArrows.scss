@@ -24,10 +24,6 @@
     .adjacent-nav-button:hover {
         background: $base-purple;
         color: $magnolia-white;
-        
-        img {
-            filter: brightness(0) saturate(100%) invert(94%) sepia(59%) saturate(20%) hue-rotate(346deg) brightness(120%) contrast(92%);
-        }
     }
 
     .adjacent-nav-button-left {

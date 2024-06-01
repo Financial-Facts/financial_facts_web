@@ -70,7 +70,7 @@ function DiscountDataDisplaySection({ discount, loading, error }: DiscountDataDi
                 supportText={'An error occurred while collecting discount details'}/> :
         discount && valuationKey ?
             <>
-                <ValuationPrice price={discount[valuationKey].price} lastUpdated={new Date(discount.lastUpdated)}/>
+                <ValuationPrice price={discount[valuationKey].price} lastUpdated={discount.lastUpdated}/>
                 <DiscountSingularData valuation={discount[valuationKey]}/>
             </> :
         <ZeroState message={'Select a Valuation'} supportText={'View the calculated valuation data'}/>

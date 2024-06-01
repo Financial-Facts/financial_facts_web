@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import DiscountDataDisplaySection from '../../organisms/discount-data-display-section/DiscountDataDisplaySection';
 import Header from '../../organisms/header/Header';
 import fetchDiscount from '../../../hooks/fetchDiscount';
@@ -17,35 +17,42 @@ function DiscountDataPage() {
 
     loadDiscounts();
     const { cik } = useParams();
+    const location = useLocation();
     const { discount, loading, error } = fetchDiscount(cik);
-    const { filteredDiscounts } = useSelector< { discounts: DiscountState }, DiscountState>((state) => state.discounts);
+    const { allDiscounts, filteredDiscounts } = useSelector< { discounts: DiscountState }, DiscountState>((state) => state.discounts);
     const dispatch = useDispatch<AppDispatch>();
     const [ adjacentDiscountState, setAdjacentDiscountState ] = useState<AdjacentNavigationState>({
         uri: '/discount',
         previousItem: undefined,
         nextItem: undefined
     });
+    const [ useFilteredDiscounts, setUseFilteredDiscounts ] = useState<boolean>(false);
 
     useEffect(() => {
         dispatch(setActivePage('Discount'));
+        setUseFilteredDiscounts(!!location.state ? !!location.state.useFilteredDiscounts : false);
     }, []);
 
+    const discountList = useMemo(() =>
+        useFilteredDiscounts ? filteredDiscounts : allDiscounts
+    , [ useFilteredDiscounts, allDiscounts, filteredDiscounts ]);
+
     useEffect(() => {
-        if (!loading && filteredDiscounts.length > 0) {
-            const index = filteredDiscounts.findIndex(val => val.cik === cik);
+        if (!loading && discountList.length > 0) {
+            const index = discountList.findIndex(val => val.cik === cik);
             if (index !== -1) {
                 setAdjacentDiscountState(current => ({
                     ...current,
                     previousItem: index !== 0 ?
-                        buildNavigationItem(filteredDiscounts[index - 1]) :
+                        buildNavigationItem(discountList[index - 1]) :
                         undefined,
-                    nextItem: index !== filteredDiscounts.length - 1 ?
-                        buildNavigationItem(filteredDiscounts[index + 1]) :
+                    nextItem: index !== discountList.length - 1 ?
+                        buildNavigationItem(discountList[index + 1]) :
                         undefined
                 }));
             }
         }
-    }, [ loading, filteredDiscounts ]);
+    }, [ loading, discountList ]);
 
     const buildNavigationItem = (discount: SimpleDiscount) => ({
         id: discount.cik,

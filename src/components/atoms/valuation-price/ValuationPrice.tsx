@@ -16,7 +16,7 @@ function ValuationPrice({ price, lastUpdated }: ValuationProps) {
             </div>
             <div className='last-updated'>
                 <h2>Last Updated</h2>
-                <span className='value'>{ lastUpdated.toDateString() }</span>
+                <span className='value'>{ String(lastUpdated) }</span>
             </div>
         </div>
     )
