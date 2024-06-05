@@ -9,7 +9,7 @@ import fetchIdentities from '../../../hooks/fetchIdentities';
 import { Identity, IdentityRequest } from '../../../services/bulk-entities/bulk-entities.typings';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { useNavigate } from 'react-router-dom';
-import ResponsiveTable from '../responsive-table/ResponsiveTable';
+import ResponsiveTable from '../../molecules/responsive-table/ResponsiveTable';
 
 export interface SearchDropDownProps {
     allIdentities: Identity[],

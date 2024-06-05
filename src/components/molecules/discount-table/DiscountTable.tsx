@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import { MultiValue } from 'react-select';
 import { Option } from '../../atoms/multi-select/MultiSelect';
-import ResponsiveTable from '../../atoms/responsive-table/ResponsiveTable';
+import ResponsiveTable from '../responsive-table/ResponsiveTable';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../store/store';
 import { sortDiscounts } from '../../../store/discounts/discounts.slice';

@@ -3,14 +3,17 @@
 .nav-wrapper-body {
     display: flex;
     align-items: center;
-    column-gap: 16px;
+    width: 100%;
+    justify-content: space-between;
     
     .left-button-placeholder {
-        width: 49px;
+        min-width: 45px;
+        min-height: 45px;
     }
     
     .right-button-placeholder {
-        width: 49px;
+        min-width: 45px;
+        min-height: 45px;
     }
     
     .move-button {

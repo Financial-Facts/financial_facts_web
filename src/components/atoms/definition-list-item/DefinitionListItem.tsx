@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import './DefinitionListItem.scss';
 import { initRef } from '../../../utilities';
+import ResizeObserverService from '../../../services/resize-observer-service/resize-observer.service';
+import { CONSTANTS } from '../../../constants/constants';
 
 export interface DefinitionListItemProps {
     word: string,
@@ -18,16 +20,21 @@ function DefinitionListItem({ word, expandedHeight, definitionElement }: Definit
         ref.style.setProperty('--list-item-expanded-height', height + 'px');
     }
 
+    const handleClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>): void => {
+        const element = event.target as HTMLElement;
+        if (element.tagName !== CONSTANTS.TAG_NAME.ANCHOR) {
+            setExpanded(current => !current) 
+        }
+    }
+
     useEffect(() => {
         if (listItemRef) {
             if (expanded && contentRef) {
-                const listener = () => {
+                const observerId = ResizeObserverService.onSizeChange(contentRef, () => {
                     setListItemExpandedHeight(listItemRef, contentRef.clientHeight);
-                }
-                window.addEventListener('resize', listener);
-                listener();
+                });
                 return (() => {
-                    window.removeEventListener('resize', listener);
+                    ResizeObserverService.disconnectObserver(observerId);
                 });
             } else {
                 listItemRef.style.setProperty('--list-item-expanded-height', `${expandedHeight}px`);
@@ -37,7 +44,7 @@ function DefinitionListItem({ word, expandedHeight, definitionElement }: Definit
 
     return <li className={`definitions-list-item ${expanded && 'expanded'}`}
         role='listitem button'
-        onClick={() => setExpanded(current => !current) }
+        onClick={handleClick}
         ref={(ref) => initRef(ref, setListItemRef)}>
         <div className='list-item-content' ref={(ref) => initRef(ref, setContentRef)}>
             <div className={`word-container ${expanded && 'expanded'}`}>

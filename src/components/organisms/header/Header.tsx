@@ -1,4 +1,4 @@
-import AdjacentNavigationArrows, { AdjacentNavigationState } from "../../atoms/adjacent-navigation-arrows/AdjacentNavigationArrows";
+import AdjacentNavigationArrows, { AdjacentNavigationState } from "../../molecules/adjacent-navigation-arrows/AdjacentNavigationArrows";
 import { Size } from "../../atoms/loading-spinner/loading-spinner.typings";
 import SymbolIcon from "../../atoms/symbol-icon/symbol-icon";
 import StickyMenu from "../sticky-menu/StickyMenu";

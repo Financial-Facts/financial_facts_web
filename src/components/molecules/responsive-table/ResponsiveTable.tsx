@@ -1,6 +1,6 @@
 import './ResponsiveTable.scss';
 import { initRef } from '../../../utilities';
-import ZeroState from '../zero-state/ZeroState';
+import ZeroState from '../../atoms/zero-state/ZeroState';
 
 export interface ResponsiveTableProps {
     className: string,

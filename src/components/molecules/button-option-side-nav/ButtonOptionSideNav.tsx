@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import ButtonOptionList from "../../atoms/button-option-list/ButtonOptionList";
+import ButtonOptionList from "../button-option-list/ButtonOptionList";
 import './ButtonOptionSideNav.scss';
 import { initRef } from '../../../utilities';
 
@@ -13,7 +13,8 @@ export interface ButtonSideNavConfigItem<T extends string> {
     includeSearch?: boolean,
     isScrollable?: boolean,
     displayCondition?: boolean,
-    deselectable?: boolean
+    deselectable?: boolean,
+    isFoldable?: boolean
 }
 
 export interface ButtonOptionSideNavProps {
@@ -34,7 +35,8 @@ function ButtonOptionSideNav({ buttonOptionSideNavConfig, orientation, refSetter
                 selectedKey={ config.selectedKey }
                 orientation={ orientation }
                 includeSearch={ config.includeSearch }
-                deselectable={config.deselectable}/>
+                deselectable={ config.deselectable }
+                isScrollable={ config.isScrollable }/>
         </div>;
 
     const renderStaticNavSection = (config: ButtonSideNavConfigItem<any>, index: number) =>
@@ -47,12 +49,13 @@ function ButtonOptionSideNav({ buttonOptionSideNavConfig, orientation, refSetter
                 selectedKey={ config.selectedKey }
                 orientation={ orientation }
                 includeSearch={ config.includeSearch }
-                deselectable={ config.deselectable }/>
+                deselectable={ config.deselectable }
+                isFoldable={ config.isFoldable }/>
         </div>
 
     const renderNavSections = () => buttonOptionSideNavConfig
         .reduce<ReactElement[]>((acc, config, index) => {
-            if (index !== 0 ) {
+            if (index !== 0) {
                 config.displayCondition = !!buttonOptionSideNavConfig[index - 1].selectedKey;
             }
             if (config.displayCondition !== false && config.keys.length > 0) {

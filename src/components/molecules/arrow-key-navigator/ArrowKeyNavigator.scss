@@ -1,7 +1,7 @@
 @import 'src/variables';
 
 .key-option-list {
-    width: 250px;
+    width: 100%;
     display: flex;
     list-style-type: none;
     overflow-x: auto;
@@ -9,7 +9,7 @@
     scroll-behavior: smooth;
 
     .key-option {
-        min-width: 250px;
+        min-width: var(--item-width);
         scroll-snap-align: start;
         text-align: center;
         display: flex;

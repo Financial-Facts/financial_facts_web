@@ -9,5 +9,8 @@ export const CONSTANTS = {
         'T3Y': 1095,
         'TFY': 1825,
         'TTY': 3650
+    },
+    TAG_NAME: {
+        ANCHOR: 'A'
     }
 }

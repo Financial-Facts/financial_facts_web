@@ -47,4 +47,5 @@ export interface KeywordSearch {
     keywordSetter: (_: string) => void
 }
 
+export type SideNavItemType = "MULTI_SELECT" | "PRICE_RANGE" | "TOGGLE" | "SEARCH" | "TITLE" | "TOGGLE_GROUP";
 export type SideNavItem = MultiSelect | PriceRange | Toggle<string> | KeywordSearch | Title | ToggleGroup<string>;

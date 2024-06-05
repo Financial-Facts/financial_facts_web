@@ -1,12 +1,13 @@
-import DefinitionListItem from '../definition-list-item/DefinitionListItem';
+import DefinitionListItem from '../../atoms/definition-list-item/DefinitionListItem';
+import DropdownInformationList from '../../atoms/dropdown-information-list/DropdownInformationList';
 import './DefinitionsSection.scss';
 
 function DefinitionsSection() {
 
     return (
-        <section className='definitions-section'>
-            <h3>Definitions</h3>
-            <ul className='definitions-list'>
+        <DropdownInformationList
+            title={'Definitions'}
+            listItem={<>
                 <DefinitionListItem
                     word={'Facts'}
                     expandedHeight={100}
@@ -38,8 +39,7 @@ function DefinitionsSection() {
                             </ul>
                         </div>
                     }/>
-            </ul>
-        </section>
+            </>}/>
     )
 }
 

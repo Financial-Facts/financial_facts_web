@@ -25,7 +25,7 @@ const ResizeObserverService = {
         return id;
     },
 
-    onWidthChange: (element: HTMLElement, callback: () => void): number => {
+    onSizeChange: (element: HTMLElement, callback: () => void): number => {
         const id = createObserver(() => {
             callback();
         });

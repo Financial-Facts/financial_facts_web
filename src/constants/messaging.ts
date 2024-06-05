@@ -8,5 +8,12 @@ export const messaging = {
         result directly or indirectly from the use or reliance on the abovementioned opinions, evaluations, analyses, prices or other information offered by the website.
         All the investment forms described here involve financial risk. The past performance of a security, an industry, a sector, a market, a financial product, a trading strategy
         or the individual trade does not guarantee any future results or returns. As an investor, you yourself bear the full responsibility for your individual investment decisions.
-        Such decisions should be discussed in advance with your personal financial advisor in case of doubt.`
+        Such decisions should be discussed in advance with your personal financial advisor in case of doubt.`,
+    origin: `Our website is inspired by the principles of value investing as outlined in Phil Town's bestselling book, Rule #1. In this book,
+        Town breaks down the complexities of investing into a simple, actionable methodology tailored for individual investors. By emphasizing the
+        importance of understanding businesses, analyzing historical fundamentals and identifying companies with durable competitive advantages,
+        we aim to empower our users to make sound investment decisions. In addition to the sticker price methodologies
+        outlined in the book, we have expanded our focus to include numerous methods of evaluation to ensure every value 
+        stock is identified using a multitude of market strategies. This gives our users a broader perspective on the growth of a company as well
+        as improving confidence in their decisions when choosing a company with which to invest.`
 }

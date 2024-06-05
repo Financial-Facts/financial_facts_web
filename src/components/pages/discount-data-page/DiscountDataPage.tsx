@@ -9,7 +9,7 @@ import { DiscountState } from '../../../store/discounts/discounts.slice';
 import { setActivePage } from '../../../store/page/page.slice';
 import { AppDispatch } from '../../../store/store';
 import PageLayout from '../../templates/page-layout/page-layout';
-import { AdjacentNavigationState } from '../../atoms/adjacent-navigation-arrows/AdjacentNavigationArrows';
+import { AdjacentNavigationState } from '../../molecules/adjacent-navigation-arrows/AdjacentNavigationArrows';
 import loadDiscounts from '../../../hooks/loadDiscounts';
 
 

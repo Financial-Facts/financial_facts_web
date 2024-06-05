@@ -28,10 +28,12 @@ function CircleNavWrapper({
 
     useEffect(() => {
         if (numItemsToDisplay !== 0) {
-            const numOfNavCircles = listLength > numItemsToDisplay ?
-                Math.ceil(listLength / numItemsToDisplay) : 
-                0;
-            generateNavCircles(numOfNavCircles);
+            const numOfCircles = Math.ceil(listLength / numItemsToDisplay);
+            const circles = [];
+            for (let i = 0; i < numOfCircles; i++) {
+              circles.push(i === 0)
+            }
+            setNavCircles(circles);
         }
     }, [ numItemsToDisplay ]);
 
@@ -50,22 +52,14 @@ function CircleNavWrapper({
         }
     }, [ elementRef, navCircles ]);
 
-    const generateNavCircles = (numOfCircles: number) => {
-        const circles = [];
-        for (let i = 0; i < numOfCircles; i++) {
-          circles.push(i === 0)
-        }
-        setNavCircles(circles);
-    }
-
     const updateSelectedCircleOnScroll = (listElement: HTMLUListElement) =>
         fromEvent<InputEvent>(listElement, 'scroll')
             .pipe(map(event => event.target))
             .subscribe((target) => {
                 if (target && navCircles.length > 0) {
                     const element = target as HTMLElement;
-                    const numItems = element.scrollLeft / (itemWidth + 10);
-                    const navCircleIndex = Math.ceil(numItems / numItemsToDisplay);
+                    const elementWidth = numItemsToDisplay * itemWidth;
+                    const navCircleIndex = Math.ceil(element.scrollLeft / elementWidth);
                     setNavCircles([...navCircles].map((_, index) => index === navCircleIndex));
                 }
             });

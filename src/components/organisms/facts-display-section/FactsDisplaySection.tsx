@@ -81,11 +81,15 @@ function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
                     <>
                         {
                             facts ? 
-                                <ButtonOptionSideNav buttonOptionSideNavConfig={[{
+                                <ButtonOptionSideNav
+                                    orientation={ mobile.mobile ? 'horizontal' : 'vertical' }
+                                    refSetter={setFactsWrapperRef}
+                                    buttonOptionSideNavConfig={[{
                                         label: 'Taxonomy',
                                         keys: getTaxonomyKeys(),
                                         selectedKey: taxonomy,
-                                        selectedKeySetter: setTaxonomy
+                                        selectedKeySetter: setTaxonomy,
+                                        isFoldable: true
                                     }, {
                                         label: 'Data',
                                         keys: facts && taxonomy && facts.facts[taxonomy] ?
@@ -94,7 +98,7 @@ function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
                                         selectedKeySetter: setDataKey,
                                         includeSearch: true,
                                         isScrollable: true
-                                    }]} orientation='vertical' refSetter={setFactsWrapperRef}/> :
+                                    }]}/> :
                                 undefined
                         }
                         {

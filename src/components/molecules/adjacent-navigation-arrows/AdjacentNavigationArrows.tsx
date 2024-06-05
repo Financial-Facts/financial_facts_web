@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import './AdjacentNavigationArrows.scss';
-import SvgIcon from '../svg-icon/SvgIcon';
+import SvgIcon from '../../atoms/svg-icon/SvgIcon';
 
 export interface NavigationItem {
     id: string

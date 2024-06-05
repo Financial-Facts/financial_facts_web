@@ -1,10 +1,8 @@
 @import 'src/variables';
 
-$discount-card-width: 200px;
-
 .discount-card {
     height: 205px;
-    min-width: $discount-card-width;
+    min-width: var(--discount-card-width, 200px);
     box-sizing: border-box;
     background: $light-gray;
     cursor: pointer;
@@ -20,7 +18,10 @@ $discount-card-width: 200px;
         color: $dark-gray;
         height: 100%;
         justify-content: center;
-        gap: 16px;
+
+        .symbol-icon-wrapper {
+            margin-bottom: 16px;
+        }
 
         .symbol, .valuation {
             font-family: $league-spartan;
@@ -41,7 +42,7 @@ $discount-card-width: 200px;
                 left: 6px;
             }
         }
-    
+
         .name, .date {
             font-family: $libre-baskerville;
             font-size: $normal-font;
@@ -49,11 +50,15 @@ $discount-card-width: 200px;
             text-align: center;
         }
 
+        .click-for-more {
+            font-size: $small-font;
+        }
+
     }
 
 }
 
-.discount-card:hover {
+.discount-card:hover, .mobile-clicked {
     border: 2px solid $base-purple;
     background: $dark-gray;
 
@@ -61,16 +66,23 @@ $discount-card-width: 200px;
         color: $off-white;
         font-family: $libre-baskerville;
         font-size: $normal-font;
+        justify-content: space-between;
 
         .date {
             font-size: $below-normal-font;
             font-weight: 400;
             text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .name {
+            margin-bottom: 16px;
         }
 
         .valuation-table {
-            width: 100%;
+            width: 175px;
             font-family: $league-spartan;
+            margin-bottom: 8px;
 
             caption {
                 text-decoration: underline;
@@ -81,21 +93,5 @@ $discount-card-width: 200px;
                 text-align: right;
             }
         }
-    }
-}
-
-@media only screen and (max-width: 576px) {
-
-    .discount-card { 
-        height: 250px;
-        min-width: $discount-card-width;
-        box-sizing: border-box;
-        background: $light-gray;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-        padding: 19px 21px;
-        margin: 0 5px;
     }
 }

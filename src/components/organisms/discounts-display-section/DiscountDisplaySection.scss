@@ -1,32 +1,8 @@
 @import 'src/variables';
-
-.simplify {
-    padding: 0 0 32px 0;
-    background: $magnolia-white;
-
-    .body {
-        .discounts {
-            margin-bottom: 15px;
-        } 
-
-        .standalone-list {
-            display: flex;
-            flex-wrap: wrap;
-            list-style: none;
-            justify-content: space-between;
-            gap: 16px;
-            padding: 0 32px;
-            
-            .discount-card {
-                flex: 1;
-            }
-        }
-    }
-}
     
 
 .full {
-    height: 500px;
+    min-height: 500px;
     padding: 50px 0;
     background: center / contain no-repeat, lightgray 50% url('/assets/discount_display_background.png');
 
@@ -61,6 +37,15 @@
         }
     }
 
+    .body-arrows {
+        flex-grow: 1;
+        justify-content: center;
+
+        .nav-wrapper-body .discounts {
+            margin: 0 16px;
+        }
+    }
+
     .body {
         display: flex;
         flex-direction: column;
@@ -71,12 +56,15 @@
             padding: 0;
             list-style: none;
             width: 840px;
-            gap: 10px;
             overflow-x: auto;
             overflow-y: hidden;
             scroll-snap-type: x mandatory;
             -ms-overflow-style: none;  /* IE and Edge */
             scrollbar-width: none;  /* Firefox */
+        }
+
+        .nav-circle-wrapper {
+            width: 410px;
         }
 
     }

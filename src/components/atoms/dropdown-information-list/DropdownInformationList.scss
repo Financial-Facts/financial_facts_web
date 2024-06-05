@@ -26,23 +26,5 @@
             height: var(--list-item-expanded-height);
         }
 
-        .discounts-definition {
-            display: flex;
-            flex-direction: column;
-            row-gap: 8px;
-
-            .discounts-description {
-                margin-bottom: 16px;
-            }
-
-            .criteria-list-header {
-                text-decoration: underline;
-            }
-
-            #criteria {
-                line-height: 24px;
-                margin-left: 16px;
-            }
-        }
     }
 }

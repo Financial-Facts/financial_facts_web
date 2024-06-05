@@ -24,7 +24,6 @@ function ArrowNavWrapper({
 
     const [ showLeftArrow, setShowLeftArrow ] = useState<boolean>(false);
     const [ showRightArrow, setShowRightArrow ] = useState<boolean>(true);
-    const [ maxScrollWidth, setMaxScrollWidth ] = useState<number | undefined>(undefined);
     
     useEffect(() => {
         if (elementRef) {
@@ -34,39 +33,34 @@ function ArrowNavWrapper({
 
     useEffect(() => {
         if (elementRef) {
-            setMaxScrollWidth(elementRef.scrollWidth - (elementRef.scrollWidth % itemWidth));
-        }
-    }, [ elementRef, element ]);
-
-    useEffect(() => {
-        if (elementRef && maxScrollWidth) {
             const subscription = updateArrowsOnScroll(elementRef);
             return () => {
                 subscription.unsubscribe();
             };
         }
-    }, [ maxScrollWidth ]); 
+    }, [ elementRef, itemWidth ]); 
 
     const updateArrowsOnScroll = (listElement: HTMLUListElement) =>
         fromEvent<InputEvent>(listElement, 'scroll')
             .pipe(map(event => event.target))
             .subscribe((target) => {
-                if (target && maxScrollWidth) {
+                if (target) {
                     const element = target as HTMLElement;
-                    setShowLeftArrow(element.scrollLeft - itemWidth >= 0);
-                    setShowRightArrow(element.scrollLeft + itemWidth < maxScrollWidth);
+                    const scrollLeft = Math.ceil(element.scrollLeft);
+                    setShowLeftArrow(scrollLeft - itemWidth >= 0);
+                    setShowRightArrow((scrollLeft + itemWidth) !== element.scrollWidth);
                 }
             });
 
     const handleArrowClick = (arrow: 'RIGHT' | 'LEFT') => {
-        if (elementRef && maxScrollWidth) {
+        if (elementRef) {
             setScrollToOptions(current => {
                 const currentLeft = elementRef.scrollLeft;
                 const delta = arrow === 'LEFT' ? -itemWidth : itemWidth;
                 return {
                     ...current,
                     ...{
-                        left: Math.min(Math.max(0, currentLeft + delta), maxScrollWidth)
+                        left: Math.min(Math.max(0, currentLeft + delta), elementRef.scrollWidth)
                     }
                 }
             });

@@ -66,7 +66,7 @@ function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchPro
     return (
         <div className={`sticky-menu-option search
             ${ isStandalone ? 'standalone-search-bar' : 'sticky-search-bar'}
-            ${ displaySearchBar ? 'display-search-bar' : CONSTANTS.EMPTY }
+            ${ !isStandalone && displaySearchBar ? 'display-search-bar' : CONSTANTS.EMPTY }
             ${ displaySearchFilter && !isStandalone ? 'display-filter-form' : CONSTANTS.EMPTY}
             ${ displaySearchResults && !isStandalone ? 'display-search-results' : CONSTANTS.EMPTY}`}
             aria-expanded={ displaySearchBar }>

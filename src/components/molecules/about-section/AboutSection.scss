@@ -1,0 +1,11 @@
+.about-section {
+    display: flex;
+    flex-direction: column;
+    padding: 32px;
+    line-height: 20px;
+
+    .definitions-section {
+        max-width: none;
+        padding: 0 0 32px 16px;
+    }
+} 

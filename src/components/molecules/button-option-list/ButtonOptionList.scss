@@ -1,11 +1,25 @@
 @import 'src/variables';
 
-.title-text {
-    padding: 4px;
-    font-size: $plus-font;
-    border-bottom: 2px solid rgba(41, 41, 41, .2);
+.options-title-wrapper {
     display: flex;
-    justify-content: center;
+    align-items: center;
+    height: 32px;
+    box-sizing: border-box;
+
+    .folded {
+        color: $disabled-gray;
+        margin-left: 32px;
+    }
+
+    .title-text {
+        padding: 4px;
+        font-size: $plus-font;
+        border-bottom: 2px solid rgba(41, 41, 41, .2);
+        display: flex;
+        justify-content: center;
+        height: auto;
+        box-sizing: border-box;
+    }
 }
 
 .key-group-wrapper {
@@ -46,6 +60,15 @@
     
     .vertical {
         flex-direction: column;
+    }
+
+    .vertical.scrollable {
+        flex-wrap: wrap;
+        flex-direction: row;
+        
+        .key {
+            flex-grow: 1;
+        }
     }
 
     .horizontal {

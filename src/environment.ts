@@ -1,4 +1,7 @@
 export const environment = {
+    benchmarkRatioLink: 'https://fullratio.com/ps-ratio-by-industry',
+    ruleNumberOneLink: 'https://www.ruleoneinvesting.com/investing-guide/chapter-11/',
+    financialModelingPrepDCFLink: 'https://site.financialmodelingprep.com/discounted-cash-flow',
     fmpDocsUrl: 'https://site.financialmodelingprep.com/developer/docs',
     factsGatewayUrl: 'https://l1o9ve56r2.execute-api.us-east-1.amazonaws.com/financial-facts/api',
     githubUrl: 'https://github.com/Financial-Facts',
