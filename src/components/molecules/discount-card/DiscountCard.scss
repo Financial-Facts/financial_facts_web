@@ -10,13 +10,15 @@
     scroll-snap-align: start;
     transition-duration: 0.4s;
     padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     .company-info {
         display: flex;
         flex-direction: column;
         align-items: center;
         color: $dark-gray;
-        height: 100%;
         justify-content: center;
 
         .symbol-icon-wrapper {

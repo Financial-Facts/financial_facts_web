@@ -15,9 +15,13 @@ function DiscountCard({ discount }: DiscountWrapper ) {
     const [ displayData, setDisplayData ] = useState(false);
     const [ imageNotFound, setImageNotFound ] = useState(false);
 
-    const handleNavigation = () => {
-        if (mobile.mobile && !displayData) {
-            setDisplayData(true);
+    const handleClick = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+        if (e.nativeEvent instanceof PointerEvent && e.nativeEvent.pointerType === 'touch') {
+            if (displayData) {
+                navigate(`/discount/${ discount.cik }`);
+            } else {
+                setDisplayData(true);
+            }
         } else {
             navigate(`/discount/${ discount.cik }`);
         }
@@ -25,7 +29,7 @@ function DiscountCard({ discount }: DiscountWrapper ) {
 
     return (
         <li className={`discount-card ${mobile.mobile && displayData ? 'mobile-clicked' : CONSTANTS.EMPTY}`}
-            onClick={handleNavigation}
+            onClick={handleClick}
             onMouseOver={() => setDisplayData(true)}
             onMouseLeave={() => setDisplayData(false)}>
             <div className="company-info">
