@@ -12,10 +12,10 @@ function SubmitButton({ outcome, loading }: SubmitButtonProps) {
     return (
         <button type='submit' className={`submit-button ${outcome}`}>{ 
             loading ? 
-                <LoadingSpinner size='SMALL' color='BLACK'></LoadingSpinner> : 
+                <LoadingSpinner size='SMALL' color='BLACK'/> : 
                 outcome !== 'neutral' ?
                     <img src={`/assets/${outcome === 'isSuccess' ? 'check' : 'x'}.svg`}/> :
-                    'Send' 
+                    <span className='send-text'>Send</span>
         }</button>
     )
   }

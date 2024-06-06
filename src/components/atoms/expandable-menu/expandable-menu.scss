@@ -1,14 +1,24 @@
 @import 'src/variables';
 
 
-.hamburger-react {
-    margin: 8px;
-}
-
 .expandable-menu {
-    max-height: 64px;
-    max-width: 64px;
+    height: 64px;
+    width: 64px;
     align-items: center;
+    justify-content: center;
+
+    .hamburger-wrapper {
+        padding: 4px;
+    }
+
+    .hamburger-wrapper:hover {
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 0 0 1pt $base-purple;
+        outline-color: transparent;
+        transition: .1s;
+        outline: 0;
+    }
 
     .drop-down-container {
         $drop-down-menu-width: 200px;

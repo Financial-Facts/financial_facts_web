@@ -5,7 +5,7 @@ import ButtonOptionSideNav from '../../molecules/button-option-side-nav/ButtonOp
 import './FactsDisplaySection.scss';
 import { CONSTANTS } from '../../../constants/constants';
 import fetchFacts from '../../../hooks/fetchFacts';
-import { Taxonomy } from '../../../services/facts/facts.typings';
+import { Facts, Taxonomy } from '../../../services/facts/facts.typings';
 import ResizeObserverService from '../../../services/resize-observer-service/resize-observer.service';
 import { initRef } from '../../../utilities';
 import { useSelector } from 'react-redux';
@@ -21,7 +21,7 @@ export type SPAN = 'ALL' | 'TTM' | 'T3Y' | 'TFY' | 'TTY';
 function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
 
     const [ taxonomy, setTaxonomy ] = useState<Taxonomy | undefined>(undefined);
-    const [ selectedDataKey, setDataKey ] = useState(CONSTANTS.EMPTY);
+    const [ selectedDataKey, setDataKey ] = useState<string | undefined>(undefined);
     const [ chartWrapperRef, setChartWrapperRef ] = useState<HTMLDivElement | null>(null);
     const [ factsWrapperRef, setFactsWrapperRef ] = useState<HTMLDivElement | null>(null);
     const { facts, loading, error, notFound } = fetchFacts(cik);
@@ -69,6 +69,20 @@ function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
         return <ZeroState message={message} supportText={support}/>
     }
 
+    const getPeriodicDataMap = (
+        facts: Facts,
+        taxonomyKey: Taxonomy,
+        selectedDataKey: string
+    ) => {
+        const taxonomyData = facts.facts[taxonomyKey];
+        if (selectedDataKey in taxonomyData) {
+            return {
+                [selectedDataKey]: facts.facts[taxonomyKey][selectedDataKey]
+            }
+        }
+        return {};
+    }
+
     return (
         <section className={`facts-display-section
             ${loading || error ? 'text-container-height' : CONSTANTS.EMPTY}`}>
@@ -106,8 +120,7 @@ function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
                                 <div className='chart-wrapper' ref={(ref) => initRef(ref, setChartWrapperRef)}>
                                     <PeriodicDataVisualization
                                         cik={cik}
-                                        data={facts.facts[taxonomy]}
-                                        periodicDataKey={selectedDataKey}/> 
+                                        periodicDataMap={getPeriodicDataMap(facts, taxonomy, selectedDataKey)}/>
                                 </div> :
                                 renderZeroState()
                         }

@@ -1,6 +1,8 @@
+import { PeriodicDataKey } from "../../../types/discount.typings";
+
 export type Valuation = 'stickerPrice' | 'discountedCashFlowPrice' | 'benchmarkRatioPrice';
 
-export const SpPeriodicDataKeys: (string | undefined)[]  = [
+export const SpPeriodicDataKeys: PeriodicDataKey[]  = [
     'annualBVPS',
     'annualPE',
     'annualROIC',
@@ -10,7 +12,7 @@ export const SpPeriodicDataKeys: (string | undefined)[]  = [
     'annualOperatingCashFlow'
 ];
 
-export const DcfPeriodicDataKeys: (string | undefined)[] = [
+export const DcfPeriodicDataKeys: PeriodicDataKey[] = [
     'historicalRevenue', 
     'projectedRevenue', 
     'historicalOperatingCashFlow', 

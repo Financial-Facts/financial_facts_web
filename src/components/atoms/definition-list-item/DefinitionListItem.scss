@@ -28,7 +28,9 @@
             background: $light-gray;
             height: var(--definition-list-item-default-height);
             box-sizing: inherit;
-    
+            display: flex;
+            justify-content: space-between;
+            
             .word {
                 margin: 0;
                 text-decoration: underline;
@@ -36,7 +38,7 @@
             }
         }
     
-        .word-container:hover {
+        .word-container:hover, .expanded {
             background: $base-purple;
             color: $off-white;
         }
@@ -45,7 +47,7 @@
             display: flex;
             justify-content: center;
             height: calc(100% - var(--definition-list-item-default-height));
-            background: $magnolia-white;
+            background: $thistle;
             padding: 24px 16px;
             box-sizing: inherit;
             line-height: 16px;

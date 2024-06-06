@@ -59,7 +59,7 @@ function ContactForm() {
                 <input type='text' className='text-field name-field' placeholder='Name' value={name} onChange={(e) => setName(e.target.value)}/>
                 <input type='text' className='text-field subject-field' placeholder='Subject' value={subject} onChange={(e) => setSubject(e.target.value)}/>
                 <textarea className='text-field message-field' maxLength={128} placeholder='Message' value={message} onChange={(e) => setMessage(e.target.value)}/>
-                <SubmitButton loading={loading} outcome={outcome}></SubmitButton>
+                <SubmitButton loading={loading} outcome={outcome}/>
             </form>
         </div>
     )

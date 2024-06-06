@@ -20,7 +20,9 @@
     background-size: cover;
     box-sizing: border-box;
 
-    h2 {
+    .discounts-display-header {
+        display: flex;
+        align-items: center;
         color: $base-purple;
         font-size: $x-large-font;
         margin: 0 5%;
@@ -67,5 +69,12 @@
             width: 410px;
         }
 
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .discounts-display-header .popup-wrapper .message-dialog {
+            top: 24px;
+            left: -138px;
     }
 }

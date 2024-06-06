@@ -16,6 +16,12 @@
         
         .text {
             background: inherit;
+            display: flex;
+            align-items: center;
+
+            .svg-icon-wrapper, .svg-component {
+                background: inherit;
+            }
         }
     }
 

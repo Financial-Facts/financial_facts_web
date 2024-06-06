@@ -2,25 +2,39 @@
 
 .svg-button-wrapper {
     cursor: pointer;
+    margin: 4px;
+}
+
+.svg-button-wrapper:hover {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 0 0 1pt $base-purple;
+    outline-color: transparent;
+    transition: .1s;
+    outline: 0;
 }
 
 .svg-icon-wrapper {
     display: flex;
     padding: var(--svg-wrapper-padding, 8px);
     height: fit-content;
+    background: inherit;
 
     .svg-component {
         display: contents;
+        background: inherit;
 
         div {
             display: flex;
             align-items: center;
+            background: inherit;
         }
 
         svg {
             fill: var(--svg-color, currentColor);
             height: var(--svg-height, 16px);
             width: var(--svg-width, 16px);
+            background: inherit;
         }
     }
 

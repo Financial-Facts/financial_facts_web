@@ -15,5 +15,8 @@ export const messaging = {
         we aim to empower our users to make sound investment decisions. In addition to the sticker price methodologies
         outlined in the book, we have expanded our focus to include numerous methods of evaluation to ensure every value 
         stock is identified using a multitude of market strategies. This gives our users a broader perspective on the growth of a company as well
-        as improving confidence in their decisions when choosing a company with which to invest.`
+        as improving confidence in their decisions when choosing a company with which to invest.`,
+    debtYears: `Debt years measures the number of years it would take to pay off all long term debts using the TTM free cash flow.`,
+    active: `A discount is considered active when the market price is below all valuation prices.`,
+    valuationDefinitionsLocation: `Definitions for the valuations utilized throughout the site can be found on the 'About Us' page.`
 }

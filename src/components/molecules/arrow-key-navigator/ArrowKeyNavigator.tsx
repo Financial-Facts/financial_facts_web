@@ -4,13 +4,13 @@ import ArrowNavWrapper from "../../atoms/arrow-nav-wrapper/arrow-nav-wrapper";
 import './ArrowKeyNavigator.scss';
 import ResizeObserverService from "../../../services/resize-observer-service/resize-observer.service";
 
-export interface ArrowKeyNavigatorProps {
-    keyOptions: string[]
-    keySetter: (_: string) => void
+export interface ArrowKeyNavigatorProps<T extends string> {
+    keyOptions: T[]
+    keySetter: (_: T) => void
 }
 
 
-function ArrowKeyNavigator({ keyOptions, keySetter }: ArrowKeyNavigatorProps) {
+function ArrowKeyNavigator<T extends string>({ keyOptions, keySetter }: ArrowKeyNavigatorProps<T>) {
 
     const [ keyListRef, setKeyListRef ] = useState<HTMLUListElement | null>(null);
     const [ itemWidth, setItemWidth ] = useState<number>(200);

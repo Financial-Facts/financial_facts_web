@@ -1,6 +1,6 @@
 import './PeriodicDataVisualization.scss';
-import { useState } from "react";
-import { BenchmarkRatioPriceInput, DiscountedCashFlowInput, PeriodicData, StickerPriceInput } from "../../../types/discount.typings";
+import { useMemo, useState } from "react";
+import { PeriodicData } from "../../../types/discount.typings";
 import PeriodicDataChart from "../../atoms/periodic-data-chart/PeriodicDataChart";
 import { TableData } from "../../atoms/periodic-data-chart/PeriodicDataChart.typings";
 import PeriodicDataTable from "../../atoms/periodic-data-table/PeriodicDataTable";
@@ -11,17 +11,16 @@ import { cleanKey } from '../../../utilities';
 
 export interface PeriodicDataVisualizationProps {
     cik: string,
-    periodicDataKey: string,
-    data: StickerPriceInput | DiscountedCashFlowInput | BenchmarkRatioPriceInput | Record<string, UnitData>
+    periodicDataMap: Record<string, PeriodicData[] | UnitData>
 }
 
 function PeriodicDataVisualization({
     cik,
-    data,
-    periodicDataKey
+    periodicDataMap
 }: PeriodicDataVisualizationProps ) {
 
     const [ span, setSpan ] = useState<SPAN>('ALL');
+    const periodicDataKeys = useMemo(() => Object.keys(periodicDataMap), [periodicDataMap]);
 
     const buildPeriodicData = (cik: string, periods: UnitPeriod[]): PeriodicData[] => {
         return periods ?
@@ -57,32 +56,40 @@ function PeriodicDataVisualization({
         }));
     }
 
-    const buildVisualizations = (tableData: TableData[]) =>
-        tableData.map((data, index) =>
-            <div key={`${cik}-facts-visualization-${index}`} className='visualizations-container'>
-                <PeriodicDataTable tableData={ data } span={span}/>
-                <PeriodicDataChart tableData={ data } span={span}/>
-            </div>);
+    const buildVisualizations = (tableDataList: TableData[]) =>
+        <div className='visualizations-container'>
+            {
+                tableDataList.map(tableData =>
+                    <PeriodicDataTable
+                        key={`${tableData.label}-table`}
+                        tableData={ tableData }
+                        span={span}/>)
+            }
+            <PeriodicDataChart tableDataList={ tableDataList } span={span}/>
+        </div>
 
     const renderPeriodicData = () => {
-        const valuationInput: Record<string, PeriodicData[] | any> = data;
-        if (periodicDataKey in valuationInput) {
-            if ('units' in valuationInput[periodicDataKey]) {
-                return buildVisualizations(buildTableData(cik, valuationInput[periodicDataKey]))
-            } else {
-                return buildVisualizations([{
-                    label: cleanKey(periodicDataKey),
-                    periodicData: valuationInput[periodicDataKey],
-                    index: 0
-                }]);
-            }
+        const unitMap = Object.values(periodicDataMap).find(dataset => !!dataset && 'units' in dataset) as UnitData;
+        if (!!unitMap) {
+            return buildVisualizations(buildTableData(cik, unitMap))
+        } else {
+            return buildVisualizations(periodicDataKeys.reduce<TableData[]>((acc, key) => {
+                if (key in periodicDataMap) {
+                    acc.push({
+                        label: cleanKey(key),
+                        periodicData: periodicDataMap[key] as PeriodicData[],
+                        index: 0
+                    });
+                }
+                return acc;
+            }, []));
         }
     }
     
     return (
         <div className='periodic-data-container'>
             <SearchFormToggle <SPAN>
-                name={`${periodicDataKey}-SpanToggle`}
+                name={`${periodicDataKeys}-SpanToggle`}
                 label={''}
                 defaultId={'All'}
                 options={[{

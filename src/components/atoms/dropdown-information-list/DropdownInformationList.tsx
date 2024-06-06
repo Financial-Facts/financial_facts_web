@@ -1,7 +1,7 @@
 import './DropdownInformationList.scss';
 
 export interface DropdownInformationListProps {
-    title: string;
+    title?: string;
     listItem: JSX.Element
 }
 
@@ -9,7 +9,7 @@ function DropdownInformationList({ title, listItem }: DropdownInformationListPro
 
     return (
         <section className='definitions-section'>
-            <h3>{ title }</h3>
+            { title && <h3>{ title }</h3> }
             <ul className='definitions-list'>
                 { listItem }
             </ul>

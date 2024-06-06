@@ -26,6 +26,27 @@ ul {
     margin-block-end: 0;
 }
 
+.valuation-definition {
+    line-height: 20px;
+
+    .subheader {
+        margin: 0;
+    }
+
+    p {
+        margin: 0 0 16px 0;
+    }
+
+}
+
+.flex-start {
+    align-items: flex-start;
+}
+
+.center {
+    align-items: center;
+}
+
 .hide {
     display: none;
 }

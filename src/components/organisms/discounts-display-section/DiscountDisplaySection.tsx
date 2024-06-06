@@ -8,6 +8,8 @@ import './DiscountDisplaySection.scss'
 import { CONSTANTS } from '../../../constants/constants'
 import { DiscountState } from '../../../store/discounts/discounts.slice'
 import { initRef } from '../../../utilities'
+import InformationIcon from '../../molecules/information-icon/InformationIcon'
+import { messaging } from '../../../constants/messaging'
 
 
 function DiscountDisplaySection() {
@@ -58,7 +60,13 @@ function DiscountDisplaySection() {
 
     return (
         <section className={`discount-display-section full`}>
-            <h2>Discounts</h2>
+            <h2 className='discounts-display-header'>
+                Discounts
+                <InformationIcon 
+                    message={messaging.valuationDefinitionsLocation}
+                    color='#292929'
+                    alignPopup='center'/>
+            </h2>
             <h3>See firms that match our criteria and their <span>valuations</span></h3>
             { loading ? (
                 <LoadingSpinner size='LARGE' color='PURPLE'/>

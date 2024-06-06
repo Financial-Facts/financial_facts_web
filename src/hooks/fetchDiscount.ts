@@ -13,6 +13,7 @@ const fetchDiscount = (cik: string | undefined) => {
     useEffect(() => {
         if (cik) {
             setLoading(true);
+            setError(false);
             supabaseService.fetchDiscount(cik)
                 .then(response => setDiscount(response))
                 .catch((_: ApiResponseError) => setError(true))

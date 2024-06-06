@@ -13,6 +13,8 @@ const fetchFacts = (cik: string) => {
     
     useEffect(() => {
         setLoading(true);
+        setError(false);
+        setNotFound(false);
         FactsService.getFacts(cik)
             .then(response => setFacts(response))
             .catch((error: ApiResponseError) => {

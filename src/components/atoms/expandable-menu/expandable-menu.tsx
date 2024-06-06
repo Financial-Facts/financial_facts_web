@@ -50,11 +50,13 @@ function ExpandableMenu({ $closeDropdowns }: ExpandableMenuProps) {
     return (
         <nav className={'sticky-menu-option expandable-menu'}
             aria-expanded={isExpanded}>
-            <Hamburger color="#8C19D3"
-                hideOutline={false}
-                toggled={isExpanded}
-                onToggle={(toggled) => setIsExpanded(toggled) }>
-            </Hamburger>
+            <div className='hamburger-wrapper'>
+                <Hamburger color="#8C19D3"
+                    hideOutline={false}
+                    toggled={isExpanded}
+                    onToggle={(toggled) => setIsExpanded(toggled) }>
+                </Hamburger>
+            </div>
             {
                 isExpanded ? 
                     <div className='drop-down-container'>

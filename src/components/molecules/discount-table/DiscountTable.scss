@@ -8,6 +8,7 @@
     .header-text {
         display: flex;
         flex-wrap: nowrap;
+        align-items: center;
     }
 }
 
@@ -52,4 +53,11 @@
             }
         }
     }    
+}
+
+@media only screen and (max-width: 576px) {
+    .table-header-content .popup-wrapper .message-dialog {
+        top: 24px;
+        left: -90px;
+    }
 }

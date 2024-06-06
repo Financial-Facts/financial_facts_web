@@ -8,33 +8,45 @@ import { PeriodicData } from '../../../types/discount.typings';
 import { filterBySpan } from '../../../utilities';
 
 export interface PeriodicDataChartProps {
-    tableData: TableData,
+    tableDataList: TableData[],
     span: SPAN,
     normalize?: boolean
 }
 
-function PeriodicDataChart({ tableData, normalize, span }: PeriodicDataChartProps) {
+const indexColorMap: Record<number, string> = {
+    0: '#8C19D3',
+    1: '#228B22'
+}
 
-    const buildDataSet = (label: string, periodicData: PeriodicData[]): ChartDataset<"line", any> => ({
+function PeriodicDataChart({ tableDataList, normalize, span }: PeriodicDataChartProps) {
+
+    const collectLabels = () => tableDataList.reduce<Set<string>>((acc, tableData) => {
+        filterBySpan(tableData.periodicData, span).forEach(period => acc.add(new Date(period.announcedDate).toLocaleDateString()));
+        return acc;
+    }, new Set<string>())
+
+    const buildDataSet = (
+        index: number,
+        label: string,
+        periodicData: PeriodicData[]
+    ): ChartDataset<"line", any> => ({
         label: label,
         data: normalize ?
             normalizeYearOverYear(periodicData.map(periodData => periodData.value)) :
-            periodicData.map(periodData => periodData.value),
+            periodicData.map(periodData => ({
+                x: new Date(periodData.announcedDate).toLocaleDateString(),
+                y: periodData.value
+            })),
         borderWidth: 1,
-        borderColor: 'rgb(140, 25, 211)',
-        backgroundColor: 'rgb(247, 238, 253)'
+        borderColor: indexColorMap[index],
+        backgroundColor: indexColorMap[index]
     });
 
-    const renderTable = () => {
-        const labels = filterBySpan(tableData.periodicData, span)
-            .map(periodData => new Date(periodData.announcedDate).toLocaleDateString());
-        return <Line data={{
-            labels: labels,
-            datasets: [buildDataSet(tableData.label, filterBySpan(tableData.periodicData, span))]
-        }}/>
-    }
-
-    return renderTable();
+    return <Line data={{
+        labels: Array.from(collectLabels()),
+        datasets: tableDataList.map((tableData, index) =>
+            buildDataSet(index, tableData.label, filterBySpan(tableData.periodicData, span)))
+    }}/>
 }
   
 export default PeriodicDataChart;

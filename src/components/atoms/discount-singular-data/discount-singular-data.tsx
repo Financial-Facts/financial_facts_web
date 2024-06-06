@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
-import { StickerPrice, BenchmarkRatioPrice, DiscountedCashFlowPrice, StickerPriceInput, BenchmarkRatioPriceInput, DiscountedCashFlowInput } from '../../../types/discount.typings';
+import { StickerPrice, BenchmarkRatioPrice, DiscountedCashFlowPrice, StickerPriceInput, BenchmarkRatioPriceInput, DiscountedCashFlowInput, PeriodicDataKey } from '../../../types/discount.typings';
 import './discount-singular-data.scss';
 import { DcfPeriodicDataKeys, SpPeriodicDataKeys } from '../../organisms/discount-data-display-section/DiscountDataDisplaySection.typings';
 import { cleanKey } from '../../../utilities';
+import InformationIcon from '../../molecules/information-icon/InformationIcon';
+import { messaging } from '../../../constants/messaging';
 
 export interface DiscountSingularDataProps {
     valuation: StickerPrice | BenchmarkRatioPrice | DiscountedCashFlowPrice
@@ -15,7 +17,7 @@ function DiscountSingularData({ valuation }: DiscountSingularDataProps) {
     useEffect(() => {
         setSingularData({});
         Object.keys(valuation.input).forEach((key) => {
-            if (!SpPeriodicDataKeys.includes(key) && !DcfPeriodicDataKeys.includes(key)) {
+            if (!SpPeriodicDataKeys.includes(key as PeriodicDataKey) && !DcfPeriodicDataKeys.includes(key  as PeriodicDataKey)) {
                 const value = valuation.input[key as keyof (StickerPriceInput | BenchmarkRatioPriceInput | DiscountedCashFlowInput)];
                 setSingularData((current) => ({
                     ...current,
@@ -27,7 +29,10 @@ function DiscountSingularData({ valuation }: DiscountSingularDataProps) {
 
     const renderDataListItem = (key: string, value: number | string) =>
         (<li className='data-list-item' key={key}>
-            <span className='text'>{ cleanKey(key) }</span>
+            <span className='text'>
+                { cleanKey(key) }
+                { key === 'debtYears' && <InformationIcon message={messaging.debtYears} alignPopup='center'/>}
+            </span>
             <span className='text'>{ value }</span>
         </li>);
 

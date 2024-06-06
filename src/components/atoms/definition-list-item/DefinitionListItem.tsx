@@ -49,6 +49,7 @@ function DefinitionListItem({ word, expandedHeight, definitionElement }: Definit
         <div className='list-item-content' ref={(ref) => initRef(ref, setContentRef)}>
             <div className={`word-container ${expanded && 'expanded'}`}>
                 <span className='word'>{ word }</span>
+                <span>(?)</span>
             </div>
             { 
                 expanded && <div className='definition-container'> 

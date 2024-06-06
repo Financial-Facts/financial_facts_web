@@ -3,7 +3,7 @@
 .options-title-wrapper {
     display: flex;
     align-items: center;
-    height: 32px;
+    min-height: 32px;
     box-sizing: border-box;
 
     .folded {
@@ -19,6 +19,7 @@
         justify-content: center;
         height: auto;
         box-sizing: border-box;
+        text-align: center;
     }
 }
 
@@ -74,7 +75,8 @@
     .horizontal {
         flex-direction: row;
         column-gap: 16px;
-
+        flex-wrap: wrap;
+        
         .key {
             flex: 33%;
         }

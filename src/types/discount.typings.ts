@@ -5,6 +5,8 @@ export interface Valuation<T> {
     input: T
 }
 
+export type PeriodicDataKey = keyof DiscountedCashFlowPeriodicData | keyof StickerPricePeriodicData;
+
 export type Period = 'Q1' | 'Q2' | 'Q3' | 'Q4' | 'FY';
 
 export interface PeriodicData {
@@ -14,9 +16,12 @@ export interface PeriodicData {
     value: number
 }
 
-export interface StickerPriceInput {
+export type StickerPriceInput = StickerPricePeriodicData & {
     cik: string
     debtYears: number,
+}
+
+export interface StickerPricePeriodicData {
     annualBVPS: PeriodicData[]
     annualPE: PeriodicData[]
     annualROIC: PeriodicData[]

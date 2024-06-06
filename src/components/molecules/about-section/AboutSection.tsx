@@ -1,6 +1,6 @@
 import { messaging } from '../../../constants/messaging';
 import DefinitionsSection from '../definitions-section/DefinitionsSection';
-import ValuationsSection from '../valuations-section/ValuationsSection';
+import ValuationsSection from '../../organisms/valuations-section/ValuationsSection';
 import './AboutSection.scss';
 
 function AboutSection() {

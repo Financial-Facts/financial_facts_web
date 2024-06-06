@@ -15,7 +15,8 @@ export interface ButtonOptionListProps <T extends string> {
     includeSearch?: boolean,
     deselectable?: boolean,
     isScrollable?: boolean,
-    isFoldable?: boolean
+    isFoldable?: boolean,
+    onFoldedElement?: JSX.Element
 }
 
 function ButtonOptionList<T extends string>({
@@ -27,7 +28,8 @@ function ButtonOptionList<T extends string>({
     includeSearch,
     deselectable,
     isScrollable,
-    isFoldable
+    isFoldable,
+    onFoldedElement
 }: ButtonOptionListProps<T>) {
     const [ keywordFilter, setKeywordFilter ] = useState(CONSTANTS.EMPTY);
     const [ isUnfolded, setIsUnfolded ] = useState<boolean>(true);
@@ -71,7 +73,7 @@ function ButtonOptionList<T extends string>({
                 !!title && 
                     <div className='options-title-wrapper'>
                         <span className={`title-text ${ isUnfolded ? CONSTANTS.EMPTY : 'folded'}`}>
-                            { isUnfolded ? title : selectedKey }
+                            { isUnfolded ? title : selectedKey ? cleanKey(selectedKey) : title }
                         </span>
                         { !!isFoldable && !isUnfolded &&
                             <SvgIcon
@@ -84,7 +86,7 @@ function ButtonOptionList<T extends string>({
                     </div> 
             }
             {
-                isUnfolded &&
+                isUnfolded ?
                     <div className='key-group-wrapper'>
                         {
                             includeSearch &&
@@ -94,7 +96,8 @@ function ButtonOptionList<T extends string>({
                             ${isScrollable ? 'vertical scrollable' : orientation}`}>
                             { renderKeys() }
                         </ul>
-                    </div>
+                    </div> :
+                    onFoldedElement
             }
         </>
     )

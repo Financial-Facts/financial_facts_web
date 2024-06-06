@@ -11,6 +11,9 @@ export const CONSTANTS = {
         'TTY': 3650
     },
     TAG_NAME: {
-        ANCHOR: 'A'
-    }
+        ANCHOR: 'A',
+        PATH: 'path',
+        DIALOG: 'DIALOG'
+    },
+    PROJECTED: 'projected'
 }

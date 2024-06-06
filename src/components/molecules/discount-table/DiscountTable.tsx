@@ -10,7 +10,9 @@ import ResponsiveTable from '../responsive-table/ResponsiveTable';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../store/store';
 import { sortDiscounts } from '../../../store/discounts/discounts.slice';
-import SvgIcon from '../../atoms/svg-icon/SvgIcon';
+import InformationIcon from '../information-icon/InformationIcon';
+import { messaging } from '../../../constants/messaging';
+import { CONSTANTS } from '../../../constants/constants';
 
 export interface DiscountTableProps {
     discounts: SimpleDiscount[],
@@ -46,7 +48,30 @@ function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
             Object
                 .keys(discounts[0])
                 .filter(key => fieldOptions.some(option => option.value === key)
-        ) : [], [ fieldOptions ])
+        ) : [], [ fieldOptions ]);
+
+    const updateSortByKey = (key: string) => {
+        sortByKey === key ?
+            setSortOrder(current => current === 'ASC' ? 'DESC' : 'ASC') :
+            setSortByKey(key as keyof SimpleDiscount);
+    }
+
+    const handleHeaderClicked = (
+        e: React.MouseEvent<HTMLTableHeaderCellElement, MouseEvent>,
+        headerKey: string
+    ): void => {
+        if (headerKey === 'active') {
+            const target = e.target as HTMLElement;
+            const isSvg = target.classList.contains('svg-icon-wrapper');
+            const isInfoElement = target.tagName === CONSTANTS.TAG_NAME.PATH;
+            const isDialog = target.tagName === CONSTANTS.TAG_NAME.DIALOG;
+            if (!isSvg && !isInfoElement && !isDialog) {
+                updateSortByKey(headerKey);
+            }
+        } else {
+            updateSortByKey(headerKey);
+        }
+    }
 
     const renderTableHeader = () =>
         <thead>
@@ -55,20 +80,15 @@ function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
                     displayedFields
                         .map(key =>
                             <th key={key}
-                                onClick={() => sortByKey === key ?
-                                        setSortOrder(current => current === 'ASC' ? 'DESC' : 'ASC') :
-                                        setSortByKey(key as keyof SimpleDiscount)}>
+                                onClick={(e) => handleHeaderClicked(e, key)}>
                                 <div className='table-header-content'>
                                     <span className='header-text'>
                                         { cleanKey(key) }
                                         { 
                                             key === 'active' &&
-                                                <SvgIcon
-                                                    src='/assets/info-icon.svg'
-                                                    height='16px'
-                                                    width='16px'
-                                                    color='#F5F5F5'
-                                                    tooltipMessage='A discount is considered active when the market price is below all valuation prices'/>
+                                                <InformationIcon
+                                                    message={messaging.active}
+                                                    color='#F5F5F5'/>
                                         }
                                     </span>
                                     { 

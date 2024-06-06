@@ -14,7 +14,8 @@ export interface ButtonSideNavConfigItem<T extends string> {
     isScrollable?: boolean,
     displayCondition?: boolean,
     deselectable?: boolean,
-    isFoldable?: boolean
+    isFoldable?: boolean,
+    onFoldedElement?: JSX.Element
 }
 
 export interface ButtonOptionSideNavProps {
@@ -50,7 +51,8 @@ function ButtonOptionSideNav({ buttonOptionSideNavConfig, orientation, refSetter
                 orientation={ orientation }
                 includeSearch={ config.includeSearch }
                 deselectable={ config.deselectable }
-                isFoldable={ config.isFoldable }/>
+                isFoldable={ config.isFoldable }
+                onFoldedElement={ config.onFoldedElement }/>
         </div>
 
     const renderNavSections = () => buttonOptionSideNavConfig

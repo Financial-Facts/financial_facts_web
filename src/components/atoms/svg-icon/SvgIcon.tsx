@@ -39,7 +39,7 @@ function SvgIcon({
             iconWrapperRef.style.setProperty('--svg-height', height);
             iconWrapperRef.style.setProperty('--svg-width', width);
 
-            setPropertyIfExists(iconWrapperRef, '--svg-wrapper-padding', wrapperPadding);
+            setPropertyIfExists(iconWrapperRef, '--svg-wrapper-padding', isButton ? '4px' : wrapperPadding);
             setPropertyIfExists(iconWrapperRef, '--svg-color', color);
         }
     }, [ iconWrapperRef ]);

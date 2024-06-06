@@ -6,6 +6,10 @@
     font-size: $normal-font;
     min-height: 500px;
     
+    .definitions-section {
+        padding: 0 0 16px 0;
+    }
+    
     .side-nav-wrapper {
         height: auto;
     }
@@ -17,7 +21,8 @@
         flex: 1;
         border-top: 1px solid rgba(41, 41, 41, 0.2);
         padding: 16px 32px;
-
+        box-sizing: border-box;
+        
         .periodic-data-container {
             width: 100%;
             height: fit-content;
