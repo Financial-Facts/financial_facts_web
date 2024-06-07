@@ -1,19 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SymbolIcon from "../../atoms/symbol-icon/symbol-icon";
 import "./DiscountCard.scss";
 import { CONSTANTS } from "../../../constants/constants";
-import { DiscountWrapper } from "../../../services/bulk-entities/bulk-entities.typings";
+import { SimpleDiscount } from "../../../services/bulk-entities/bulk-entities.typings";
 import FormatService from "../../../services/format/format.service";
 import { useSelector } from "react-redux";
 import { MobileState } from "../../../store/mobile/mobile.slice";
+import { Observable } from "rxjs";
+import { handleEnterKeyEvent } from "../../../utilities";
 
-function DiscountCard({ discount }: DiscountWrapper ) {
+export interface DiscountCardProps {
+    discount: SimpleDiscount,
+    hideDataTrigger$: Observable<void>
+}
+
+function DiscountCard({ discount, hideDataTrigger$ }: DiscountCardProps ) {
 
     const navigate = useNavigate();
     const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
     const [ displayData, setDisplayData ] = useState(false);
     const [ imageNotFound, setImageNotFound ] = useState(false);
+
+    useEffect(() => {
+        if (mobile.mobile) {
+            const subscription = hideDataTrigger$.subscribe(() => {
+                setDisplayData(false)
+            });
+            return () => {
+                subscription.unsubscribe();
+            }
+        }
+    }, []);
 
     const handleClick = () => {
         if (!displayData) {
@@ -24,8 +42,10 @@ function DiscountCard({ discount }: DiscountWrapper ) {
     }
 
     return (
-        <li className={`discount-card ${mobile.mobile && displayData ? 'mobile-clicked' : CONSTANTS.EMPTY}`}
+        <li className={`discount-card ${ displayData ? 'display-data' : CONSTANTS.EMPTY}`}
+            tabIndex={0}
             onClick={handleClick}
+            onKeyDown={(e) => handleEnterKeyEvent(e, handleClick)}
             onMouseOver={() => !mobile.mobile && setDisplayData(true)}
             onMouseLeave={() => !mobile.mobile && setDisplayData(false)}>
             <div className="company-info">

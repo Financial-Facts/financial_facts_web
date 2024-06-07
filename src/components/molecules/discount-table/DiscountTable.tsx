@@ -16,7 +16,7 @@ import { CONSTANTS } from '../../../constants/constants';
 
 export interface DiscountTableProps {
     discounts: SimpleDiscount[],
-    fieldOptions: MultiValue<Option>
+    fieldOptions: MultiValue<Option<keyof SimpleDiscount>>
 }
 
 function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
@@ -44,11 +44,8 @@ function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
     }, [ sortByKey, sortOrder ]);
 
     const displayedFields = useMemo(() =>
-            discounts.length > 0 ? 
-            Object
-                .keys(discounts[0])
-                .filter(key => fieldOptions.some(option => option.value === key)
-        ) : [], [ fieldOptions ]);
+        fieldOptions.map(option => option.value)
+    , [ fieldOptions ]);
 
     const updateSortByKey = (key: string) => {
         sortByKey === key ?

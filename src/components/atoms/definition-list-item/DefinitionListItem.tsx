@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './DefinitionListItem.scss';
-import { initRef } from '../../../utilities';
+import { handleEnterKeyEvent, initRef } from '../../../utilities';
 import ResizeObserverService from '../../../services/resize-observer-service/resize-observer.service';
 import { CONSTANTS } from '../../../constants/constants';
 
@@ -43,8 +43,11 @@ function DefinitionListItem({ word, expandedHeight, definitionElement }: Definit
     }, [ expanded, contentRef ]);
 
     return <li className={`definitions-list-item ${expanded && 'expanded'}`}
+        tabIndex={0}
         role='listitem button'
+        aria-expanded={expanded}
         onClick={handleClick}
+        onKeyDown={(e) => handleEnterKeyEvent(e, () => setExpanded(current => !current))}
         ref={(ref) => initRef(ref, setListItemRef)}>
         <div className='list-item-content' ref={(ref) => initRef(ref, setContentRef)}>
             <div className={`word-container ${expanded && 'expanded'}`}>

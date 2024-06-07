@@ -8,12 +8,12 @@ export interface Title {
     label: string
 }
 
-export interface MultiSelect {
+export interface MultiSelect<T extends string> {
     type: 'MULTI_SELECT',
     label: string,
-    options: Option[],
-    defaultSelected: Option[],
-    selectionSetter: (_: MultiValue<Option>) => void
+    options: Option<T>[],
+    defaultSelected: Option<T>[],
+    selectionSetter: (_: MultiValue<Option<T>>) => void
 }
 
 export interface PriceRange {
@@ -48,4 +48,4 @@ export interface KeywordSearch {
 }
 
 export type SideNavItemType = "MULTI_SELECT" | "PRICE_RANGE" | "TOGGLE" | "SEARCH" | "TITLE" | "TOGGLE_GROUP";
-export type SideNavItem = MultiSelect | PriceRange | Toggle<string> | KeywordSearch | Title | ToggleGroup<string>;
+export type SideNavItem<T extends string> = MultiSelect<T> | PriceRange | Toggle<string> | KeywordSearch | Title | ToggleGroup<string>;

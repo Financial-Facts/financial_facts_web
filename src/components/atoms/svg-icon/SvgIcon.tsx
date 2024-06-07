@@ -12,7 +12,8 @@ export interface InfoIconProps {
     wrapperPadding?: string,
     tooltipMessage?: string,
     isButton?: boolean,
-    onClick?: () => void
+    onClick?: () => void,
+    setExternalRef?: React.Dispatch<React.SetStateAction<HTMLDivElement | null>>
 }
 
 function SvgIcon({ 
@@ -23,7 +24,8 @@ function SvgIcon({
     tooltipMessage,
     wrapperPadding,
     isButton,
-    onClick
+    onClick,
+    setExternalRef
 }: InfoIconProps) {
 
     const [ iconWrapperRef, setIconWrapperRef ] = useState<HTMLDivElement | null>(null);
@@ -49,7 +51,12 @@ function SvgIcon({
             title={tooltipMessage}
             role={ isButton ? 'button' : 'img' }
             tabIndex={ isButton ? 0 : -1 }
-            ref={(ref) => initRef(ref, setIconWrapperRef)}
+            ref={(ref) => initRef(ref, (ref) => {
+                if (!!setExternalRef) {
+                    setExternalRef(ref);
+                }
+                setIconWrapperRef(ref);
+            })}
             onClick={() => !!onClick && onClick()}
             onKeyDown={(e) => !!onClick && handleEnterKeyEvent(e, onClick)}>
             <ReactSVG src={src} className='svg-component'/>

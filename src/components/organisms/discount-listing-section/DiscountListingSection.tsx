@@ -15,12 +15,8 @@ import { getExtreme } from './DiscountListingSection.utils';
 import { SideNavItem } from '../../molecules/multi-function-side-nav/MultiFunctionSideNav.typings';
 import { SimpleDiscount } from '../../../services/bulk-entities/bulk-entities.typings';
 
-export interface DiscountOption extends Option {
-    value: keyof SimpleDiscount,
-    label: string
-}
 
-const defaultSelectedKeys: MultiValue<DiscountOption> = [
+const defaultSelectedKeys: MultiValue<Option<keyof SimpleDiscount>> = [
     {
         value: 'name',
         label: cleanKey('name')
@@ -39,6 +35,18 @@ const defaultSelectedKeys: MultiValue<DiscountOption> = [
     }
 ];
 
+const keyOptions: (keyof SimpleDiscount)[] = [
+    'cik',
+    'name',
+    'symbol',
+    'lastUpdated',
+    'active',
+    'stickerPrice',
+    'discountedCashFlowPrice',
+    'benchmarkRatioPrice',
+    'marketPrice'
+];
+
 function DiscountListingSection() {
 
     const dispatch = useDispatch<AppDispatch>();
@@ -46,23 +54,20 @@ function DiscountListingSection() {
     const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
     const absoluteMinimumPrice = useMemo(() => getExtreme(allDiscounts, 'MIN'), [ allDiscounts ]);
     const absoluteMaximumPrice = useMemo(() => getExtreme(allDiscounts, 'MAX'), [ allDiscounts ]);
-    const [ selectedTableKeys, setSelectedTableKeys ] = useState<MultiValue<Option>>(defaultSelectedKeys);
+    const [ selectedTableKeys, setSelectedTableKeys ] = useState<MultiValue<Option<keyof SimpleDiscount>>>(defaultSelectedKeys);
     const [ hideValuesAbove, setHideValuesAbove ] = useState<HideValuationPrices>(filteredFilter.hideValuesAbove);
     const [ keyword, setKeyword ] = useState<string>(filteredFilter.keyword);
     const [ priceBounds, setPriceBounds ] = useState<Bounds>(filteredFilter.priceBounds);
 
-    const tableFieldOptions = useMemo((): Option[] =>
-        filteredDiscounts.length > 0 ? 
-            Object
-                .keys(filteredDiscounts[0])
-                .map(key => ({
-                  value: key,
-                  label: cleanKey(key),
-                  color: '#8C19D3'
-                })) : []
-            , [ filteredDiscounts ]);
+    const tableFieldOptions = useMemo((): Option<keyof SimpleDiscount>[] =>
+        keyOptions.map(key => ({
+            value: key,
+            label: cleanKey(key),
+            color: '#8C19D3'
+        }))
+    , [ allDiscounts ]);
 
-    const sideNavItems: SideNavItem[] = useMemo(() => [{
+    const sideNavItems: SideNavItem<keyof SimpleDiscount>[] = useMemo(() => [{
        type: 'TOGGLE_GROUP',
        label: 'Hide discounts priced above...',
        toggles: [{
@@ -131,7 +136,11 @@ function DiscountListingSection() {
         label: 'Display Fields',
         options: tableFieldOptions,
         defaultSelected: Array.from(defaultSelectedKeys),
-        selectionSetter: setSelectedTableKeys
+        selectionSetter: (selection) => {
+            const sortedSelections = Array.from(selection).sort((a, b) => 
+                keyOptions.indexOf(a.value) - keyOptions.indexOf(b.value))
+            setSelectedTableKeys(sortedSelections);
+        }
     }], [ loading ]);
                
     useEffect(() => {

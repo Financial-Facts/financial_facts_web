@@ -35,7 +35,15 @@
         text-align: center;
 
         span {
+            display: inline-flex;
+            align-items: center;
             color: $base-purple;
+        }
+
+        .svg-icon-wrapper {
+            background: $base-purple;
+            border-radius: 4px;
+            margin-left: 6px;
         }
     }
 
@@ -74,7 +82,7 @@
 
 @media only screen and (max-width: 576px) {
     .discounts-display-header .popup-wrapper .message-dialog {
-            top: 24px;
-            left: -138px;
+        top: 30px;
+        left: -182px;
     }
 }

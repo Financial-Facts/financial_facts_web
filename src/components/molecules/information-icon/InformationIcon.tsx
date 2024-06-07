@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import SvgIcon from "../../atoms/svg-icon/SvgIcon";
-import { initRef } from "../../../utilities";
+import { handleEnterKeyEvent, initRef } from "../../../utilities";
 import './InformationIcon.scss';
+import listenForWindowClick from "../../../hooks/listenForWindowClick";
 
 export interface InformationIconProps {
     message: string,
@@ -21,7 +22,12 @@ function InformationIcon({
 
     const [ dialogRef, setDialogRef ] = useState<HTMLDialogElement | null>(null);
     const [ showDialog, setShowDialog ] = useState<boolean>(false);
-    
+    const [ infoIconRef, setInfoIconRef ] = useState<HTMLDivElement | null>(null);
+
+    listenForWindowClick(() => {
+        setShowDialog(false);
+    }, infoIconRef);
+
     useEffect(() => {
         if (!dialogRef) {
             return;
@@ -42,11 +48,13 @@ function InformationIcon({
                 width={width}
                 isButton={true}
                 color={color}
-                onClick={() => setShowDialog(current => !current)}/>
+                onClick={() => setShowDialog(current => !current)}
+                setExternalRef={setInfoIconRef}/>
             <div className={`popup-wrapper ${alignPopup}`}>
                 <dialog ref={(ref) => initRef(ref, setDialogRef)}
                     className="message-dialog"
-                    onClick={() => setShowDialog(current => !current)}>
+                    onClick={() => setShowDialog(current => !current)}
+                    onKeyDown={(e) => handleEnterKeyEvent(e, () => setShowDialog(current => !current))}>
                     { message }
                 </dialog>
             </div>

@@ -7,17 +7,17 @@ import PriceRange from '../../atoms/price-range/PriceRange';
 import { Orientation } from '../button-option-side-nav/ButtonOptionSideNav';
 
 
-export interface MultiFunctionSideNavProps {
+export interface MultiFunctionSideNavProps<T extends string> {
     label: string
-    items: SideNavItem[]
+    items: SideNavItem<T>[]
     orientation: Orientation
 }
 
-function MultiFunctionSideNav({ label, items, orientation }: MultiFunctionSideNavProps) {
+function MultiFunctionSideNav<T extends string>({ label, items, orientation }: MultiFunctionSideNavProps<T>) {
     const halfSizedItems = new Set<SideNavItemType>(['PRICE_RANGE', 'SEARCH', 'TITLE', 'TOGGLE']);
     const fullSizedItems = new Set<SideNavItemType>(['MULTI_SELECT', 'TOGGLE_GROUP']);
 
-    const renderSideNavItem = (item: SideNavItem) => {
+    const renderSideNavItem = (item: SideNavItem<T>) => {
         switch(item.type) {
             case 'MULTI_SELECT': {
                 return <MultiSelect
@@ -61,13 +61,16 @@ function MultiFunctionSideNav({ label, items, orientation }: MultiFunctionSideNa
         }
     }
 
-    const renderFullItemWrapper = (item: SideNavItem) => 
+    const renderFullItemWrapper = (item: SideNavItem<T>) => 
         <div key={`${item.label}-multi-select`} className='item'>
             { item.type !== 'TOGGLE' && <span className='item-label'>{ item.label }</span> }
             { renderSideNavItem(item) }
         </div>
 
-    const renderHalfItemsWrapper = (a: SideNavItem, b: SideNavItem) => 
+    const renderHalfItemsWrapper = (
+        a: SideNavItem<T>,
+        b: SideNavItem<T>
+    ) => 
         <div key={`${a.label}-${b.label}-multi-select`} className='item two-halves-item'>
             <div>
                 { a.type !== 'TOGGLE' && <span className='item-label'>{ a.label }</span> }
@@ -79,7 +82,7 @@ function MultiFunctionSideNav({ label, items, orientation }: MultiFunctionSideNa
             </div>
         </div>
 
-    const renderSideNavBuckets = (items: SideNavItem[]): JSX.Element[] => {
+    const renderSideNavBuckets = (items: SideNavItem<T>[]): JSX.Element[] => {
         const result: JSX.Element[] = [];
         let i = 0;
         while (i < items.length) {

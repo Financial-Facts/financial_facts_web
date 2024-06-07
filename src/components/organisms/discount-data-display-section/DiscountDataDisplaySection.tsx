@@ -77,6 +77,9 @@ function DiscountDataDisplaySection({ discount, loading, error }: DiscountDataDi
                         .filter(key => !key.includes(CONSTANTS.PROJECTED)));
                     return;
                 }
+                default: {
+                    setKeyOptions([]);
+                }
             }
         } else {
             setKeyOptions([]);

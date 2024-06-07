@@ -8,46 +8,28 @@ import './CompanySearchSection.scss';
 import fetchIdentities from '../../../hooks/fetchIdentities';
 import { CONSTANTS } from '../../../constants/constants';
 import { IdentityRequest } from '../../../services/bulk-entities/bulk-entities.typings';
-import { debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
 
 
 function CompanySearchSection() {
 
-    const NUM_BACKGROUND_ROWS = 6;
-    const SIZE_BACKGROUND_IMG = 50; 
-    const calculateIdentityLimit = (screenWidth: number): number => {
-        return Math.round((screenWidth / SIZE_BACKGROUND_IMG) * NUM_BACKGROUND_ROWS);
+    const SIZE_BACKGROUND_IMG = 114; 
+    const NUM_BACKGROUND_ROWS = window.outerHeight / SIZE_BACKGROUND_IMG;
+    
+    const calculateIdentityLimit = (): number => {
+        return Math.round((window.outerWidth / SIZE_BACKGROUND_IMG) * NUM_BACKGROUND_ROWS);
     }
 
     const [ identityImages, setIdentityImages ] = useState<JSX.Element[]>([]);
     const [ imagesLoaded, setImagesLoaded ] = useState(0);
     const [ isLoadingImages, setIsLoadingImages ] = useState(true);
-    const [ requestIdentity, setRequestIdentity ] = useState<IdentityRequest>({
+    const [ requestIdentity ] = useState<IdentityRequest>({
         startIndex: 0,
-        limit: calculateIdentityLimit(window.outerWidth),
+        limit: calculateIdentityLimit(),
         sortBy: 'SYMBOL',
         order: 'ASC'
     });
 
     const { identities, loading, error } = fetchIdentities(requestIdentity);
-
-    useEffect(() => {
-        const resizeSubscription = fromEvent(window, 'resize')
-            .pipe(
-                map(event => {
-                    const target = event.target as Window;
-                    return calculateIdentityLimit(target.outerWidth);
-                }),
-                distinctUntilChanged(),
-                debounceTime(CONSTANTS.DEBOUNCE_TIME)
-            ).subscribe(identityLimit => setRequestIdentity(current => ({
-                ...current,
-                limit: identityLimit
-            })));
-        return () => {
-            resizeSubscription.unsubscribe();
-        }
-    }, []);
 
     useEffect(() => {  
         if (!loading && !error) {

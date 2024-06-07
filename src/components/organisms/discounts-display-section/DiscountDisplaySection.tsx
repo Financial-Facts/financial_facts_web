@@ -10,14 +10,20 @@ import { DiscountState } from '../../../store/discounts/discounts.slice'
 import { initRef } from '../../../utilities'
 import InformationIcon from '../../molecules/information-icon/InformationIcon'
 import { messaging } from '../../../constants/messaging'
+import listenForWindowClick from '../../../hooks/listenForWindowClick'
+import { Subject } from 'rxjs'
+import SvgIcon from '../../atoms/svg-icon/SvgIcon'
+import { useNavigate } from 'react-router-dom'
 
+const hideDataSubject = new Subject<void>();
 
 function DiscountDisplaySection() {
-
+    
     const { allDiscounts, loading } = useSelector< { discounts: DiscountState }, DiscountState>((state) => state.discounts);
-
+    
     const CARD_WIDTH = 250;
 
+    const navigate = useNavigate();
     const [ numCardsToDisplay, setNumCardsToDisplay ] = useState(0);
     const [ usingArrowNavigation, setUsingArrowNavigation ] = useState(false);
     const [ discountListRef, setDiscountListRef ] = useState<HTMLUListElement | null>(null);
@@ -26,11 +32,23 @@ function DiscountDisplaySection() {
         <ul ref={(ref) => initRef(ref, setDiscountListRef)}
             className={ 'discounts' }
             style={{
-              "--discount-card-width": `${CARD_WIDTH}px`
+                "--discount-card-width": `${CARD_WIDTH}px`
             } as React.CSSProperties }>
-            { allDiscounts.map(discount => <DiscountCard key={discount.cik} discount={ discount }/>) }
+            { 
+                allDiscounts.map(discount =>
+                    <DiscountCard
+                        key={discount.cik}
+                        discount={ discount }
+                        hideDataTrigger$={hideDataSubject.asObservable()}/>)
+            }
         </ul>,
     [ allDiscounts ]);
+
+    listenForWindowClick((target: Element) => {
+        if (!target.classList.contains('symbol-icon')) {
+            hideDataSubject.next();
+        }
+    }, discountListRef);
 
     useEffect(() => {
         updateDiscountCardDisplay();
@@ -67,7 +85,19 @@ function DiscountDisplaySection() {
                     color='#292929'
                     alignPopup='center'/>
             </h2>
-            <h3>See firms that match our criteria and their <span>valuations</span></h3>
+            <h3>
+                See firms that match our criteria and their&nbsp;
+                <span>
+                    valuations
+                    <SvgIcon src={'/assets/list.svg'}
+                        height={'16px'}
+                        width={'16px'}
+                        color='#F5F5F5'
+                        tooltipMessage={messaging.discountListLink}
+                        isButton={true}
+                        onClick={() => navigate('/discount')}/>
+                </span>
+            </h3>
             { loading ? (
                 <LoadingSpinner size='LARGE' color='PURPLE'/>
             ) : (

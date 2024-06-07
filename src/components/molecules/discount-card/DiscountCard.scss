@@ -60,7 +60,7 @@
 
 }
 
-.discount-card:hover, .mobile-clicked {
+.discount-card:hover, .discount-card:focus-visible, .display-data {
     border: 2px solid $base-purple;
     background: $dark-gray;
 

@@ -2,7 +2,7 @@ import { SPAN } from "./components/organisms/facts-display-section/FactsDisplayS
 import { CONSTANTS } from "./constants/constants";
 import { PeriodicData } from "./types/discount.typings";
 
-export const handleEnterKeyEvent = (e: React.KeyboardEvent<HTMLDivElement>, handler: () => void): void => {
+export const handleEnterKeyEvent = <T> (e: React.KeyboardEvent<T>, handler: () => void): void => {
     if (e.code === 'Enter') {
         handler();
     }

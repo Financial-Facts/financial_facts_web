@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { environment } from "../../../environment";
 import DefinitionListItem from "../../atoms/definition-list-item/DefinitionListItem";
 import SvgIcon from "../../atoms/svg-icon/SvgIcon";
+import './BrPriceDefinition.scss';
 
 function BrPriceDefinition() {
 

@@ -10,6 +10,7 @@ import { Identity, IdentityRequest } from '../../../services/bulk-entities/bulk-
 import { distinctUntilChanged } from 'rxjs/operators';
 import { useNavigate } from 'react-router-dom';
 import ResponsiveTable from '../../molecules/responsive-table/ResponsiveTable';
+import { handleEnterKeyEvent } from '../../../utilities';
 
 export interface SearchDropDownProps {
     allIdentities: Identity[],
@@ -62,6 +63,10 @@ function SearchDropDown({ allIdentities, identityListDispatch, searchCriteria }:
                 ...searchCriteria
             }));
 
+    const handleClick = (identity: Identity) => {
+        navigate(`/facts/${identity.cik}`)
+    }
+    
     const renderTableHeader = () =>
         <thead>
             <tr>
@@ -78,7 +83,10 @@ function SearchDropDown({ allIdentities, identityListDispatch, searchCriteria }:
     
     const renderTableRows = () => {
         return allIdentities.map(identity =>
-            <tr key={identity.cik} onClick={() => navigate(`/facts/${identity.cik}`)}>
+            <tr key={identity.cik}
+                tabIndex={0}
+                onClick={() => handleClick(identity)}
+                onKeyDown={(e) => handleEnterKeyEvent(e, () => handleClick(identity))}>
                 <td>{ identity.cik }</td>
                 <td>{ identity.symbol }</td>
                 <td className='company-name'>{ identity.name }</td>
