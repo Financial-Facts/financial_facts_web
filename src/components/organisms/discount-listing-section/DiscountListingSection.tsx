@@ -1,7 +1,7 @@
 import './DiscountListingSection.scss';
 import { useDispatch, useSelector } from 'react-redux'
 import LoadingSpinner from '../../atoms/loading-spinner/loading-spinner'
-import { DiscountState, HideValuationPrices, filterDiscounts } from '../../../store/discounts/discounts.slice'
+import { DiscountState, HideValuationPrices, filterDiscounts, resetFilteredDiscounts } from '../../../store/discounts/discounts.slice'
 import DiscountTable from '../../molecules/discount-table/DiscountTable'
 import MultiFunctionSideNav from '../../molecules/multi-function-side-nav/MultiFunctionSideNav';
 import { Option } from '../../atoms/multi-select/MultiSelect';
@@ -14,6 +14,7 @@ import { AppDispatch } from '../../../store/store';
 import { getExtreme } from './DiscountListingSection.utils';
 import { SideNavItem } from '../../molecules/multi-function-side-nav/MultiFunctionSideNav.typings';
 import { SimpleDiscount } from '../../../services/bulk-entities/bulk-entities.typings';
+import { CONSTANTS } from '../../../constants/constants';
 
 
 const defaultSelectedKeys: MultiValue<Option<keyof SimpleDiscount>> = [
@@ -58,6 +59,7 @@ function DiscountListingSection() {
     const [ hideValuesAbove, setHideValuesAbove ] = useState<HideValuationPrices>(filteredFilter.hideValuesAbove);
     const [ keyword, setKeyword ] = useState<string>(filteredFilter.keyword);
     const [ priceBounds, setPriceBounds ] = useState<Bounds>(filteredFilter.priceBounds);
+    const [ sideNavReloadTrigger, sideNavTriggerReload ] = useState<string>(filteredFilter.keyword);
 
     const tableFieldOptions = useMemo((): Option<keyof SimpleDiscount>[] =>
         keyOptions.map(key => ({
@@ -141,8 +143,24 @@ function DiscountListingSection() {
                 keyOptions.indexOf(a.value) - keyOptions.indexOf(b.value))
             setSelectedTableKeys(sortedSelections);
         }
-    }], [ loading ]);
+    }], [ loading, filteredFilter, filteredDiscounts, hideValuesAbove ]);
                
+    const resetFilter = (): void => {
+        dispatch(resetFilteredDiscounts());
+        setHideValuesAbove({
+            discountedCashFlowPrice: false,
+            stickerPrice: false,
+            benchmarkRatioPrice: false
+        });
+        setKeyword(CONSTANTS.EMPTY);
+        setSelectedTableKeys(defaultSelectedKeys);
+        setPriceBounds({
+            lowerBound: absoluteMinimumPrice,
+            upperBound: absoluteMaximumPrice
+        });
+        sideNavTriggerReload(Math.random().toString());
+    }
+
     useEffect(() => {
         dispatch(filterDiscounts({
             hideValuesAbove: hideValuesAbove,
@@ -151,16 +169,22 @@ function DiscountListingSection() {
         }));
     }, [ hideValuesAbove, keyword, priceBounds ]);
 
+    const sideNav = useMemo(() =>
+        <MultiFunctionSideNav
+            key={Math.random()}
+            items={sideNavItems}
+            label='Discount Filters'
+            orientation={ mobile.mobile ? 'horizontal' : 'vertical'}
+            labelButtonOnClick={resetFilter}/>
+    , [ loading, sideNavReloadTrigger, mobile ]);
+
     return (
         <section className={`discount-listing-section`}>
             { loading ? (
                 <LoadingSpinner size='LARGE' color='PURPLE'/>
             ) : 
                 <>
-                    <MultiFunctionSideNav
-                        items={sideNavItems}
-                        label='Discount Filters'
-                        orientation={ mobile.mobile ? 'horizontal' : 'vertical'}/>
+                   { sideNav }
                     <DiscountTable
                         discounts={filteredDiscounts}
                         fieldOptions={selectedTableKeys}/>

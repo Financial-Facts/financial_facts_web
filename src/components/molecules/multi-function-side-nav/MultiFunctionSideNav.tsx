@@ -5,15 +5,22 @@ import SearchFilterInput from '../../atoms/search-filter-input/SearchFilterInput
 import { SideNavItem, SideNavItemType } from './MultiFunctionSideNav.typings';
 import PriceRange from '../../atoms/price-range/PriceRange';
 import { Orientation } from '../button-option-side-nav/ButtonOptionSideNav';
+import SvgIcon from '../../atoms/svg-icon/SvgIcon';
 
 
 export interface MultiFunctionSideNavProps<T extends string> {
     label: string
     items: SideNavItem<T>[]
     orientation: Orientation
+    labelButtonOnClick?: () => void
 }
 
-function MultiFunctionSideNav<T extends string>({ label, items, orientation }: MultiFunctionSideNavProps<T>) {
+function MultiFunctionSideNav<T extends string>({ 
+    label,
+    items,
+    orientation,
+    labelButtonOnClick
+}: MultiFunctionSideNavProps<T>) {
     const halfSizedItems = new Set<SideNavItemType>(['PRICE_RANGE', 'SEARCH', 'TITLE', 'TOGGLE']);
     const fullSizedItems = new Set<SideNavItemType>(['MULTI_SELECT', 'TOGGLE_GROUP']);
 
@@ -102,7 +109,17 @@ function MultiFunctionSideNav<T extends string>({ label, items, orientation }: M
 
     return (
         <div className={`multi-side-nav multi-function-${orientation}`}>
-            <h2 className='side-nav-label'>{ label }</h2>
+            <h2 className='side-nav-label'>
+                { label }
+                { 
+                    !!labelButtonOnClick && 
+                        <SvgIcon 
+                            src={'/assets/reset.svg'}
+                            height={'16px'}
+                            width={'16px'}
+                            isButton={true}
+                            onClick={labelButtonOnClick}/> }
+            </h2>
             { 
                 renderSideNavBuckets(items)
             }

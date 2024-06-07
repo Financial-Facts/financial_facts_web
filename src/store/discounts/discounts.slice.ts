@@ -3,6 +3,7 @@ import { Order, SimpleDiscount } from '../../services/bulk-entities/bulk-entitie
 import { supabaseService } from '../../services/supabase/supabase.service';
 import { Bounds } from '../../components/atoms/price-range/PriceRange';
 import { CONSTANTS } from '../../constants/constants';
+import { getExtreme } from '../../components/organisms/discount-listing-section/DiscountListingSection.utils';
 
 export interface HideValuationPrices {
   stickerPrice: boolean,
@@ -124,22 +125,19 @@ export const discountsSlice = createSlice({
     },
     resetFilteredDiscounts: (state) => {
       state.filteredDiscounts = [...state.allDiscounts];
-      state.filteredSort = {
-        sortBy: 'name',
-        sortOrder: 'ASC'
-      }
       state.filteredFilter = {
         hideValuesAbove: {
-          benchmarkRatioPrice: true,
-          discountedCashFlowPrice: true,
-          stickerPrice: true
+          benchmarkRatioPrice: false,
+          discountedCashFlowPrice: false,
+          stickerPrice: false
         },
         keyword: CONSTANTS.EMPTY,
         priceBounds: {
-          lowerBound: 0,
-          upperBound: 0
+          lowerBound: getExtreme(state.allDiscounts, 'MIN'),
+          upperBound: getExtreme(state.allDiscounts, 'MAX')
         }
       }
+      state.filteredDiscounts.sort(getSortFunction(state.filteredSort.sortBy,  state.filteredSort.sortOrder));
     }
   },
   extraReducers: (builder) => {

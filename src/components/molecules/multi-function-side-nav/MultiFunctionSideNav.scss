@@ -32,6 +32,12 @@
         display: flex;
         justify-content: center;
         margin: 0 0 8px 0;
+        align-items: center;
+
+        .svg-icon-wrapper {
+            background: $base-purple;
+            border-radius: 4px;
+        }
     }
 
     .two-halves-item {
