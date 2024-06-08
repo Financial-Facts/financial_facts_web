@@ -80,22 +80,23 @@ function DiscountDisplaySection() {
         <section className={`discount-display-section full`}>
             <h2 className='discounts-display-header'>
                 Discounts
-                <InformationIcon 
-                    message={messaging.valuationDefinitionsLocation}
-                    color='#292929'
-                    alignPopup='center'/>
+                <SvgIcon src={'/assets/list.svg'}
+                    height={'16px'}
+                    width={'16px'}
+                    color='#F5F5F5'
+                    tooltipMessage={messaging.discountListLink}
+                    isButton={true}
+                    onClick={() => navigate('/discount')}/>
             </h2>
             <h3>
                 See firms that match our criteria and their&nbsp;
-                <span>
+                <span className='valuation-text'>
                     valuations
-                    <SvgIcon src={'/assets/list.svg'}
-                        height={'16px'}
-                        width={'16px'}
-                        color='#F5F5F5'
-                        tooltipMessage={messaging.discountListLink}
-                        isButton={true}
-                        onClick={() => navigate('/discount')}/>
+                    <InformationIcon 
+                        message={messaging.valuationDefinitionsLocation}
+                        color='#292929'
+                        alignPopup='center'
+                        screenSide='right'/>
                 </span>
             </h3>
             { loading ? (

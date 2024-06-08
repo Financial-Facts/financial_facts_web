@@ -27,6 +27,12 @@
         font-size: $x-large-font;
         margin: 0 5%;
         text-align: center;
+
+        .svg-icon-wrapper {
+            background: $base-purple;
+            border-radius: 4px;
+            margin-left: 6px;
+        }
     }
 
     h3 {
@@ -34,16 +40,10 @@
         margin: 17px 10% 21px 10%;
         text-align: center;
 
-        span {
+        .valuation-text {
             display: inline-flex;
             align-items: center;
             color: $base-purple;
-        }
-
-        .svg-icon-wrapper {
-            background: $base-purple;
-            border-radius: 4px;
-            margin-left: 6px;
         }
     }
 
@@ -77,12 +77,5 @@
             width: 410px;
         }
 
-    }
-}
-
-@media only screen and (max-width: 576px) {
-    .discounts-display-header .popup-wrapper .message-dialog {
-        top: 30px;
-        left: -182px;
     }
 }

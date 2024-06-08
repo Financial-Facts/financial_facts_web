@@ -9,7 +9,8 @@ export interface InformationIconProps {
     color?: string,
     height?: string,
     width?: string,
-    alignPopup?: 'center' | 'flex-start'
+    alignPopup?: 'center' | 'flex-start',
+    screenSide?: 'left' | 'right'
 }
 
 function InformationIcon({ 
@@ -17,7 +18,8 @@ function InformationIcon({
     color,
     height = '16px',
     width = '16px',
-    alignPopup = 'flex-start'
+    alignPopup = 'flex-start',
+    screenSide = 'left'
 }: InformationIconProps) {
 
     const [ dialogRef, setDialogRef ] = useState<HTMLDialogElement | null>(null);
@@ -50,7 +52,7 @@ function InformationIcon({
                 color={color}
                 onClick={() => setShowDialog(current => !current)}
                 setExternalRef={setInfoIconRef}/>
-            <div className={`popup-wrapper ${alignPopup}`}>
+            <div className={`popup-wrapper ${alignPopup} ${screenSide}`}>
                 <dialog ref={(ref) => initRef(ref, setDialogRef)}
                     className="message-dialog"
                     onClick={() => setShowDialog(current => !current)}
