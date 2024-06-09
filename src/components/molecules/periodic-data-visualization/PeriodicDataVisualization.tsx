@@ -9,6 +9,8 @@ import { SPAN } from "../../organisms/facts-display-section/FactsDisplaySection"
 import { UnitData, UnitPeriod } from "../../../services/facts/facts.typings";
 import { cleanKey } from '../../../utilities';
 
+const percentKeys = new Set<string>(['annualROIC']);
+
 export interface PeriodicDataVisualizationProps {
     cik: string,
     periodicDataMap: Record<string, PeriodicData[] | UnitData>
@@ -63,7 +65,8 @@ function PeriodicDataVisualization({
                     <PeriodicDataTable
                         key={`${tableData.label}-table`}
                         tableData={ tableData }
-                        span={span}/>)
+                        span={span}
+                        isPercent={tableData.isPercent}/>)
             }
             <PeriodicDataChart tableDataList={ tableDataList } span={span}/>
         </div>
@@ -78,7 +81,8 @@ function PeriodicDataVisualization({
                     acc.push({
                         label: cleanKey(key),
                         periodicData: periodicDataMap[key] as PeriodicData[],
-                        index: 0
+                        index: 0,
+                        isPercent: percentKeys.has(key)
                     });
                 }
                 return acc;

@@ -1,3 +1,4 @@
+import FormatService from '../../../services/format/format.service';
 import { filterBySpan } from '../../../utilities';
 import { SPAN } from '../../organisms/facts-display-section/FactsDisplaySection';
 import { TableData } from '../periodic-data-chart/PeriodicDataChart.typings';
@@ -5,13 +6,17 @@ import './PeriodicDataTable.scss';
 
 export interface PeriodicDataTableProps {
     tableData: TableData,
-    span: SPAN
+    span: SPAN,
+    isPercent?: boolean
 };
 
-function PeriodicDataTable({ tableData, span }: PeriodicDataTableProps) {
+function PeriodicDataTable({ tableData, span, isPercent = false }: PeriodicDataTableProps) {
 
     const renderDataRows = (tableData: TableData) => {
-        const columns = filterBySpan(tableData.periodicData, span).map(periodicData => periodicData.value);
+        const columns = filterBySpan(tableData.periodicData, span).map(periodicData =>
+            isPercent ?
+                periodicData.value :
+                FormatService.formatToDollarValue(periodicData.value));
         let key = 0;
         return <tbody key={ `${tableData.label}-table-body` }>
             <tr>
@@ -33,7 +38,7 @@ function PeriodicDataTable({ tableData, span }: PeriodicDataTableProps) {
 
     const renderTables = () => 
         (<div className='table-wrapper'>
-            <div className='table-title' title={tableData.label}> {tableData.label} </div>
+            <div className='table-title' title={tableData.label}> {tableData.label} ({tableData.isPercent ? '%' : 'USD'})</div>
             <table className='periodic-data-table'>
                 { renderHeaderRows(tableData) }
                 { renderDataRows(tableData) }
