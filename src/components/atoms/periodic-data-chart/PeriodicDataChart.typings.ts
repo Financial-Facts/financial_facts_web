@@ -1,3 +1,3 @@
 import { PeriodicData } from "../../../types/discount.typings";
 
-export interface TableData { index: number, label: string, periodicData: PeriodicData[], isPercent?: boolean }
+export interface TableData { index: number, label: string, periodicData: PeriodicData[], dataType?: 'CURRENCY' | 'PERCENT' }

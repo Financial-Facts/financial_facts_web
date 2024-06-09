@@ -54,7 +54,8 @@ function PeriodicDataVisualization({
         return Object.keys(unitMap).map((unit, index) => ({
             index: index,
             label: `${item.label} (${unit})`,
-            periodicData: unitMap[unit]
+            periodicData: unitMap[unit],
+            dataType: unit === 'USD' || unit === 'USD/shares' ? 'CURRENCY' : undefined
         }));
     }
 
@@ -66,7 +67,7 @@ function PeriodicDataVisualization({
                         key={`${tableData.label}-table`}
                         tableData={ tableData }
                         span={span}
-                        isPercent={tableData.isPercent}/>)
+                        dataType={tableData.dataType}/>)
             }
             <PeriodicDataChart tableDataList={ tableDataList } span={span}/>
         </div>
@@ -78,11 +79,12 @@ function PeriodicDataVisualization({
         } else {
             return buildVisualizations(periodicDataKeys.reduce<TableData[]>((acc, key) => {
                 if (key in periodicDataMap) {
+                    const isPercent = percentKeys.has(key);
                     acc.push({
-                        label: cleanKey(key),
+                        label: `${cleanKey(key)} (${isPercent ? '%' : 'USD'})`,
                         periodicData: periodicDataMap[key] as PeriodicData[],
                         index: 0,
-                        isPercent: percentKeys.has(key)
+                        dataType: isPercent ? 'PERCENT' : 'CURRENCY'
                     });
                 }
                 return acc;

@@ -7,16 +7,17 @@ import './PeriodicDataTable.scss';
 export interface PeriodicDataTableProps {
     tableData: TableData,
     span: SPAN,
-    isPercent?: boolean
+    dataType?: 'PERCENT' | 'CURRENCY'
 };
 
-function PeriodicDataTable({ tableData, span, isPercent = false }: PeriodicDataTableProps) {
+function PeriodicDataTable({ tableData, span, dataType }: PeriodicDataTableProps) {
 
     const renderDataRows = (tableData: TableData) => {
         const columns = filterBySpan(tableData.periodicData, span).map(periodicData =>
-            isPercent ?
-                periodicData.value :
-                FormatService.formatToDollarValue(periodicData.value));
+            dataType === 'CURRENCY' ?
+                FormatService.formatToDollarValue(periodicData.value):
+                periodicData.value);
+            
         let key = 0;
         return <tbody key={ `${tableData.label}-table-body` }>
             <tr>
@@ -38,7 +39,7 @@ function PeriodicDataTable({ tableData, span, isPercent = false }: PeriodicDataT
 
     const renderTables = () => 
         (<div className='table-wrapper'>
-            <div className='table-title' title={tableData.label}> {tableData.label} ({tableData.isPercent ? '%' : 'USD'})</div>
+            <div className='table-title' title={tableData.label}> {tableData.label} </div>
             <table className='periodic-data-table'>
                 { renderHeaderRows(tableData) }
                 { renderDataRows(tableData) }
