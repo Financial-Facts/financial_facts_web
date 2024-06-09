@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.3.3",
     "@fontsource/league-spartan": "^5.0.17",
     "@fontsource/libre-baskerville": "^5.0.8",
     "@reduxjs/toolkit": "^2.0.1",

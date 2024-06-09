@@ -17,8 +17,11 @@ function StickyMenu() {
     const [ $closeDropdowns ] = useState(new Subject<ClosurePayload[]>());
     const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
 
-    listenForWindowClick(() => {
-        $closeDropdowns.next(['ALL']);
+    listenForWindowClick((e) => {
+        const isToggleButton = e.id.includes('-state-');
+        if (!isToggleButton) {
+            $closeDropdowns.next(['ALL']);
+        }
     }, stickyMenuRef);
 
     return (

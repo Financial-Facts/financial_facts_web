@@ -6,9 +6,9 @@ export const environment = {
     factsGatewayUrl: 'https://l1o9ve56r2.execute-api.us-east-1.amazonaws.com/financial-facts/api',
     githubUrl: 'https://github.com/Financial-Facts',
     linkedInUrl: 'https://www.linkedin.com/in/matthew-gabriel-9b508a17a',
-    contactEmail: 'stockdataanalyst@gmail.com',
-    mailServiceUrl: 'https://postmail.invotes.com/send',
-    mailServiceToken: '814c5l57a9749h2ggb8fjjhw',
+    emailPublicToken: 'vJ1G8MaAAI8Flleft',
+    emailServiceId: 'service_9d1x574',
+    emailTemplateId: 'contact_form',
     symbolIconSourceUrl: 'https://dohx2dbahhnol.cloudfront.net',
     supabaseUrl: 'https://gryjgqyrnxtfsswnyttk.supabase.co',
     supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdyeWpncXlybnh0ZnNzd255dHRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEyOTMwODEsImV4cCI6MjAyNjg2OTA4MX0.Q4sXMP2DS2OLmRiG10zAW-XxNbcPXkm7x_xGGJGZ78k'

@@ -37,11 +37,13 @@ function SearchBar({ identityListDispatch, searchCriteria, dispatch, setIsLoadin
     }, [ searchBarRef ]);
 
     useEffect(() => {
-        setIdentityRequest(() => ({
-            ...searchCriteria,
-            startIndex: 0,
-            limit: CONSTANTS.IDENTITY_BATCH_SIZE - 1
-        }));
+        if (searchCriteria.keyword) {
+            setIdentityRequest(() => ({
+                ...searchCriteria,
+                startIndex: 0,
+                limit: CONSTANTS.IDENTITY_BATCH_SIZE - 1
+            }));
+        }
     }, [ searchCriteria ]);
 
     useEffect(() => {

@@ -11,6 +11,7 @@ import SvgIcon from '../../atoms/svg-icon/SvgIcon';
 import watchForMenuClosure from '../../../hooks/watchForMenuClosure';
 import { searchCriteriaReducer } from './reducers/search-criteria.reducer';
 import { identityListReducer } from './reducers/identity-list.reducer';
+import ZeroState from '../../atoms/zero-state/ZeroState';
 
 export interface ExpandableSearchProps {
     $closeDropdowns: Subject<ClosurePayload[]>,
@@ -42,7 +43,7 @@ function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchPro
     }, [ searchCriteria.order, searchCriteria.searchBy, searchCriteria.sortBy ]);
 
     useEffect(() => {
-        setDisplaySearchResults(isStandalone || !!searchCriteria.keyword);
+        setDisplaySearchResults(!!searchCriteria.keyword);
     }, [ searchCriteria.keyword ]);
 
     const handleOpenEvent = (): void => {
@@ -108,7 +109,8 @@ function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchPro
                         <SearchDropDown allIdentities={identities}
                             identityListDispatch={identityListDispatch}
                             searchCriteria={searchCriteria}/> :
-                    undefined
+                    isStandalone &&
+                        <ZeroState message={'No input'} supportText={'Use the search bar to find company filings'}/>
             }
         </div>
     )

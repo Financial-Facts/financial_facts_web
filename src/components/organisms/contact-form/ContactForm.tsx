@@ -3,24 +3,25 @@ import SubmitButton from '../../molecules/submit-button/submit-button';
 import { Outcome } from '../../molecules/submit-button/submit-button.typings';
 import './ContactForm.scss';
 import { CONSTANTS } from '../../../constants/constants';
-import EmailService from '../../../services/email/email.service';
+import emailjs from '@emailjs/browser';
+import { environment } from '../../../environment';
 
 function ContactForm() {
 
     const [name, setName] = useState(CONSTANTS.EMPTY);
-    const [subject, setSubject] = useState(CONSTANTS.EMPTY);
+    const [email, setEmail] = useState(CONSTANTS.EMPTY);
     const [message, setMessage] = useState(CONSTANTS.EMPTY);
     const [loading, setLoading] = useState(false);
     const [outcome, setOutcome] = useState<Outcome>('neutral');
 
     const clearFields = (): void => {
         setName(CONSTANTS.EMPTY);
-        setSubject(CONSTANTS.EMPTY);
+        setEmail(CONSTANTS.EMPTY);
         setMessage(CONSTANTS.EMPTY);
     }
 
     const validateFields = (): boolean => {
-        return (!!name && !!subject && !!message);
+        return (!!name && !!email && !!message);
     }
 
     const handleSetTimer = (outcome: Outcome): void => {
@@ -28,6 +29,23 @@ function ContactForm() {
         setTimeout(() => {
             setOutcome('neutral');
         }, outcome === 'isSuccess' ? 3000 : 1000);
+    }
+
+    const sendEmail = (form: HTMLFormElement): void => {
+        emailjs.sendForm(
+            environment.emailServiceId,
+            environment.emailTemplateId,
+            form,
+            {
+                publicKey: environment.emailPublicToken
+            })
+        .then(() => {
+                clearFields();
+                handleSetTimer('isSuccess');
+            }, () => {
+                handleSetTimer('isFailure');
+            })
+        .finally(() => setLoading(false));
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
@@ -42,13 +60,8 @@ function ContactForm() {
         }
 
         setLoading(true);
-        EmailService.sendEmail(name, subject, message).subscribe(isSuccess => {
-            if (isSuccess) {
-                clearFields();
-            }
-            setLoading(false);
-            handleSetTimer(isSuccess ? 'isSuccess' : 'isFailure');
-        });
+        const element = event.target as HTMLFormElement;
+        sendEmail(element);
     }
 
     return (
@@ -56,9 +69,9 @@ function ContactForm() {
             <h2>Contact</h2>
             <span>Send a message</span>
             <form onSubmit={ handleSubmit }>
-                <input type='text' className='text-field name-field' placeholder='Name' value={name} onChange={(e) => setName(e.target.value)}/>
-                <input type='text' className='text-field subject-field' placeholder='Subject' value={subject} onChange={(e) => setSubject(e.target.value)}/>
-                <textarea className='text-field message-field' maxLength={128} placeholder='Message' value={message} onChange={(e) => setMessage(e.target.value)}/>
+                <input type='text' name='user_name' className='text-field name-field' placeholder='Name' value={name} onChange={(e) => setName(e.target.value)}/>
+                <input type='text' name='user_email' className='text-field subject-field' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                <textarea name='message' className='text-field message-field' maxLength={128} placeholder='Message' value={message} onChange={(e) => setMessage(e.target.value)}/>
                 <SubmitButton loading={loading} outcome={outcome}/>
             </form>
         </div>
