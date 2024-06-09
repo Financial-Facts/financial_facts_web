@@ -32,6 +32,11 @@
 
 }
 
+.submit-button:focus {
+    outline: 1px solid #8C19D3;
+    outline-offset: 2px;
+}
+
 .isSuccess {
     background: $emerald-green;
 }

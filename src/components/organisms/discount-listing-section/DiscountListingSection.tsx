@@ -1,20 +1,18 @@
 import './DiscountListingSection.scss';
 import { useDispatch, useSelector } from 'react-redux'
 import LoadingSpinner from '../../atoms/loading-spinner/loading-spinner'
-import { DiscountState, HideValuationPrices, filterDiscounts, resetFilteredDiscounts } from '../../../store/discounts/discounts.slice'
+import { DiscountState, resetFilteredDiscounts, updateFilterHideValuationPrices, updateFilterKeyword, updateFilterPriceBounds } from '../../../store/discounts/discounts.slice'
 import DiscountTable from '../../molecules/discount-table/DiscountTable'
 import MultiFunctionSideNav from '../../molecules/multi-function-side-nav/MultiFunctionSideNav';
 import { Option } from '../../atoms/multi-select/MultiSelect';
 import { cleanKey } from '../../../utilities';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { MultiValue } from 'react-select';
-import { Bounds } from '../../atoms/price-range/PriceRange';
 import { MobileState } from '../../../store/mobile/mobile.slice';
 import { AppDispatch } from '../../../store/store';
 import { getExtreme } from './DiscountListingSection.utils';
-import { SideNavItem } from '../../molecules/multi-function-side-nav/MultiFunctionSideNav.typings';
+import { KeywordSearch, MultiSelect, PriceRange, ToggleGroup } from '../../molecules/multi-function-side-nav/MultiFunctionSideNav.typings';
 import { SimpleDiscount } from '../../../services/bulk-entities/bulk-entities.typings';
-import { CONSTANTS } from '../../../constants/constants';
 
 
 const defaultSelectedKeys: MultiValue<Option<keyof SimpleDiscount>> = [
@@ -55,11 +53,7 @@ function DiscountListingSection() {
     const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
     const absoluteMinimumPrice = useMemo(() => getExtreme(allDiscounts, 'MIN'), [ allDiscounts ]);
     const absoluteMaximumPrice = useMemo(() => getExtreme(allDiscounts, 'MAX'), [ allDiscounts ]);
-    const [ selectedTableKeys, setSelectedTableKeys ] = useState<MultiValue<Option<keyof SimpleDiscount>>>(defaultSelectedKeys);
-    const [ hideValuesAbove, setHideValuesAbove ] = useState<HideValuationPrices>(filteredFilter.hideValuesAbove);
-    const [ keyword, setKeyword ] = useState<string>(filteredFilter.keyword);
-    const [ priceBounds, setPriceBounds ] = useState<Bounds>(filteredFilter.priceBounds);
-    const [ sideNavReloadTrigger, sideNavTriggerReload ] = useState<string>(filteredFilter.keyword);
+    const [ selectedTableKeys, setSelectedTableKeys ] = useState<MultiValue<Option<keyof SimpleDiscount>>>([...defaultSelectedKeys]);
 
     const tableFieldOptions = useMemo((): Option<keyof SimpleDiscount>[] =>
         keyOptions.map(key => ({
@@ -69,114 +63,92 @@ function DiscountListingSection() {
         }))
     , [ allDiscounts ]);
 
-    const sideNavItems: SideNavItem<keyof SimpleDiscount>[] = useMemo(() => [{
-       type: 'TOGGLE_GROUP',
-       label: 'Hide discounts priced above...',
-       toggles: [{
-            type: 'TOGGLE',
-            label: 'Sticker Price',
-            defaultSelected: String(hideValuesAbove.stickerPrice),
-            options: [{
-                id: 'true',
-                input: 'true'
-            }, {
-                id: 'false',
-                input: 'false'
-            }],
-            selectionSetter: (val) => setHideValuesAbove(current => ({
-                ...current,
-                stickerPrice: 'true' === val
+    const toggleGroupConfig: ToggleGroup<string> = useMemo(() => ({
+        type: 'TOGGLE_GROUP',
+        label: 'Hide discounts priced above...',
+        toggles: [{
+                type: 'TOGGLE',
+                label: 'Sticker Price',
+                defaultSelected: String(filteredFilter.hideValuesAbove.stickerPrice),
+                options: [{
+                    id: 'true',
+                    input: 'true'
+                }, {
+                    id: 'false',
+                    input: 'false'
+                }],
+                selectionSetter: (val: string) => dispatch(updateFilterHideValuationPrices({
+                key: 'stickerPrice',
+                value: val === 'true'
             }))
-        }, {
-            type: 'TOGGLE',
-            label: 'DCF Price',
-            defaultSelected: String(hideValuesAbove.discountedCashFlowPrice),
-            options: [{
-                id: 'true',
-                input: 'true'
-            }, {
-                id: 'false',
-                input: 'false'
-            }],
-            selectionSetter: (val) => setHideValuesAbove(current => ({
-                ...current,
-                discountedCashFlowPrice: 'true' === val
+         }, {
+             type: 'TOGGLE',
+             label: 'DCF Price',
+             defaultSelected: String(filteredFilter.hideValuesAbove.discountedCashFlowPrice),
+             options: [{
+                 id: 'true',
+                 input: 'true'
+             }, {
+                 id: 'false',
+                 input: 'false'
+             }],
+             selectionSetter: (val: string) => dispatch(updateFilterHideValuationPrices({
+                key: 'discountedCashFlowPrice',
+                value: val === 'true'
             }))
-        }, {
-            type: 'TOGGLE',
-            label: 'BR Price',
-            defaultSelected: String(hideValuesAbove.benchmarkRatioPrice),
-            options: [{
-                id: 'true',
-                input: 'true'
-            }, {
-                id: 'false',
-                input: 'false'
-            }],
-            selectionSetter: (val) => setHideValuesAbove(current => ({
-                ...current,
-                benchmarkRatioPrice: 'true' === val
+         }, {
+             type: 'TOGGLE',
+             label: 'BR Price',
+             defaultSelected: String(filteredFilter.hideValuesAbove.benchmarkRatioPrice),
+             options: [{
+                 id: 'true',
+                 input: 'true'
+             }, {
+                 id: 'false',
+                 input: 'false'
+             }],
+             selectionSetter: (val: string) => dispatch(updateFilterHideValuationPrices({
+                key: 'benchmarkRatioPrice',
+                value: val === 'true'
             }))
-        }]
-    }, {
+         }]
+     }), [ filteredFilter.hideValuesAbove ]);
+
+    const keywordSearchConfig: KeywordSearch = useMemo(() => ({
         type: 'SEARCH',
         label: 'Keyword Search',
-        defaultValue: keyword,
-        keywordSetter: setKeyword
-    }, {
+        defaultValue: filteredFilter.keyword,
+        keywordSetter: (val) => dispatch(updateFilterKeyword(val))
+    }), [ filteredFilter.keyword ]);
+
+    const priceBoundsSliderConfig: PriceRange = useMemo(() => ({
         type: 'PRICE_RANGE',
         label: 'Market Price Range',
-        boundSetter: setPriceBounds,
+        boundSetter: (bounds) => dispatch(updateFilterPriceBounds(bounds)),
         minimum: absoluteMinimumPrice,
         maximum: absoluteMaximumPrice,
         defaultValues: [
-            priceBounds.lowerBound || absoluteMinimumPrice,
-            priceBounds.upperBound || absoluteMaximumPrice
+            filteredFilter.priceBounds.lowerBound || absoluteMinimumPrice,
+            filteredFilter.priceBounds.upperBound || absoluteMaximumPrice
         ]
-    }, {
+    }), [ filteredFilter.priceBounds, absoluteMinimumPrice, absoluteMaximumPrice ]);
+
+    const multiSelectConfig: MultiSelect<keyof SimpleDiscount> = useMemo(() => ({
         type: 'MULTI_SELECT',
         label: 'Display Fields',
         options: tableFieldOptions,
-        defaultSelected: Array.from(defaultSelectedKeys),
+        defaultSelected: selectedTableKeys,
         selectionSetter: (selection) => {
             const sortedSelections = Array.from(selection).sort((a, b) => 
                 keyOptions.indexOf(a.value) - keyOptions.indexOf(b.value))
             setSelectedTableKeys(sortedSelections);
         }
-    }], [ loading, filteredFilter, filteredDiscounts, hideValuesAbove ]);
-               
+    }), [ tableFieldOptions, selectedTableKeys ]);
+              
     const resetFilter = (): void => {
         dispatch(resetFilteredDiscounts());
-        setHideValuesAbove({
-            discountedCashFlowPrice: false,
-            stickerPrice: false,
-            benchmarkRatioPrice: false
-        });
-        setKeyword(CONSTANTS.EMPTY);
-        setSelectedTableKeys(defaultSelectedKeys);
-        setPriceBounds({
-            lowerBound: absoluteMinimumPrice,
-            upperBound: absoluteMaximumPrice
-        });
-        sideNavTriggerReload(Math.random().toString());
+        setSelectedTableKeys([...defaultSelectedKeys]);
     }
-
-    useEffect(() => {
-        dispatch(filterDiscounts({
-            hideValuesAbove: hideValuesAbove,
-            keyword: keyword,
-            priceBounds: priceBounds
-        }));
-    }, [ hideValuesAbove, keyword, priceBounds ]);
-
-    const sideNav = useMemo(() =>
-        <MultiFunctionSideNav
-            key={Math.random()}
-            items={sideNavItems}
-            label='Discount Filters'
-            orientation={ mobile.mobile ? 'horizontal' : 'vertical'}
-            labelButtonOnClick={resetFilter}/>
-    , [ loading, sideNavReloadTrigger, mobile ]);
 
     return (
         <section className={`discount-listing-section`}>
@@ -184,7 +156,16 @@ function DiscountListingSection() {
                 <LoadingSpinner size='LARGE' color='PURPLE'/>
             ) : 
                 <>
-                   { sideNav }
+                   <MultiFunctionSideNav
+                        items={[
+                            toggleGroupConfig, 
+                            keywordSearchConfig,
+                            priceBoundsSliderConfig,
+                            multiSelectConfig
+                        ]}
+                        label='Discount Filters'
+                        orientation={ mobile.mobile ? 'horizontal' : 'vertical'}
+                        labelButtonOnClick={resetFilter}/>
                     <DiscountTable
                         discounts={filteredDiscounts}
                         fieldOptions={selectedTableKeys}/>

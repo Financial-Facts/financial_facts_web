@@ -31,8 +31,11 @@
         width: 100%;
         display: flex;
         justify-content: center;
+        flex-wrap: wrap;
         margin: 0 0 8px 0;
+        gap: 8px;
         align-items: center;
+        flex-direction: row;
 
         .svg-icon-wrapper {
             background: $base-purple;

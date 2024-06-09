@@ -36,7 +36,9 @@ function App() {
   const dispatch = useDispatch<AppDispatch>();
 
   const handleWindowSizeChange = () => {
-    const screenWidth = window.innerWidth;
+    const screenWidth = window.visualViewport ?
+      window.visualViewport.width :
+      window.innerWidth;
     const mobileSize: MobileSize | undefined =
       screenWidth < 576 ? 'SMALL' :
       screenWidth < 768 ? 'MEDIUM' :

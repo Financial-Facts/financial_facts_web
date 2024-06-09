@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { handleEnterKeyEvent } from '../../../utilities';
 import './SearchFormToggle.scss';
 
@@ -15,6 +16,10 @@ export interface ToggleOption <T> {
 }
 
 function SearchFormToggle<T>({ name, label, defaultId, options, setter }: SearchFormToggleProps<T>) {
+
+    useEffect(() => {
+        handleToggleChange(defaultId);
+    }, [ defaultId ]);
 
     const handleToggleChange = (id: string) => {
         const option = options.find(option => option.id === id);
@@ -34,7 +39,7 @@ function SearchFormToggle<T>({ name, label, defaultId, options, setter }: Search
                     type="radio"
                     name={name}
                     onChange={ () => handleToggleChange(option.id) }
-                    defaultChecked={ option.id === defaultId }/>
+                    checked={ option.id === defaultId }/>
                 <label htmlFor={`${name}-state-${index}`}>{ option.id }</label>
             </div>)
 

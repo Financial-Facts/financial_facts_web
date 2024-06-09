@@ -118,9 +118,23 @@ export const discountsSlice = createSlice({
       state.filteredSort = action.payload;
       state.filteredDiscounts.sort(getSortFunction(sortBy, sortOrder));
     },
-    filterDiscounts: (state, action: PayloadAction<DiscountFilter>) => {
-      state.filteredFilter = action.payload;
-      state.filteredDiscounts = filterDiscountState([...state.allDiscounts], action.payload);
+    updateFilterPriceBounds: (state, action: PayloadAction<Bounds>) => {
+      state.filteredFilter.priceBounds = action.payload;
+      state.filteredDiscounts = filterDiscountState([...state.allDiscounts], state.filteredFilter);
+      state.filteredDiscounts.sort(getSortFunction(state.filteredSort.sortBy, state.filteredSort.sortOrder));
+    },
+    updateFilterHideValuationPrices: (state, action: PayloadAction<{
+      key: keyof HideValuationPrices,
+      value: boolean
+    }>) => {
+      const { key, value } = action.payload;
+      state.filteredFilter.hideValuesAbove[key] = value;
+      state.filteredDiscounts = filterDiscountState([...state.allDiscounts], state.filteredFilter);
+      state.filteredDiscounts.sort(getSortFunction(state.filteredSort.sortBy, state.filteredSort.sortOrder));
+    },
+    updateFilterKeyword: (state, action: PayloadAction<string>) => {
+      state.filteredFilter.keyword = action.payload;
+      state.filteredDiscounts = filterDiscountState([...state.allDiscounts], state.filteredFilter);
       state.filteredDiscounts.sort(getSortFunction(state.filteredSort.sortBy, state.filteredSort.sortOrder));
     },
     resetFilteredDiscounts: (state) => {
@@ -157,5 +171,12 @@ export const discountsSlice = createSlice({
   }
 });
 
-export const { sortDiscounts, filterDiscounts, resetFilteredDiscounts } = discountsSlice.actions;
+export const { 
+  sortDiscounts,
+  updateFilterPriceBounds,
+  updateFilterHideValuationPrices,
+  updateFilterKeyword,
+  resetFilteredDiscounts 
+} = discountsSlice.actions;
+
 export default discountsSlice;

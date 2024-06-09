@@ -5,7 +5,9 @@ import SearchFilterInput from '../../atoms/search-filter-input/SearchFilterInput
 import { SideNavItem, SideNavItemType } from './MultiFunctionSideNav.typings';
 import PriceRange from '../../atoms/price-range/PriceRange';
 import { Orientation } from '../button-option-side-nav/ButtonOptionSideNav';
-import SvgIcon from '../../atoms/svg-icon/SvgIcon';
+import SubmitButton from '../submit-button/submit-button';
+import { useState } from 'react';
+import { Outcome } from '../submit-button/submit-button.typings';
 
 
 export interface MultiFunctionSideNavProps<T extends string> {
@@ -23,6 +25,16 @@ function MultiFunctionSideNav<T extends string>({
 }: MultiFunctionSideNavProps<T>) {
     const halfSizedItems = new Set<SideNavItemType>(['PRICE_RANGE', 'SEARCH', 'TITLE', 'TOGGLE']);
     const fullSizedItems = new Set<SideNavItemType>(['MULTI_SELECT', 'TOGGLE_GROUP']);
+    const [ submitOutcome, setSubmitOutcome ] = useState<Outcome>('neutral');
+    let timeout: ReturnType<typeof setTimeout>;
+
+    const handleSetTimer = (): void => {
+        clearTimeout(timeout);
+        setSubmitOutcome('isSuccess');
+        timeout = setTimeout(() => {
+            setSubmitOutcome('neutral');
+        }, 500);
+    }
 
     const renderSideNavItem = (item: SideNavItem<T>) => {
         switch(item.type) {
@@ -113,12 +125,15 @@ function MultiFunctionSideNav<T extends string>({
                 { label }
                 { 
                     !!labelButtonOnClick && 
-                        <SvgIcon 
-                            src={'/assets/reset.svg'}
-                            height={'16px'}
-                            width={'16px'}
-                            isButton={true}
-                            onClick={labelButtonOnClick}/> }
+                        <SubmitButton
+                            text='Reset'
+                            outcome={submitOutcome}
+                            loading={false}
+                            onClick={() => {
+                                labelButtonOnClick();
+                                handleSetTimer();
+                            }}/>
+                }
             </h2>
             { 
                 renderSideNavBuckets(items)

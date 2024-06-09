@@ -12,7 +12,7 @@ export interface MultiSelect<T extends string> {
     type: 'MULTI_SELECT',
     label: string,
     options: Option<T>[],
-    defaultSelected: Option<T>[],
+    defaultSelected: MultiValue<Option<T>>,
     selectionSetter: (_: MultiValue<Option<T>>) => void
 }
 
@@ -22,7 +22,7 @@ export interface PriceRange {
     minimum: number,
     maximum: number,
     defaultValues: number[]
-    boundSetter: React.Dispatch<React.SetStateAction<Bounds>>
+    boundSetter: (bounds: Bounds) => void
 }
 
 export interface Toggle<T> {

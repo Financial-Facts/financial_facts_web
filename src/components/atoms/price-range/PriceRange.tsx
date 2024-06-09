@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './PriceRange.scss';
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
@@ -9,7 +9,7 @@ export interface Bounds {
 }
 
 export interface PriceRangeProps {
-    boundSetter: React.Dispatch<React.SetStateAction<Bounds>>,
+    boundSetter: (bounds: Bounds) => void,
     minimum: number,
     maximum: number,
     defaultValues: number[]
@@ -27,6 +27,10 @@ function PriceRange({ boundSetter, minimum, maximum, defaultValues }: PriceRange
         boundSetter(newBounds);
         setValues(ev);
     }
+
+    useEffect(() => {
+        setValues(defaultValues);   
+    }, [ defaultValues ]);
 
     return (
         <div className='price-range'>
