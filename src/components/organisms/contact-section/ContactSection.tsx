@@ -8,10 +8,10 @@ function ContactSection() {
     return (
         <section className='contact-section'>
             <div className='contact-wrapper'>
-                <ContactInfoList></ContactInfoList>
-                <ContactForm></ContactForm>
+                <ContactForm/>
+                <ContactInfoList/>
             </div>
-            <SiteMap></SiteMap>
+            <SiteMap/>
         </section>
     )
   }

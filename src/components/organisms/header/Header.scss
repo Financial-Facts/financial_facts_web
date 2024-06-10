@@ -86,7 +86,7 @@
             }
     
             h2 {
-                font-size: clamp($normal-font, 5vw, $plus-font);
+                font-size: $normal-font;
             }
         }
     }

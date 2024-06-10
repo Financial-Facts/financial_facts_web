@@ -15,7 +15,7 @@
         align-items: center;
         color: $off-white;
         font-family: $libre-baskerville;
-        font-size: clamp($below-normal-font, 2vw, $normal-font);
+        font-size: $below-normal-font;
         text-align: center;
         row-gap: 32px;
 
@@ -32,11 +32,11 @@
         }
 
         h2 {
-            font-size: clamp($below-normal-font, 2vw, $normal-font);
+            font-size: $below-normal-font;
         }
 
         .subtext {
-            font-size: clamp($small-font, 2vw, $below-normal-font);
+            font-size: $small-font;
             margin: 0;
 
             a {
@@ -50,7 +50,7 @@
             text-align: justify;
             
             h2 {
-                font-size: clamp($below-normal-font, 2vw, $normal-font);
+                font-size: $below-normal-font;
             }
         }
     }

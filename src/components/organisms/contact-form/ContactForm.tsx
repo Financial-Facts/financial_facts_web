@@ -66,11 +66,11 @@ function ContactForm() {
 
     return (
         <div className='contact-form'>
-            <h2>Contact</h2>
-            <span>Send a message</span>
+            <h2>Contact Us</h2>
+            <span>Send us a message</span>
             <form onSubmit={ handleSubmit }>
                 <input type='text' name='user_name' className='text-field name-field' placeholder='Name' value={name} onChange={(e) => setName(e.target.value)}/>
-                <input type='text' name='user_email' className='text-field subject-field' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                <input type='text' name='user_email' className='text-field subject-field' placeholder='Reply email' value={email} onChange={(e) => setEmail(e.target.value)}/>
                 <textarea name='message' className='text-field message-field' maxLength={128} placeholder='Message' value={message} onChange={(e) => setMessage(e.target.value)}/>
                 <SubmitButton loading={loading} outcome={outcome}/>
             </form>

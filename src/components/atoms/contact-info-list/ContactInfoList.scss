@@ -5,6 +5,8 @@
     height: 100%;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
 
     .logo {
         width: 100px;
@@ -15,6 +17,7 @@
         display: flex;
         flex-direction: column;
         row-gap: 24px;
+        align-items: center;
 
         .row {
             display: flex;
@@ -26,13 +29,4 @@
             width: 32px;
         }
     }
-}
-
-@media only screen and (max-width: 576px) {
-
-    .contact-info-list .contact-list {
-        padding: 0;
-        align-items: center;
-    }
-
 }

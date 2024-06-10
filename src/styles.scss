@@ -28,7 +28,8 @@ ul {
 
 .valuation-definition {
     line-height: 20px;
-
+    font-size: $normal-font;
+    
     .subheader {
         margin: 0;
     }
@@ -68,4 +69,5 @@ ul {
 .league-spartan {
     font-family: $league-spartan;
     color: $dark-gray;
+    font-size: $normal-font;
 }

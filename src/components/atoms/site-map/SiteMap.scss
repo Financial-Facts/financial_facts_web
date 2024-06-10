@@ -6,7 +6,9 @@
     flex-direction: column;
     align-items: center;
     font-family: $league-spartan;
+    font-size: $normal-font;
     color: $dark-gray;
+    margin-bottom: 32px;
 
     .parent-list {
         display: flex;

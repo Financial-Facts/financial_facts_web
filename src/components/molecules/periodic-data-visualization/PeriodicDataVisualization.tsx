@@ -4,12 +4,28 @@ import { PeriodicData } from "../../../types/discount.typings";
 import PeriodicDataChart from "../../atoms/periodic-data-chart/PeriodicDataChart";
 import { TableData } from "../../atoms/periodic-data-chart/PeriodicDataChart.typings";
 import PeriodicDataTable from "../../atoms/periodic-data-table/PeriodicDataTable";
-import SearchFormToggle from "../../atoms/search-form-toggle/SearchFormToggle";
+import SearchFormToggle, { ToggleOption } from "../../atoms/search-form-toggle/SearchFormToggle";
 import { SPAN } from "../../organisms/facts-display-section/FactsDisplaySection";
 import { UnitData, UnitPeriod } from "../../../services/facts/facts.typings";
 import { cleanKey } from '../../../utilities';
 
 const percentKeys = new Set<string>(['annualROIC']);
+
+const spanToggleOptions: ToggleOption<SPAN>[] = [
+    {
+        id: 'All',
+        input: 'ALL'
+    }, {
+        id: '3 years',
+        input: 'T3Y'
+    }, {
+        id: '5 years',
+        input: 'TFY'
+    }, {
+        id: '10 years',
+        input: 'TTY'
+    }
+];
 
 export interface PeriodicDataVisualizationProps {
     cik: string,
@@ -92,25 +108,18 @@ function PeriodicDataVisualization({
         }
     }
     
+    const getSpanId = () => {
+        const option = spanToggleOptions.find(option => option.input === span);
+        return !!option ? option.id : 'ALL'
+    }
+    
     return (
         <div className='periodic-data-container'>
             <SearchFormToggle <SPAN>
                 name={`${periodicDataKeys}-SpanToggle`}
                 label={''}
-                defaultId={'All'}
-                options={[{
-                    id: 'All',
-                    input: 'ALL'
-                }, {
-                    id: '3 years',
-                    input: 'T3Y'
-                }, {
-                    id: '5 years',
-                    input: 'TFY'
-                }, {
-                    id: '10 years',
-                    input: 'TTY'
-                }]} 
+                defaultId={getSpanId()}
+                options={spanToggleOptions} 
                 setter={setSpan}
             />
             {
