@@ -1,26 +1,15 @@
-import { useEffect, useState } from 'react';
-import { CONSTANTS } from '../../../constants/constants';
 import './SearchFilterInput.scss';
 
 export interface SearchFilterInputProps {
     setKeywordFilter: (_: string) => void,
-    defaultValue?: string
+    value: string
 }
 
-function SearchFilterInput({ setKeywordFilter, defaultValue }: SearchFilterInputProps) {
-
-    const [ value, setValue ] = useState<string>(defaultValue || CONSTANTS.EMPTY);
-
-    useEffect(() => {
-        if (defaultValue !== null && defaultValue !== undefined) {
-            setValue(defaultValue);
-        }
-    }, [ defaultValue ]);
+function SearchFilterInput({ setKeywordFilter, value }: SearchFilterInputProps) {
 
     const handleInput = (e: React.FormEvent<HTMLInputElement>): void => {
         const updatedValue = (e.target as HTMLInputElement).value;
         setKeywordFilter(updatedValue);
-        setValue(updatedValue);
     };
 
     return (

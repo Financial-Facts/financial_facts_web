@@ -22,12 +22,16 @@ function DiscountDisplaySection() {
     const { allDiscounts, loading } = useSelector< { discounts: DiscountState }, DiscountState>((state) => state.discounts);
     
     const CARD_WIDTH = 250;
+    const calculateNumCardsToDisplay = (): number => {
+        const viewportWidth = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+        return Math.floor((viewportWidth - 150) / CARD_WIDTH);
+    }
 
     const navigate = useNavigate();
-    const [ numCardsToDisplay, setNumCardsToDisplay ] = useState(0);
-    const [ usingArrowNavigation, setUsingArrowNavigation ] = useState(false);
+    const [ numCardsToDisplay, setNumCardsToDisplay ] = useState(calculateNumCardsToDisplay());
     const [ discountListRef, setDiscountListRef ] = useState<HTMLUListElement | null>(null);
 
+    const usingArrowNavigation = numCardsToDisplay === 1;
     const discountCardsList = useMemo(() =>
         <ul ref={(ref) => initRef(ref, setDiscountListRef)}
             className={ 'discounts' }
@@ -51,30 +55,24 @@ function DiscountDisplaySection() {
     }, discountListRef);
 
     useEffect(() => {
-        updateDiscountCardDisplay();
-        window.addEventListener('resize', updateDiscountCardDisplay);
+        const listener = () => {
+            setNumCardsToDisplay(calculateNumCardsToDisplay());
+        }
+        window.addEventListener('resize', listener);
+        return (() => {
+            window.removeEventListener('resize', listener);
+        });
     }, [ loading ]);
 
     useEffect(() => {
         if (discountListRef) {
+            discountListRef.style.width = `${numCardsToDisplay * CARD_WIDTH}px`;
             discountListRef.scrollTo({
                 left: 0,
                 behavior: 'instant'
             });
         }
     }, [ discountListRef, numCardsToDisplay ]);
-
-    useEffect(() => {
-        if (discountListRef) {
-            discountListRef.style.width = `${numCardsToDisplay * CARD_WIDTH}px`;
-        }
-        setUsingArrowNavigation(numCardsToDisplay === 1);
-    }, [ numCardsToDisplay, discountListRef ]);
-
-    const updateDiscountCardDisplay = () => {
-        const viewportWidth = window.visualViewport ? window.visualViewport.width : window.innerWidth;
-        setNumCardsToDisplay(Math.floor((viewportWidth - 150) / CARD_WIDTH));
-    }
 
     return (
         <section className={`discount-display-section full`}>

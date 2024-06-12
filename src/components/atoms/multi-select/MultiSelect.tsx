@@ -1,6 +1,5 @@
 import makeAnimated from 'react-select/animated';
 import Select, { MultiValue } from 'react-select';
-import { useEffect, useState } from 'react';
 
 export interface Option<T extends string> {
     value: T;
@@ -11,19 +10,14 @@ export interface Option<T extends string> {
 
 export interface MultiSelectProps<T extends string> { 
     options: Option<T>[],
-    defaultSelected: MultiValue<Option<T>>,
+    value: MultiValue<Option<T>>,
     selectionSetter: (_: MultiValue<Option<T>>) => void
 }
 
 
-function MultiSelect<T extends string>({ options, defaultSelected, selectionSetter }: MultiSelectProps<T>) {
+function MultiSelect<T extends string>({ options, value, selectionSetter }: MultiSelectProps<T>) {
 
     const animatedComponents = makeAnimated();
-    const [ value, setValue ] = useState<MultiValue<Option<T>>>(defaultSelected);
-
-    useEffect(() => {
-      setValue(defaultSelected);
-    }, [ defaultSelected ]);
 
     return (
         <Select
@@ -33,10 +27,7 @@ function MultiSelect<T extends string>({ options, defaultSelected, selectionSett
             isMulti={true}
             options={options}
             isClearable={false}
-            onChange={(val) => {
-              setValue(val);
-              selectionSetter(val);
-            }}/>
+            onChange={selectionSetter}/>
     )
   }
   

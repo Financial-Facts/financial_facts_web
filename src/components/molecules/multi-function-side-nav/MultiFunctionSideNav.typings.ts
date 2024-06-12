@@ -12,7 +12,7 @@ export interface MultiSelect<T extends string> {
     type: 'MULTI_SELECT',
     label: string,
     options: Option<T>[],
-    defaultSelected: MultiValue<Option<T>>,
+    value: MultiValue<Option<T>>,
     selectionSetter: (_: MultiValue<Option<T>>) => void
 }
 
@@ -21,20 +21,20 @@ export interface PriceRange {
     label: string
     minimum: number,
     maximum: number,
-    defaultValues: number[]
+    value: number[]
     boundSetter: (bounds: Bounds) => void
 }
 
-export interface Toggle<T> {
+export interface Toggle<T extends string> {
     type: 'TOGGLE'
     label: string
-    defaultSelected: string
+    selectedId: T
     options: ToggleOption<T>[]
     selectionSetter: (_: T) => void,
     showToggleLabel?: boolean
 }
 
-export interface ToggleGroup<T> {
+export interface ToggleGroup<T extends string> {
     type: 'TOGGLE_GROUP',
     label: string
     toggles: Toggle<T>[]
@@ -43,9 +43,9 @@ export interface ToggleGroup<T> {
 export interface KeywordSearch {
     type: 'SEARCH',
     label: string,
-    defaultValue: string,
+    value: string,
     keywordSetter: (_: string) => void
 }
 
 export type SideNavItemType = "MULTI_SELECT" | "PRICE_RANGE" | "TOGGLE" | "SEARCH" | "TITLE" | "TOGGLE_GROUP";
-export type SideNavItem<T extends string> = MultiSelect<T> | PriceRange | Toggle<string> | KeywordSearch | Title | ToggleGroup<string>;
+export type SideNavItem<T extends string, J extends string> = MultiSelect<T> | PriceRange | Toggle<J> | KeywordSearch | Title | ToggleGroup<J>;

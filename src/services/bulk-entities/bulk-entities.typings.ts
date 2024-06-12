@@ -43,7 +43,7 @@ export interface IdentityRequest {
     startIndex: number,
     limit: number,
     keyword?: string,
-    searchBy?: SearchBy,
+    searchBy: SearchBy,
     sortBy: SortBy,
     order: Order
-  }
+}

@@ -21,15 +21,11 @@ export type SPAN = 'ALL' | 'TTM' | 'T3Y' | 'TFY' | 'TTY';
 function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
 
     const [ taxonomy, setTaxonomy ] = useState<Taxonomy | undefined>(undefined);
-    const [ selectedDataKey, setDataKey ] = useState<string | undefined>(undefined);
+    const [ selectedDataKey, setDataKey ] = useState<string | undefined>(CONSTANTS.EMPTY);
     const [ chartWrapperRef, setChartWrapperRef ] = useState<HTMLDivElement | null>(null);
     const [ factsWrapperRef, setFactsWrapperRef ] = useState<HTMLDivElement | null>(null);
     const { facts, loading, error, notFound } = fetchFacts(cik);
     const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
-
-    useEffect(() => {
-        setDataKey(CONSTANTS.EMPTY);
-    }, [ taxonomy ]);
 
     useEffect(() => {
         if (!mobile.mobile && chartWrapperRef && factsWrapperRef) {
@@ -102,7 +98,10 @@ function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
                                         label: 'Taxonomy',
                                         keys: getTaxonomyKeys(),
                                         selectedKey: taxonomy,
-                                        selectedKeySetter: setTaxonomy,
+                                        selectedKeySetter: (taxonomy) => {
+                                            setDataKey(CONSTANTS.EMPTY);
+                                            setTaxonomy(taxonomy);
+                                        },
                                         isFoldable: true
                                     }, {
                                         label: 'Data',

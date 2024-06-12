@@ -1,7 +1,7 @@
 import './DiscountListingSection.scss';
 import { useDispatch, useSelector } from 'react-redux'
 import LoadingSpinner from '../../atoms/loading-spinner/loading-spinner'
-import { DiscountState, resetFilteredDiscounts, updateFilterHideValuationPrices, updateFilterKeyword, updateFilterPriceBounds } from '../../../store/discounts/discounts.slice'
+import { DiscountState, resetFilteredDiscounts, sortDiscounts, updateFilterHideValuationPrices, updateFilterKeyword, updateFilterPriceBounds } from '../../../store/discounts/discounts.slice'
 import DiscountTable from '../../molecules/discount-table/DiscountTable'
 import MultiFunctionSideNav from '../../molecules/multi-function-side-nav/MultiFunctionSideNav';
 import { Option } from '../../atoms/multi-select/MultiSelect';
@@ -14,6 +14,7 @@ import { getExtreme } from './DiscountListingSection.utils';
 import { KeywordSearch, MultiSelect, PriceRange, ToggleGroup } from '../../molecules/multi-function-side-nav/MultiFunctionSideNav.typings';
 import { SimpleDiscount } from '../../../services/bulk-entities/bulk-entities.typings';
 
+type TrueOrFalse = 'true' | 'false';
 
 const defaultSelectedKeys: MultiValue<Option<keyof SimpleDiscount>> = [
     {
@@ -49,7 +50,7 @@ const keyOptions: (keyof SimpleDiscount)[] = [
 function DiscountListingSection() {
 
     const dispatch = useDispatch<AppDispatch>();
-    const { allDiscounts, filteredDiscounts, loading, filteredFilter } = useSelector< { discounts: DiscountState }, DiscountState>((state) => state.discounts);
+    const { allDiscounts, filteredDiscounts, loading, filteredFilter, filteredSort } = useSelector< { discounts: DiscountState }, DiscountState>((state) => state.discounts);
     const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
     const absoluteMinimumPrice = useMemo(() => getExtreme(allDiscounts, 'MIN'), [ allDiscounts ]);
     const absoluteMaximumPrice = useMemo(() => getExtreme(allDiscounts, 'MAX'), [ allDiscounts ]);
@@ -63,61 +64,61 @@ function DiscountListingSection() {
         }))
     , [ allDiscounts ]);
 
-    const toggleGroupConfig: ToggleGroup<string> = useMemo(() => ({
+    const toggleGroupConfig: ToggleGroup<TrueOrFalse> = useMemo(() => ({
         type: 'TOGGLE_GROUP',
         label: 'Hide discounts priced above...',
         toggles: [{
-                type: 'TOGGLE',
-                label: 'Sticker Price',
-                defaultSelected: String(filteredFilter.hideValuesAbove.stickerPrice),
-                options: [{
-                    id: 'true',
-                    input: 'true'
-                }, {
-                    id: 'false',
-                    input: 'false'
-                }],
-                selectionSetter: (val: string) => dispatch(updateFilterHideValuationPrices({
+            type: 'TOGGLE',
+            label: 'Sticker Price',
+            selectedId: filteredFilter.hideValuesAbove.stickerPrice ? 'true' : 'false',
+            options: [{
+                id: 'true',
+                label: 'true'
+            }, {
+                id: 'false',
+                label: 'false'
+            }],
+            selectionSetter: (val) => dispatch(updateFilterHideValuationPrices({
                 key: 'stickerPrice',
                 value: val === 'true'
             }))
-         }, {
-             type: 'TOGGLE',
-             label: 'DCF Price',
-             defaultSelected: String(filteredFilter.hideValuesAbove.discountedCashFlowPrice),
-             options: [{
-                 id: 'true',
-                 input: 'true'
-             }, {
-                 id: 'false',
-                 input: 'false'
-             }],
-             selectionSetter: (val: string) => dispatch(updateFilterHideValuationPrices({
+        }, {
+            type: 'TOGGLE',
+            label: 'DCF Price',
+            selectedId: filteredFilter.hideValuesAbove.discountedCashFlowPrice ? 'true' : 'false',
+            options: [{
+                id: 'true',
+                label: 'true'
+            }, {
+                id: 'false',
+                label: 'false'
+            }],
+            selectionSetter: (val) => dispatch(updateFilterHideValuationPrices({
                 key: 'discountedCashFlowPrice',
                 value: val === 'true'
             }))
-         }, {
-             type: 'TOGGLE',
-             label: 'BR Price',
-             defaultSelected: String(filteredFilter.hideValuesAbove.benchmarkRatioPrice),
-             options: [{
-                 id: 'true',
-                 input: 'true'
-             }, {
-                 id: 'false',
-                 input: 'false'
-             }],
-             selectionSetter: (val: string) => dispatch(updateFilterHideValuationPrices({
+        }, {
+            type: 'TOGGLE',
+            label: 'BR Price',
+            selectedId: filteredFilter.hideValuesAbove.benchmarkRatioPrice ? 'true' : 'false',
+            options: [{
+                id: 'true',
+                label: 'true'
+            }, {
+                id: 'false',
+                label: 'false'
+            }],
+            selectionSetter: (val) => dispatch(updateFilterHideValuationPrices({
                 key: 'benchmarkRatioPrice',
                 value: val === 'true'
             }))
-         }]
-     }), [ filteredFilter.hideValuesAbove ]);
+        }]
+    }), [ filteredFilter.hideValuesAbove ]);
 
     const keywordSearchConfig: KeywordSearch = useMemo(() => ({
         type: 'SEARCH',
         label: 'Keyword Search',
-        defaultValue: filteredFilter.keyword,
+        value: filteredFilter.keyword,
         keywordSetter: (val) => dispatch(updateFilterKeyword(val))
     }), [ filteredFilter.keyword ]);
 
@@ -127,7 +128,7 @@ function DiscountListingSection() {
         boundSetter: (bounds) => dispatch(updateFilterPriceBounds(bounds)),
         minimum: absoluteMinimumPrice,
         maximum: absoluteMaximumPrice,
-        defaultValues: [
+        value: [
             filteredFilter.priceBounds.lowerBound || absoluteMinimumPrice,
             filteredFilter.priceBounds.upperBound || absoluteMaximumPrice
         ]
@@ -137,13 +138,23 @@ function DiscountListingSection() {
         type: 'MULTI_SELECT',
         label: 'Display Fields',
         options: tableFieldOptions,
-        defaultSelected: selectedTableKeys,
+        value: selectedTableKeys,
         selectionSetter: (selection) => {
-            const sortedSelections = Array.from(selection).sort((a, b) => 
-                keyOptions.indexOf(a.value) - keyOptions.indexOf(b.value))
-            setSelectedTableKeys(sortedSelections);
+            let selectedTableKeys: Option<keyof SimpleDiscount>[] = [];
+            if (selection.length > 0) {
+                const sortedSelections = Array.from(selection).sort((a, b) => 
+                    keyOptions.indexOf(a.value) - keyOptions.indexOf(b.value));
+                if (!sortedSelections.some(option => option.value === filteredSort.sortBy)) {
+                    dispatch(sortDiscounts({
+                        sortBy: sortedSelections[0].value,
+                        sortOrder: 'ASC'
+                    }));
+                }
+                selectedTableKeys = sortedSelections;
+            }
+            setSelectedTableKeys(selectedTableKeys);
         }
-    }), [ tableFieldOptions, selectedTableKeys ]);
+    }), [ tableFieldOptions, selectedTableKeys, filteredSort ]);
               
     const resetFilter = (): void => {
         dispatch(resetFilteredDiscounts());

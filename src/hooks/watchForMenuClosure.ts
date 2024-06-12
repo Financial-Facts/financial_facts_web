@@ -7,6 +7,7 @@ const watchForMenuClosure = (
     $closeDropdowns: Subject<ClosurePayload[]>,
     action: (payload: ClosurePayload[]) => void
 ) => {
+    
     useEffect(() => {
         const watchForClosure = $closeDropdowns
             .subscribe((payload: ClosurePayload[]) => action(payload));

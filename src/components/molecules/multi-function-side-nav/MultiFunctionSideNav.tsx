@@ -10,19 +10,19 @@ import { useState } from 'react';
 import { Outcome } from '../submit-button/submit-button.typings';
 
 
-export interface MultiFunctionSideNavProps<T extends string> {
+export interface MultiFunctionSideNavProps<T extends string, J extends string> {
     label: string
-    items: SideNavItem<T>[]
+    items: SideNavItem<T, J>[]
     orientation: Orientation
     labelButtonOnClick?: () => void
 }
 
-function MultiFunctionSideNav<T extends string>({ 
+function MultiFunctionSideNav<T extends string, J extends string>({ 
     label,
     items,
     orientation,
     labelButtonOnClick
-}: MultiFunctionSideNavProps<T>) {
+}: MultiFunctionSideNavProps<T, J>) {
     const halfSizedItems = new Set<SideNavItemType>(['PRICE_RANGE', 'SEARCH', 'TITLE', 'TOGGLE']);
     const fullSizedItems = new Set<SideNavItemType>(['MULTI_SELECT', 'TOGGLE_GROUP']);
     const [ submitOutcome, setSubmitOutcome ] = useState<Outcome>('neutral');
@@ -36,12 +36,12 @@ function MultiFunctionSideNav<T extends string>({
         }, 500);
     }
 
-    const renderSideNavItem = (item: SideNavItem<T>) => {
+    const renderSideNavItem = (item: SideNavItem<T, J>) => {
         switch(item.type) {
             case 'MULTI_SELECT': {
-                return <MultiSelect
+                return <MultiSelect<T>
                     options={item.options}
-                    defaultSelected={item.defaultSelected}
+                    value={item.value}
                     selectionSetter={item.selectionSetter}/>
             }
             case 'PRICE_RANGE': {
@@ -49,30 +49,28 @@ function MultiFunctionSideNav<T extends string>({
                     boundSetter={item.boundSetter}
                     minimum={item.minimum}
                     maximum={item.maximum}
-                    defaultValues={item.defaultValues}/>
+                    value={item.value}/>
             }
             case 'TOGGLE': {
-                return <SearchFormToggle
-                    name={item.label}
+                return <SearchFormToggle<J>
                     label={item.label}
-                    defaultId={item.defaultSelected}
+                    selectedId={item.selectedId}
                     options={item.options}
-                    setter={item.selectionSetter}/>
+                    selectedIdSetter={item.selectionSetter}/>
             }
             case 'SEARCH': {
                 return <SearchFilterInput
-                    defaultValue={item.defaultValue}
+                    value={item.value}
                     setKeywordFilter={item.keywordSetter}/>
             }
             case 'TOGGLE_GROUP': {
                 return item.toggles.map(toggleConfig => 
-                    <SearchFormToggle
+                    <SearchFormToggle<J>
                         key={`${toggleConfig.label}`}
-                        name={toggleConfig.label}
                         label={toggleConfig.label}
-                        defaultId={toggleConfig.defaultSelected}
+                        selectedId={toggleConfig.selectedId}
                         options={toggleConfig.options}
-                        setter={toggleConfig.selectionSetter}/>)
+                        selectedIdSetter={toggleConfig.selectionSetter}/>)
             }
             default: {
                 return undefined;
@@ -80,15 +78,15 @@ function MultiFunctionSideNav<T extends string>({
         }
     }
 
-    const renderFullItemWrapper = (item: SideNavItem<T>) => 
+    const renderFullItemWrapper = (item: SideNavItem<T, J>) => 
         <div key={`${item.label}-multi-select`} className='item'>
             { item.type !== 'TOGGLE' && <span className='item-label'>{ item.label }</span> }
             { renderSideNavItem(item) }
         </div>
 
     const renderHalfItemsWrapper = (
-        a: SideNavItem<T>,
-        b: SideNavItem<T>
+        a: SideNavItem<T, J>,
+        b: SideNavItem<T, J>
     ) => 
         <div key={`${a.label}-${b.label}-multi-select`} className='item two-halves-item'>
             <div>
@@ -101,7 +99,7 @@ function MultiFunctionSideNav<T extends string>({
             </div>
         </div>
 
-    const renderSideNavBuckets = (items: SideNavItem<T>[]): JSX.Element[] => {
+    const renderSideNavBuckets = (items: SideNavItem<T, J>[]): JSX.Element[] => {
         const result: JSX.Element[] = [];
         let i = 0;
         while (i < items.length) {

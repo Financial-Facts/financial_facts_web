@@ -13,18 +13,14 @@ export interface ArrowKeyNavigatorProps<T extends string> {
 function ArrowKeyNavigator<T extends string>({ keyOptions, keySetter }: ArrowKeyNavigatorProps<T>) {
 
     const [ keyListRef, setKeyListRef ] = useState<HTMLUListElement | null>(null);
-    const [ itemWidth, setItemWidth ] = useState<number>(200);
-
-    const setItemWidthProperty = (element: HTMLUListElement, width: number) => {
-        setItemWidth(width);
-        element.style.setProperty('--item-width', `${width}px`);
-    }
+    const [ itemWidth, setItemWidth ] = useState<number>(keyListRef ? keyListRef.clientWidth : 200);
 
     useEffect(() => {
         if (keyListRef) {
-            setItemWidthProperty(keyListRef, keyListRef.clientWidth);
             const observerId = ResizeObserverService.onSizeChange(keyListRef, () => {
-                setItemWidthProperty(keyListRef, keyListRef.clientWidth);
+                const width = keyListRef.clientWidth;
+                setItemWidth(width);
+                keyListRef.style.setProperty('--item-width', `${width}px`);
             });
             return (() => ResizeObserverService.disconnectObserver(observerId));
         }
@@ -33,7 +29,6 @@ function ArrowKeyNavigator<T extends string>({ keyOptions, keySetter }: ArrowKey
     
     useEffect(() => {
         if (keyOptions.length > 0 && keyListRef) {
-            keySetter(keyOptions[0]);
             keyListRef.scrollTo({
                 left: 0,
                 behavior: 'instant'

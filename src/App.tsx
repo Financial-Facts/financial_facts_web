@@ -18,7 +18,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from './store/store';
 import DiscountDataPage from './components/pages/discount-data-page/DiscountDataPage';
 import AboutPage from './components/pages/about-page/AboutPage';
-import ScrollToTop from './hooks/scrollToTop';
+import OnNavigation from './hooks/onNavigation';
 
 
 ChartJS.register(
@@ -60,7 +60,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <ScrollToTop/>
+      <OnNavigation/>
       <Routes>
         <Route path="/" element={<MainPage/>}/>
         <Route path="/discount" element={<DiscountSelectionPage/>}/>

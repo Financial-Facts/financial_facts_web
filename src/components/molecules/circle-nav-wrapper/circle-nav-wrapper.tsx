@@ -20,22 +20,19 @@ function CircleNavWrapper({
     itemWidth
 }: CircleNavWrapperProps) {
 
-    const [ navCircles, setNavCircles ] = useState<boolean[]>([]);
+    const [ navCircles, setNavCircles ] = useState<boolean[]>(numItemsToDisplay === 0 ? [] : () => {
+        const numOfCircles = Math.ceil(listLength / numItemsToDisplay);
+        const circles = [];
+        for (let i = 0; i < numOfCircles; i++) {
+            circles.push(i === 0)
+        }
+        return circles;
+    });
+
     const [ scrollToOptions, setScrollToOptions ] = useState<ScrollToOptions>({
         left: 0,
         behavior: 'smooth',
     });
-
-    useEffect(() => {
-        if (numItemsToDisplay !== 0) {
-            const numOfCircles = Math.ceil(listLength / numItemsToDisplay);
-            const circles = [];
-            for (let i = 0; i < numOfCircles; i++) {
-              circles.push(i === 0)
-            }
-            setNavCircles(circles);
-        }
-    }, [ numItemsToDisplay ]);
 
     useEffect(() => {
         if (elementRef) {

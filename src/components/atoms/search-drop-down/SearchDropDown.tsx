@@ -2,32 +2,24 @@ import { useEffect, useState } from 'react';
 import { fromEvent } from 'rxjs/internal/observable/fromEvent';
 import { filter } from 'rxjs/internal/operators/filter';
 import { map } from 'rxjs/internal/operators/map';
-import { IdentityListAction, SearchCriteria } from '../../molecules/expandable-search/expandable-search.typings';
 import './SearchDropDown.scss';
 import { CONSTANTS } from '../../../constants/constants';
-import fetchIdentities from '../../../hooks/fetchIdentities';
-import { Identity, IdentityRequest } from '../../../services/bulk-entities/bulk-entities.typings';
+import { Identity } from '../../../services/bulk-entities/bulk-entities.typings';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { useNavigate } from 'react-router-dom';
 import ResponsiveTable from '../../molecules/responsive-table/ResponsiveTable';
 import { handleEnterKeyEvent } from '../../../utilities';
+import { IdentityRequestAction } from '../../molecules/expandable-search/reducers/identity-request.reducer';
 
 export interface SearchDropDownProps {
-    allIdentities: Identity[],
-    identityListDispatch: (action: IdentityListAction) => void,
-    searchCriteria: SearchCriteria
+    identities: Identity[],
+    identityRequestDispatch: React.Dispatch<IdentityRequestAction>
 }
 
-function SearchDropDown({ allIdentities, identityListDispatch, searchCriteria }: SearchDropDownProps) {
+function SearchDropDown({ identities, identityRequestDispatch }: SearchDropDownProps) {
 
     const navigate = useNavigate();
     const [ searchResultsRef, setSearchResultsRef ] = useState<HTMLDivElement | null>(null);
-    const [ identityRequest, setIdentityRequest ] = useState<IdentityRequest | null>(null);
-    const { identities, loading } = fetchIdentities(identityRequest, false);
-
-    useEffect(() => {
-        identityListDispatch({ type: 'update_list', payload: identities });
-    }, [ identities ]);
 
     useEffect(() => {
         if (searchResultsRef) {
@@ -38,29 +30,30 @@ function SearchDropDown({ allIdentities, identityListDispatch, searchCriteria }:
                 }
             }
         }
-    }, [ searchResultsRef, allIdentities ]);
+    }, [ searchResultsRef ]);
 
     const subscribeToScrollEvents = (searchResults: HTMLDivElement) => 
         fromEvent<InputEvent>(searchResults, 'scroll')
             .pipe(
                 map(event => event.target),
                 filter(target => {
-                    if (!loading &&
-                        target &&
-                        allIdentities.length > 0 &&
-                        allIdentities.length % CONSTANTS.IDENTITY_BATCH_SIZE === 0) {
+                    if (target &&
+                        identities.length > 0 &&
+                        identities.length % CONSTANTS.IDENTITY_BATCH_SIZE === 0) {
                         const element = target as HTMLElement;
                         const percentScrolled = (element.scrollTop / (element.scrollHeight - element.offsetHeight)) * 100;
                         return percentScrolled > CONSTANTS.SEARCH_SCROLL_FETCH_THRESHOLD;
                     }
                     return false;
                 }),
-                map(() => allIdentities.length),
+                map(() => identities.length),
                 distinctUntilChanged())
-            .subscribe(startIndex => setIdentityRequest({
-                startIndex: startIndex,
-                limit: CONSTANTS.IDENTITY_BATCH_SIZE - 1,
-                ...searchCriteria
+            .subscribe(startIndex => identityRequestDispatch({
+                type: 'set_start_and_limit',
+                payload: {
+                    startIndex: startIndex,
+                    limit: CONSTANTS.IDENTITY_BATCH_SIZE - 1
+                }
             }));
 
     const handleClick = (identity: Identity) => {
@@ -82,7 +75,7 @@ function SearchDropDown({ allIdentities, identityListDispatch, searchCriteria }:
         </tbody>
     
     const renderTableRows = () => {
-        return allIdentities.map(identity =>
+        return identities.map(identity =>
             <tr key={identity.cik}
                 tabIndex={0}
                 onClick={() => handleClick(identity)}
@@ -98,7 +91,7 @@ function SearchDropDown({ allIdentities, identityListDispatch, searchCriteria }:
             className='search-results-table'
             renderTableHeader={renderTableHeader}
             renderTableBody={renderTableBody}
-            zeroStateCondition={ allIdentities.length === 0}
+            zeroStateCondition={ identities.length === 0}
             wrapperRefSetter={setSearchResultsRef}/>
     )
   }

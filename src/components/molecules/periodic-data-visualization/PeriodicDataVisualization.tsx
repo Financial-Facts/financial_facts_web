@@ -13,17 +13,17 @@ const percentKeys = new Set<string>(['annualROIC']);
 
 const spanToggleOptions: ToggleOption<SPAN>[] = [
     {
-        id: 'All',
-        input: 'ALL'
+        id: 'ALL',
+        label: 'All'
     }, {
-        id: '3 years',
-        input: 'T3Y'
+        id: 'T3Y',
+        label: '3 years'
     }, {
-        id: '5 years',
-        input: 'TFY'
+        id: 'TFY',
+        label: '5 years'
     }, {
-        id: '10 years',
-        input: 'TTY'
+        id: 'TTY',
+        label: '10 years'
     }
 ];
 
@@ -109,18 +109,17 @@ function PeriodicDataVisualization({
     }
     
     const getSpanId = () => {
-        const option = spanToggleOptions.find(option => option.input === span);
+        const option = spanToggleOptions.find(option => option.id === span);
         return !!option ? option.id : 'ALL'
     }
     
     return (
         <div className='periodic-data-container'>
             <SearchFormToggle <SPAN>
-                name={`${periodicDataKeys}-SpanToggle`}
                 label={''}
-                defaultId={getSpanId()}
+                selectedId={getSpanId()}
                 options={spanToggleOptions} 
-                setter={setSpan}
+                selectedIdSetter={setSpan}
             />
             {
                 renderPeriodicData()

@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { StickerPrice, BenchmarkRatioPrice, DiscountedCashFlowPrice, StickerPriceInput, BenchmarkRatioPriceInput, DiscountedCashFlowInput, PeriodicDataKey } from '../../../types/discount.typings';
 import './discount-singular-data.scss';
 import { DcfPeriodicDataKeys, SpPeriodicDataKeys } from '../../organisms/discount-data-display-section/DiscountDataDisplaySection.typings';
@@ -12,20 +11,12 @@ export interface DiscountSingularDataProps {
 
 function DiscountSingularData({ valuation }: DiscountSingularDataProps) {
 
-    const [ singularData, setSingularData ] = useState<Record<string, string>>({})
-
-    useEffect(() => {
-        setSingularData({});
-        Object.keys(valuation.input).forEach((key) => {
-            if (!SpPeriodicDataKeys.includes(key as PeriodicDataKey) && !DcfPeriodicDataKeys.includes(key  as PeriodicDataKey)) {
-                const value = valuation.input[key as keyof (StickerPriceInput | BenchmarkRatioPriceInput | DiscountedCashFlowInput)];
-                setSingularData((current) => ({
-                    ...current,
-                    ...{ [key]: value }
-                }));
-            }
-        })
-    }, [ valuation ]);
+    const singularData = Object.keys(valuation.input).reduce<Record<string, string>>((acc, key) => {
+        if (!SpPeriodicDataKeys.includes(key as PeriodicDataKey) && !DcfPeriodicDataKeys.includes(key  as PeriodicDataKey)) {
+            acc[key] = valuation.input[key as keyof (StickerPriceInput | BenchmarkRatioPriceInput | DiscountedCashFlowInput)];
+        }
+        return acc;
+    }, {});
 
     const renderDataListItem = (key: string, value: number | string) =>
         (<li className='data-list-item' key={key}>

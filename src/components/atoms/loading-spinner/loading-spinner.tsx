@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import './loading-spinner.scss';
 import { Color, Size } from './loading-spinner.typings';
 
@@ -10,11 +9,7 @@ export interface LoadingSpinnerProps {
 
 function LoadingSpinner({ size, color, minHeight }: LoadingSpinnerProps) {
 
-    const [colorClass, setColorClass] = useState('PURPLE');
-    
-    useEffect(() => {
-        setColorClass(`${color.toLowerCase()}`);
-    }, [color]);
+    const colorClass = `${color.toLowerCase()}`;
 
     return (
         <section className={`loader-wrapper`} style={{

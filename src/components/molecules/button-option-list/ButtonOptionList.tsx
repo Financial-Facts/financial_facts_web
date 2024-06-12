@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './ButtonOptionList.scss';
 import { CONSTANTS } from '../../../constants/constants';
 import { cleanKey } from '../../../utilities';
@@ -34,12 +34,6 @@ function ButtonOptionList<T extends string>({
     const [ keywordFilter, setKeywordFilter ] = useState(CONSTANTS.EMPTY);
     const [ isUnfolded, setIsUnfolded ] = useState<boolean>(true);
 
-    useEffect(() => {
-        if (isFoldable && selectedKey) {
-            setIsUnfolded(false);
-        }
-    }, [ selectedKey ]);
-
     const renderKeys = () => {
         return keys
             .reduce<T[]>((acc, key) => {
@@ -60,7 +54,10 @@ function ButtonOptionList<T extends string>({
                         if (deselectable && selectedKey === key) {
                             setter(undefined);
                         } else {
-                            setter(key)
+                            if (isFoldable) {
+                                setIsUnfolded(false);
+                            }
+                            setter(key);
                         }
                     }}>
                     { cleanKey(key) }
@@ -90,7 +87,7 @@ function ButtonOptionList<T extends string>({
                     <div className='key-group-wrapper'>
                         {
                             includeSearch &&
-                                <SearchFilterInput setKeywordFilter={setKeywordFilter}/>
+                                <SearchFilterInput value={keywordFilter} setKeywordFilter={setKeywordFilter}/>
                         }
                         <ul className={`key-group
                             ${isScrollable ? 'vertical scrollable' : orientation}`}>

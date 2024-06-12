@@ -1,30 +1,29 @@
-import { useEffect } from 'react';
 import { handleEnterKeyEvent } from '../../../utilities';
 import './SearchFormToggle.scss';
 
-export interface SearchFormToggleProps<T> {
-    name: string,
+export interface SearchFormToggleProps<T extends string> {
     label: string,
-    defaultId: string,
     options: ToggleOption<T>[],
-    setter?: (_: T) => void
+    selectedId: T,
+    selectedIdSetter: (_: T) => void
 }
 
-export interface ToggleOption <T> {
-    id: string,
-    input: T
+export interface ToggleOption <T extends string> {
+    id: T,
+    label: string
 }
 
-function SearchFormToggle<T>({ name, label, defaultId, options, setter }: SearchFormToggleProps<T>) {
-
-    useEffect(() => {
-        handleToggleChange(defaultId);
-    }, [ defaultId ]);
+function SearchFormToggle<T extends string>({
+    label,
+    options,
+    selectedId,
+    selectedIdSetter
+}: SearchFormToggleProps<T>) {
 
     const handleToggleChange = (id: string) => {
         const option = options.find(option => option.id === id);
-        if (option && setter) {
-            setter(option.input);
+        if (option) {
+            selectedIdSetter(option.id);
         }
     }
     
@@ -32,15 +31,15 @@ function SearchFormToggle<T>({ name, label, defaultId, options, setter }: Search
         options.map((option, index) =>
             <div className='toggle-option'
                 tabIndex={0}
-                key={`${name}-state-${index}`}
+                key={`${label}-state-${index}`}
                 onKeyDown={(e) => handleEnterKeyEvent(e, () => handleToggleChange(option.id))}>
-                <input id={`${name}-state-${index}`}
+                <input id={`${label}-state-${index}`}
                     className='hide'
                     type="radio"
-                    name={name}
+                    name={label}
                     onChange={ () => handleToggleChange(option.id) }
-                    checked={ option.id === defaultId }/>
-                <label htmlFor={`${name}-state-${index}`}>{ option.id }</label>
+                    checked={ option.id === selectedId }/>
+                <label htmlFor={`${label}-state-${index}`}>{ option.label }</label>
             </div>)
 
     return (
@@ -48,7 +47,7 @@ function SearchFormToggle<T>({ name, label, defaultId, options, setter }: Search
             <span>
                 { label }
             </span>
-            <div id={`${name}-toggle-group`} className="switch-toggle switch-3 switch-candy">
+            <div id={`${label}-toggle-group`} className="switch-toggle switch-3 switch-candy">
                 { renderToggleOptions() }
             </div>
         </div>

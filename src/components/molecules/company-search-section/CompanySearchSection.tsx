@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Subject } from 'rxjs/internal/Subject';
 import LoadingSpinner from '../../atoms/loading-spinner/loading-spinner';
 import SymbolIcon from '../../atoms/symbol-icon/symbol-icon';
@@ -14,44 +14,31 @@ function CompanySearchSection() {
 
     const SIZE_BACKGROUND_IMG = 114; 
     const NUM_BACKGROUND_ROWS = window.outerHeight / SIZE_BACKGROUND_IMG;
-    
-    const calculateIdentityLimit = (): number => {
-        return Math.round((window.outerWidth / SIZE_BACKGROUND_IMG) * NUM_BACKGROUND_ROWS);
-    }
 
-    const [ identityImages, setIdentityImages ] = useState<JSX.Element[]>([]);
+    const calculateIdentityLimit = (): number => 
+        Math.round((window.outerWidth / SIZE_BACKGROUND_IMG) * NUM_BACKGROUND_ROWS);
+
     const [ imagesLoaded, setImagesLoaded ] = useState(0);
-    const [ isLoadingImages, setIsLoadingImages ] = useState(true);
-    const [ requestIdentity ] = useState<IdentityRequest>({
+    const identityRequest: IdentityRequest = useMemo(() => ({
         startIndex: 0,
         limit: calculateIdentityLimit(),
+        searchBy: 'SYMBOL',
         sortBy: 'SYMBOL',
         order: 'ASC'
-    });
+    }), [ SIZE_BACKGROUND_IMG, NUM_BACKGROUND_ROWS ]);
 
-    const { identities, loading, error } = fetchIdentities(requestIdentity);
+    const { identities } = fetchIdentities(identityRequest);
 
-    useEffect(() => {  
-        if (!loading && !error) {
-            setIdentityImages(identities.map(identity =>
-                <SymbolIcon 
-                    key={identity.cik}
-                    symbol={identity.symbol}
-                    size='SMALL'
-                    setImageNotFound={incrementImagesLoaded}/>))
-        }
-    }, [ loading ]);
+    const identityImages = useMemo(() => identities.map(identity =>
+        <SymbolIcon 
+            key={identity.cik}
+            symbol={identity.symbol}
+            size='SMALL'
+            setImageNotFound={() => setImagesLoaded((current) => current + 1)}/>)
+    , [ identities ]);
 
-    useEffect(() => {
-        if (identityImages.length !== 0 && imagesLoaded === identityImages.length) {
-            setIsLoadingImages(false);
-        }
-    }, [ imagesLoaded ]);
-
-    const incrementImagesLoaded = (_: boolean): void => {
-        setImagesLoaded((current) => current + 1);
-    }
-
+    const isLoadingImages = identityImages.length === 0 || imagesLoaded !== identityImages.length;
+    
     return (
         <section className='company-search-section'>
             { isLoadingImages ? <LoadingSpinner size={'LARGE'} color={'PURPLE'}/> : undefined }

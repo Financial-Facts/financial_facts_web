@@ -1,15 +1,15 @@
 import './DiscountTable.scss';
-import { Order, SimpleDiscount } from '../../../services/bulk-entities/bulk-entities.typings'
+import { SimpleDiscount } from '../../../services/bulk-entities/bulk-entities.typings'
 import { cleanKey } from '../../../utilities';
 import FormatService from '../../../services/format/format.service';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { MultiValue } from 'react-select';
 import { Option } from '../../atoms/multi-select/MultiSelect';
 import ResponsiveTable from '../responsive-table/ResponsiveTable';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../store/store';
-import { sortDiscounts } from '../../../store/discounts/discounts.slice';
+import { DiscountSort, DiscountState, sortDiscounts } from '../../../store/discounts/discounts.slice';
 import InformationIcon from '../information-icon/InformationIcon';
 import { messaging } from '../../../constants/messaging';
 import { CONSTANTS } from '../../../constants/constants';
@@ -23,39 +23,32 @@ function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
 
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
-    const [ sortByKey, setSortByKey ] = useState<keyof SimpleDiscount>('name');
-    const [ sortOrder, setSortOrder ] = useState<Order>('ASC');
-
+    
+    const { sortBy, sortOrder } = useSelector< { discounts: DiscountState }, DiscountSort>((state) => state.discounts.filteredSort );
+    
     const currencyKeys = new Set<string>([
         'marketPrice', 'stickerPrice', 'discountedCashFlowPrice', 'benchmarkRatioPrice'
     ]);
-
-    useEffect(() => {
-        if (fieldOptions.length > 0 && fieldOptions.every(option => option.value !== sortByKey)) {
-            setSortByKey(fieldOptions[0].value as keyof SimpleDiscount)
-        }
-    }, [ fieldOptions ]);
-
-    useEffect(() => {
-        dispatch(sortDiscounts({
-            sortBy: sortByKey,
-            sortOrder: sortOrder
-        }));
-    }, [ sortByKey, sortOrder ]);
 
     const displayedFields = useMemo(() =>
         fieldOptions.map(option => option.value)
     , [ fieldOptions ]);
 
-    const updateSortByKey = (key: string) => {
-        sortByKey === key ?
-            setSortOrder(current => current === 'ASC' ? 'DESC' : 'ASC') :
-            setSortByKey(key as keyof SimpleDiscount);
+    const updateSortByKey = (key: keyof SimpleDiscount) => {
+        sortBy === key ?
+            dispatch(sortDiscounts({
+                sortBy: sortBy,
+                sortOrder: sortOrder === 'ASC' ? 'DESC' : 'ASC'
+            })) :
+            dispatch(sortDiscounts({
+                sortBy: key,
+                sortOrder: 'ASC'
+            }))
     }
 
     const handleHeaderClicked = (
         e: React.MouseEvent<HTMLTableHeaderCellElement, MouseEvent>,
-        headerKey: string
+        headerKey: keyof SimpleDiscount
     ): void => {
         if (headerKey === 'active') {
             const target = e.target as HTMLElement;
@@ -89,7 +82,7 @@ function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
                                         }
                                     </span>
                                     { 
-                                        sortByKey === key &&
+                                        sortBy === key &&
                                             <img src='/assets/sort-arrows-icon.svg'
                                                 className={`sortArrow`}/>
                                     }

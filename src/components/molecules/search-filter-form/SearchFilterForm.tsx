@@ -1,91 +1,80 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import SearchFormToggle from '../../atoms/search-form-toggle/SearchFormToggle';
-import { SearchCriteria, SearchCriteriaAction } from '../expandable-search/expandable-search.typings';
 import './SearchFilterForm.scss';
-import { SearchBy, SortBy, Order } from '../../../services/bulk-entities/bulk-entities.typings';
+import { SearchBy, SortBy, Order, IdentityRequest } from '../../../services/bulk-entities/bulk-entities.typings';
+import { IdentityRequestAction } from '../expandable-search/reducers/identity-request.reducer';
 
 export interface SearchFilterFormProps {
-    searchCriteria: SearchCriteria,
-    dispatch: (action: SearchCriteriaAction) => void,
+    identityRequest: IdentityRequest,
+    identityRequestDispatch: React.Dispatch<IdentityRequestAction>,
     renderDelay: number
  }
 
-function SearchFilterForm({ searchCriteria, dispatch, renderDelay }: SearchFilterFormProps) {
+function SearchFilterForm({ identityRequest, identityRequestDispatch, renderDelay }: SearchFilterFormProps) {
     const [ displayForm, setDisplayForm ] = useState(false);
-    let timeout: ReturnType<typeof setTimeout>;
 
-    useEffect(() => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-            setDisplayForm(true);
-        }, renderDelay);
-    }, []);
+    setTimeout(() => {
+        setDisplayForm(true);
+    }, renderDelay);
 
     return (
-        displayForm ?
-            <form className='search-filter-form' key={`${JSON.stringify(searchCriteria)}`}>
+        displayForm &&
+            <form className='search-filter-form'>
                 <SearchFormToggle <SearchBy>
-                    name={'searchBy'}
                     label='Search by...'
-                    defaultId={searchCriteria.searchBy}
+                    selectedId={identityRequest.searchBy}
                     options={[{
                         id: 'SYMBOL',
-                        input: 'SYMBOL'
+                        label: 'SYMBOL'
                     }, {
                         id: 'NAME',
-                        input: 'NAME'
+                        label: 'NAME'
                     }, {
                         id: 'CIK',
-                        input: 'CIK'
+                        label: 'CIK'
                     }]} 
-                    setter={ (searchBy => {
-                        dispatch({
+                    selectedIdSetter={ (searchBy => {
+                        identityRequestDispatch({
                             type: 'set_search_by',
-                            payload: { searchBy }
+                            payload: searchBy
                         })
-                    }) }>    
-                </SearchFormToggle>
+                    }) }/>
                 <SearchFormToggle <SortBy>
-                    name={'sortBy'}
                     label='Sort by...'
-                    defaultId={searchCriteria.sortBy}
+                    selectedId={identityRequest.sortBy}
                     options={[{
                         id: 'SYMBOL',
-                        input: 'SYMBOL'
+                        label: 'SYMBOL'
                     }, {
                         id: 'NAME',
-                        input: 'NAME'
+                        label: 'NAME'
                     }, {
                         id: 'CIK',
-                        input: 'CIK'
+                        label: 'CIK'
                     }]} 
-                    setter={ (sortBy => {
-                        dispatch({
+                    selectedIdSetter={ (sortBy => {
+                        identityRequestDispatch({
                             type: 'set_sort_by',
-                            payload: { sortBy }
+                            payload: sortBy
                         })
-                    }) }>    
-                </SearchFormToggle>
+                    })}/>
                 <SearchFormToggle <Order>
-                    name={'order'}
                     label='Order by...'
-                    defaultId={searchCriteria.order}
+                    selectedId={identityRequest.order}
                     options={[{
                         id: 'ASC',
-                        input: 'ASC'
+                        label: 'ASC'
                     }, {
                         id: 'DESC',
-                        input: 'DESC'
+                        label: 'DESC'
                     }]} 
-                    setter={ (order => {
-                        dispatch({
+                    selectedIdSetter={ (order => {
+                        identityRequestDispatch({
                             type: 'set_order',
-                            payload: { order }
+                            payload: order
                         })
-                    }) }>    
-                </SearchFormToggle>
-            </form> :
-            undefined
+                    }) }/>
+            </form>
     )
   }
   

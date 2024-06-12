@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import ZeroState from '../../atoms/zero-state/ZeroState';
 import ButtonOptionSideNav, { ButtonSideNavConfigItem } from "../../molecules/button-option-side-nav/ButtonOptionSideNav";
 import './DiscountDataDisplaySection.scss';
@@ -16,7 +16,6 @@ import DropdownInformationList from "../../atoms/dropdown-information-list/Dropd
 import DcfPriceDefinition from "../../molecules/dcf-price-definition/DcfPriceDefinition";
 import BrPriceDefinition from "../../molecules/br-price-definition/BrPriceDefinition";
 import { buildPeriodicDataMap } from "./DiscountDataDisplaySection.utils";
-import { CONSTANTS } from "../../../constants/constants";
 
 export interface DiscountDataDisplaySectionProps {
     discount: Discount | null,
@@ -28,23 +27,32 @@ function DiscountDataDisplaySection({ discount, loading, error }: DiscountDataDi
 
     const [ valuationKey, setValuationKey ] = useState<Valuation | undefined>(undefined);
     const [ periodicDataKey, setPeriodicDataKey ] = useState<PeriodicDataKey | undefined>(undefined);
-    const [ keyOptions, setKeyOptions ] = useState<PeriodicDataKey[]>([]);
     const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
-    const valuationHasPeriodicData = useMemo(() => keyOptions.length > 0, [ keyOptions ]);
-    const discountDefinition = useMemo(() => 
+
+    const keyOptions: PeriodicDataKey[] = useMemo(() => 
+        valuationKey === 'stickerPrice' ? SpPeriodicDataKeys :
+        valuationKey === 'discountedCashFlowPrice' ? DcfPeriodicDataKeys : 
+        [] 
+    , [ valuationKey ]);
+    
+    const valuationHasPeriodicData = keyOptions.length > 0;
+    const discountDefinition = 
         <DropdownInformationList
             listItem={
                 valuationKey === 'stickerPrice' ? <StickerPriceDefinition/> :
                 valuationKey === 'discountedCashFlowPrice' ? <DcfPriceDefinition/> :
                 <BrPriceDefinition/>
             }/>
-    , [ valuationKey ]);
+
     const buttonOptionSideNav = useMemo(() => {
         const fullConfig: ButtonSideNavConfigItem<any>[] = [{
             label: 'Valuation',
             keys: ['stickerPrice', 'benchmarkRatioPrice', 'discountedCashFlowPrice'],
             selectedKey: valuationKey,
-            selectedKeySetter: setValuationKey,
+            selectedKeySetter: (key) => {
+                setValuationKey(key);
+                setPeriodicDataKey(undefined);
+            },
             isFoldable: true,
             onFoldedElement: mobile.mobile ? discountDefinition : undefined
         }, {
@@ -54,7 +62,8 @@ function DiscountDataDisplaySection({ discount, loading, error }: DiscountDataDi
             selectedKeySetter: setPeriodicDataKey,
             isScrollable: true,
             deselectable: true
-        }]
+        }];
+        
         return mobile.mobile ? 
             <ButtonOptionSideNav
                 buttonOptionSideNavConfig={fullConfig.slice(0, 1)}
@@ -63,28 +72,6 @@ function DiscountDataDisplaySection({ discount, loading, error }: DiscountDataDi
                 buttonOptionSideNavConfig={fullConfig}
                 orientation={'vertical'}/> 
     }, [ mobile, valuationKey, periodicDataKey, keyOptions ]);
-
-    useEffect(() => {
-        setPeriodicDataKey(undefined);
-        if (discount && valuationKey) {
-            switch (valuationKey) {
-                case 'stickerPrice': {
-                    setKeyOptions(SpPeriodicDataKeys);
-                    return;
-                }
-                case 'discountedCashFlowPrice': {
-                    setKeyOptions(DcfPeriodicDataKeys
-                        .filter(key => !key.includes(CONSTANTS.PROJECTED)));
-                    return;
-                }
-                default: {
-                    setKeyOptions([]);
-                }
-            }
-        } else {
-            setKeyOptions([]);
-        }
-    }, [ valuationKey ]);
 
     const renderSelectValuationKey = () => 
         loading ?
