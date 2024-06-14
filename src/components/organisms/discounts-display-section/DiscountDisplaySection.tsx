@@ -24,7 +24,7 @@ function DiscountDisplaySection() {
     const CARD_WIDTH = 250;
     const calculateNumCardsToDisplay = (): number => {
         const viewportWidth = window.visualViewport ? window.visualViewport.width : window.innerWidth;
-        return Math.floor((viewportWidth - 150) / CARD_WIDTH);
+        return Math.max(1, Math.floor((viewportWidth - 150) / CARD_WIDTH));
     }
 
     const navigate = useNavigate();

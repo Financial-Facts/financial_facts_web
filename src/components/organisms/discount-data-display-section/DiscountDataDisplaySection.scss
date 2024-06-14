@@ -19,7 +19,6 @@
         flex-direction: column;
         width: 75%;
         flex: 1;
-        border-top: 1px solid rgba(41, 41, 41, 0.2);
         padding: 16px 32px;
         box-sizing: border-box;
         
@@ -47,6 +46,10 @@
             background: $base-purple;
             border-radius: 22.5px;
             color: $off-white;
+        }
+
+        .definitions-section {
+            max-width: unset;
         }
     }
 }

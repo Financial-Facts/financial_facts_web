@@ -119,8 +119,7 @@ function PeriodicDataVisualization({
                 label={''}
                 selectedId={getSpanId()}
                 options={spanToggleOptions} 
-                selectedIdSetter={setSpan}
-            />
+                selectedIdSetter={setSpan}/>
             {
                 renderPeriodicData()
             }

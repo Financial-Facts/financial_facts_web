@@ -9,6 +9,7 @@ import { DiscountState } from '../../../store/discounts/discounts.slice';
 import PageLayout from '../../templates/page-layout/page-layout';
 import loadDiscounts from '../../../hooks/loadDiscounts';
 import { AdjacentNavigationState } from '../../molecules/adjacent-navigation-arrows/AdjacentNavigationArrows';
+import DiscountOverview from '../../atoms/discount-overview/DiscountOverview';
 
 
 function DiscountDataPage() {
@@ -59,6 +60,8 @@ function DiscountDataPage() {
         <PageLayout sections={
             [
                 header,
+                <DiscountOverview key={`${cik}-discount-overview`}
+                    discount={discount}/>,
                 <DiscountDataDisplaySection key={`${cik}-discount-data-section`}
                     discount={discount}
                     loading={loading}

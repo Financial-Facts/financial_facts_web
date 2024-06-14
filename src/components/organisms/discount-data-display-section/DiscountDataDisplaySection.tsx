@@ -2,8 +2,7 @@ import { useMemo, useState } from "react";
 import ZeroState from '../../atoms/zero-state/ZeroState';
 import ButtonOptionSideNav, { ButtonSideNavConfigItem } from "../../molecules/button-option-side-nav/ButtonOptionSideNav";
 import './DiscountDataDisplaySection.scss';
-import { DcfPeriodicDataKeys, SpPeriodicDataKeys, Valuation } from './DiscountDataDisplaySection.typings';
-import { Discount, PeriodicDataKey } from "../../../types/discount.typings";
+import { DcfPeriodicDataKeys, PeriodicDataKeyOption, SpPeriodicDataKeys, Valuation } from './DiscountDataDisplaySection.typings';
 import { useSelector } from "react-redux";
 import DiscountSingularData from "../../atoms/discount-singular-data/discount-singular-data";
 import { MobileState } from "../../../store/mobile/mobile.slice";
@@ -16,6 +15,7 @@ import DropdownInformationList from "../../atoms/dropdown-information-list/Dropd
 import DcfPriceDefinition from "../../molecules/dcf-price-definition/DcfPriceDefinition";
 import BrPriceDefinition from "../../molecules/br-price-definition/BrPriceDefinition";
 import { buildPeriodicDataMap } from "./DiscountDataDisplaySection.utils";
+import { Discount } from "../../../types/discount.typings";
 
 export interface DiscountDataDisplaySectionProps {
     discount: Discount | null,
@@ -26,15 +26,15 @@ export interface DiscountDataDisplaySectionProps {
 function DiscountDataDisplaySection({ discount, loading, error }: DiscountDataDisplaySectionProps) {
 
     const [ valuationKey, setValuationKey ] = useState<Valuation | undefined>(undefined);
-    const [ periodicDataKey, setPeriodicDataKey ] = useState<PeriodicDataKey | undefined>(undefined);
+    const [ periodicDataKey, setPeriodicDataKey ] = useState<PeriodicDataKeyOption | undefined>();
     const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
 
-    const keyOptions: PeriodicDataKey[] = useMemo(() => 
-        valuationKey === 'stickerPrice' ? SpPeriodicDataKeys :
-        valuationKey === 'discountedCashFlowPrice' ? DcfPeriodicDataKeys : 
-        [] 
-    , [ valuationKey ]);
-    
+    const getKeyOptions = (key: Valuation | undefined): PeriodicDataKeyOption[] => 
+        key === 'stickerPrice' ? SpPeriodicDataKeys :
+        key === 'discountedCashFlowPrice' ? DcfPeriodicDataKeys : 
+        [];
+
+    const keyOptions: PeriodicDataKeyOption[] = useMemo(() => getKeyOptions(valuationKey), [ valuationKey ]);
     const valuationHasPeriodicData = keyOptions.length > 0;
     const discountDefinition = 
         <DropdownInformationList
@@ -51,7 +51,12 @@ function DiscountDataDisplaySection({ discount, loading, error }: DiscountDataDi
             selectedKey: valuationKey,
             selectedKeySetter: (key) => {
                 setValuationKey(key);
-                setPeriodicDataKey(undefined);
+                if (mobile.mobile) {
+                    const options = getKeyOptions(key);
+                    setPeriodicDataKey(options.length > 0 ? options[0] : undefined);
+                } else {
+                    setPeriodicDataKey(undefined);
+                }
             },
             isFoldable: true,
             onFoldedElement: mobile.mobile ? discountDefinition : undefined
@@ -91,7 +96,7 @@ function DiscountDataDisplaySection({ discount, loading, error }: DiscountDataDi
         mobile.mobile ?
             valuationHasPeriodicData &&
                 <div className="periodic-data-arrow-nav">
-                    <ArrowKeyNavigator<PeriodicDataKey> keySetter={setPeriodicDataKey} keyOptions={keyOptions}/>
+                    <ArrowKeyNavigator<PeriodicDataKeyOption> keySetter={setPeriodicDataKey} keyOptions={keyOptions}/>
                 </div> :
             valuationKey && !periodicDataKey && valuationHasPeriodicData &&
                 <ZeroState message='Select periodic data' supportText="Select option to see time series data"/>

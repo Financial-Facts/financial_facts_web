@@ -1,9 +1,9 @@
-import { StickerPrice, BenchmarkRatioPrice, DiscountedCashFlowPrice, StickerPriceInput, BenchmarkRatioPriceInput, DiscountedCashFlowInput, PeriodicDataKey } from '../../../types/discount.typings';
+import { StickerPrice, BenchmarkRatioPrice, DiscountedCashFlowPrice, StickerPriceInput, BenchmarkRatioPriceInput, DiscountedCashFlowInput } from '../../../types/discount.typings';
 import './discount-singular-data.scss';
-import { DcfPeriodicDataKeys, SpPeriodicDataKeys } from '../../organisms/discount-data-display-section/DiscountDataDisplaySection.typings';
 import { cleanKey } from '../../../utilities';
 import InformationIcon from '../../molecules/information-icon/InformationIcon';
 import { messaging } from '../../../constants/messaging';
+import { SpSingularDataKeys, SpSingularDataKeyOption, DcfSingularDataKeys, DcfSingularDataKeyOption, BrpSingularDataKeys, BrpSingularDataKeyOption } from './discount-singular-data.typings';
 
 export interface DiscountSingularDataProps {
     valuation: StickerPrice | BenchmarkRatioPrice | DiscountedCashFlowPrice
@@ -12,7 +12,9 @@ export interface DiscountSingularDataProps {
 function DiscountSingularData({ valuation }: DiscountSingularDataProps) {
 
     const singularData = Object.keys(valuation.input).reduce<Record<string, string>>((acc, key) => {
-        if (!SpPeriodicDataKeys.includes(key as PeriodicDataKey) && !DcfPeriodicDataKeys.includes(key  as PeriodicDataKey)) {
+        if (SpSingularDataKeys.includes(key as SpSingularDataKeyOption) ||
+            DcfSingularDataKeys.includes(key  as DcfSingularDataKeyOption) ||
+            BrpSingularDataKeys.includes(key as BrpSingularDataKeyOption)) {
             acc[key] = valuation.input[key as keyof (StickerPriceInput | BenchmarkRatioPriceInput | DiscountedCashFlowInput)];
         }
         return acc;
@@ -27,16 +29,18 @@ function DiscountSingularData({ valuation }: DiscountSingularDataProps) {
             <span className='text'>{ value }</span>
         </li>);
 
-    const renderDataList = (record: Record<string, number | string>) =>
+    const renderDataList = () =>
         <ul className={`data-list`}>
-            { Object.keys(record).map(key => renderDataListItem(key, record[key])) }
+            { Object.keys(singularData).map(key => {
+                return renderDataListItem(key, singularData[key])
+            }) }
         </ul>
     
 
     return (
         <>
             <h2>Valuation Inputs</h2>
-            { renderDataList(singularData) }
+            { renderDataList() }
         </>
     )
   }

@@ -11,6 +11,9 @@ import { initRef } from '../../../utilities';
 import { useSelector } from 'react-redux';
 import { MobileState } from '../../../store/mobile/mobile.slice';
 import PeriodicDataVisualization from '../../molecules/periodic-data-visualization/PeriodicDataVisualization';
+import FactsIdentity from '../../atoms/facts-identity/FactsIdentity';
+import { useLocation } from 'react-router-dom';
+import fetchIdentity from '../../../hooks/fetchIdentity';
 
 export interface FactsDisplaySectionProps {
     cik: string
@@ -20,12 +23,14 @@ export type SPAN = 'ALL' | 'TTM' | 'T3Y' | 'TFY' | 'TTY';
 
 function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
 
+    const location = useLocation();
     const [ taxonomy, setTaxonomy ] = useState<Taxonomy | undefined>(undefined);
     const [ selectedDataKey, setDataKey ] = useState<string | undefined>(CONSTANTS.EMPTY);
     const [ chartWrapperRef, setChartWrapperRef ] = useState<HTMLDivElement | null>(null);
     const [ factsWrapperRef, setFactsWrapperRef ] = useState<HTMLDivElement | null>(null);
     const { facts, loading, error, notFound } = fetchFacts(cik);
     const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
+    const { identity } = !!location.state ? { identity: location.state } : fetchIdentity(cik);
 
     useEffect(() => {
         if (!mobile.mobile && chartWrapperRef && factsWrapperRef) {
@@ -114,15 +119,21 @@ function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
                                     }]}/> :
                                 undefined
                         }
-                        {
-                            facts && taxonomy && selectedDataKey ?
-                                <div className='chart-wrapper' ref={(ref) => initRef(ref, setChartWrapperRef)}>
-                                    <PeriodicDataVisualization
-                                        cik={cik}
-                                        periodicDataMap={getPeriodicDataMap(facts, taxonomy, selectedDataKey)}/>
-                                </div> :
-                                renderZeroState()
-                        }
+                        <div className='main-content' ref={(ref) => initRef(ref, setChartWrapperRef)}>
+                            { 
+                                identity &&
+                                    <FactsIdentity identity={identity}/>
+                            }
+                            {
+                                facts && taxonomy && selectedDataKey ?
+                                    <div className='chart-wrapper'>
+                                        <PeriodicDataVisualization
+                                            cik={cik}
+                                            periodicDataMap={getPeriodicDataMap(facts, taxonomy, selectedDataKey)}/>
+                                    </div> :
+                                    renderZeroState()
+                            }
+                        </div>
                     </>
             }
         </section>

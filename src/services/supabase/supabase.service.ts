@@ -66,6 +66,25 @@ class SupabaseService {
         return data;
     }
 
+    async fetchIdentity(cik: string): Promise<Identity | null> {
+        const { data, error } = await this.client
+            .from('identity')
+            .select('*')
+            .eq('cik', cik)
+            .limit(1)
+            .returns<Identity[] | null>();
+
+        if (error) {
+            throw new ApiResponseError(`Error occurred fetching identity for ${cik}: ${error.message}`, error.code);
+        }
+
+        if (data === null || data.length === 0) {
+            return null;
+        }
+
+        return data[0]
+    }
+
 }
 
 export const supabaseService = new SupabaseService(environment.supabaseUrl, environment.supabaseAnonKey);

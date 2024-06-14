@@ -1,8 +1,23 @@
-import { PeriodicDataKey } from "../../../types/discount.typings";
-
 export type Valuation = 'stickerPrice' | 'discountedCashFlowPrice' | 'benchmarkRatioPrice';
 
-export const SpPeriodicDataKeys: PeriodicDataKey[]  = [
+export type PeriodicDataKeyOption = SpPeriodicDataKeyOption | DcfPeriodicDataKeyOption;
+
+export type SpPeriodicDataKeyOption = 
+    'annualBVPS' |
+    'annualPE' | 
+    'annualROIC' |
+    'annualEPS' |
+    'annualEquity' |
+    'annualRevenue' |
+    'annualOperatingCashFlow';
+
+export type DcfPeriodicDataKeyOption = 
+    'historicalRevenue' |
+    'historicalOperatingCashFlow' |
+    'historicalCapitalExpenditure' |
+    'historicalFreeCashFlow';
+
+export const SpPeriodicDataKeys: SpPeriodicDataKeyOption[] = [
     'annualBVPS',
     'annualPE',
     'annualROIC',
@@ -12,13 +27,9 @@ export const SpPeriodicDataKeys: PeriodicDataKey[]  = [
     'annualOperatingCashFlow'
 ];
 
-export const DcfPeriodicDataKeys: PeriodicDataKey[] = [
+export const DcfPeriodicDataKeys: DcfPeriodicDataKeyOption[] = [
     'historicalRevenue', 
-    'projectedRevenue', 
-    'historicalOperatingCashFlow', 
-    'projectedOperatingCashFlow', 
-    'historicalCapitalExpenditure', 
-    'projectedCapitalExpenditure', 
-    'historicalFreeCashFlow', 
-    'projectedFreeCashFlow',
+    'historicalOperatingCashFlow',
+    'historicalCapitalExpenditure',
+    'historicalFreeCashFlow',
 ];

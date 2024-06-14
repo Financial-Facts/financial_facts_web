@@ -1,0 +1,24 @@
+@import 'src/variables';
+
+.facts-identity {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 16px 0;
+
+    .text-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        .name {
+            font-size: $large-font;
+            font-weight: 600;
+            color: $base-purple;
+        }
+        
+        .symbol {
+            font-size: $hefty-font;
+        }
+    }
+}

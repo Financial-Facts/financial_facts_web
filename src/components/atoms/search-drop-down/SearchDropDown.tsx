@@ -57,7 +57,9 @@ function SearchDropDown({ identities, identityRequestDispatch }: SearchDropDownP
             }));
 
     const handleClick = (identity: Identity) => {
-        navigate(`/facts/${identity.cik}`)
+        navigate(`/facts/${identity.cik}`, {
+            state: identity
+        })
     }
     
     const renderTableHeader = () =>

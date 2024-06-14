@@ -26,22 +26,31 @@
         height: $facts-display-section-height;
     }
 
-    .chart-wrapper {
-        width: 75%;
-        height: fit-content;
-        flex: 1;
+    .main-content {
+        min-height: 100%;
+        width: calc(100% - min(25%, 300px));
         display: flex;
-        align-items: center;
         flex-direction: column;
-        padding: 16px;
-        gap: 16px;
         box-sizing: border-box;
-
         
-        .visualizations-container {
-           width: 100%; 
+        .chart-wrapper {
+            width: 100%;
+            height: fit-content;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            padding: 16px;
+            gap: 16px;
+            box-sizing: border-box;
+    
+            
+            .visualizations-container {
+               width: 100%; 
+            }
         }
     }
+
 }
 
 @media only screen and (max-width: 1024px) {
@@ -49,8 +58,13 @@
     .facts-display-section {
         flex-direction: column;
 
-        .chart-wrapper {
+        .main-content {
             width: 100%;
+            padding: 16px 32px;
+
+            .chart-wrapper {
+                width: 100%;
+            }
         }
     }
 }

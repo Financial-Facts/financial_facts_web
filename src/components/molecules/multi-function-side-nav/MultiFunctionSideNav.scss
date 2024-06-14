@@ -6,13 +6,14 @@
     max-width: 300px;
     border-right: 1px solid rgba(41, 41, 41, .2);
     height: 100%;
+    --multi-function-gap: 24px;
 }
 
 .multi-function-horizontal {
     width: 100%;
     border-bottom: 1px solid rgba(41, 41, 41, .2);
     flex-wrap: wrap;
-    gap: 16px 20px;
+    --multi-function-gap: 16px;
 
     .item {
         flex: 33%;
@@ -22,10 +23,10 @@
 
 .multi-side-nav {
     display: flex;
-    justify-content: space-between;
     padding: 24px;
     box-sizing: border-box;
     background: $magnolia-white;
+    gap: var(--multi-function-gap);
 
     .side-nav-label {
         width: 100%;
@@ -43,8 +44,9 @@
         }
     }
 
+        
     .two-halves-item {
-        gap: 16px 20px;
+        gap: var(--multi-function-gap);
     }
 
     .item {

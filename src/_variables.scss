@@ -21,7 +21,7 @@ $x-large-font: 48px;
 $large-font: 32px;
 $plus-font: 24px;
 $hefty-font: 20px;
-$above-normal-font: 18px;
+$above-normal-font: clamp(18px, 2vw, 20px);
 $normal-font: clamp(16px, 2vw, 18px);
 $below-normal-font: clamp(14px, 2vw, 16px);
 $small-font: clamp(12px, 2vw, 14px);
