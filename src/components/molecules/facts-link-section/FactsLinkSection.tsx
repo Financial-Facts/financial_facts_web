@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import './FactsLinkSection.scss';
-import SvgIcon from '../../atoms/svg-icon/SvgIcon';
+import SubmitButton from '../submit-button/submit-button';
 
 function FactsLinkSection() {
 
@@ -11,14 +11,12 @@ function FactsLinkSection() {
         <h2>Facts</h2>
         <h3>Looking for raw data for a specific company?</h3>
         <div className='search-navigation-button-wrapper'>
-            <button className='search-navigation-button'
-              onClick={() => navigate('/facts')}>
-                Search
-                <SvgIcon src='/assets/magnifying-glass.svg'
-                    height='32px'
-                    width='32px'
-                    wrapperPadding='0'/>
-            </button>
+            <SubmitButton
+              text='Search'
+              outcome={'neutral'}
+              loading={false}
+              iconSource='/assets/magnifying-glass.svg'
+              onClick={() => navigate('/facts')}/>
         </div>
         <div role='img' className='company-icon-list-box'/>
       </section>

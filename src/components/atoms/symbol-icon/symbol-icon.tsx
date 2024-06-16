@@ -7,10 +7,11 @@ import { environment } from "../../../environment";
 export interface SymbolIconProps {
     symbol: string,
     size: Size,
-    setImageNotFound?: (imageNotFound: boolean) => void
+    setImageNotFound?: (imageNotFound: boolean) => void,
+    setIsLoadingImage?: (isLoading: boolean) => void
 };
 
-function SymbolIcon({ symbol, size, setImageNotFound }: SymbolIconProps) {
+function SymbolIcon({ symbol, size, setImageNotFound, setIsLoadingImage }: SymbolIconProps) {
     const [ isError, setIsError ] = useState(false);
 
     const getIconEndpoint = (symbol: string): string => {
@@ -21,6 +22,9 @@ function SymbolIcon({ symbol, size, setImageNotFound }: SymbolIconProps) {
         setIsError(!isSuccess);
         if (setImageNotFound) {
             setImageNotFound(!isSuccess);
+        }
+        if (!!setIsLoadingImage) {
+            setIsLoadingImage(false);
         }
     }
 

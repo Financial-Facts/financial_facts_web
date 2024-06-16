@@ -1,24 +1,34 @@
 @import 'src/variables';
 
-.facts-identity {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 24px 16px 0;
+.facts-identity-wrapper {
+    width: 100%;
+    border-bottom: 1px solid rgba(41, 41, 41, 0.2);
+    border-top: 1px solid rgba(41, 41, 41, 0.2);
 
-    .text-container {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-
-        .name {
-            font-size: $large-font;
-            font-weight: 600;
-            color: $base-purple;
-        }
         
-        .symbol {
-            font-size: $hefty-font;
+    .facts-identity {
+        display: flex;
+        align-items: center;
+        padding: 24px;
+        gap: 16px;
+        background: #DFDFDF;
+        justify-content: space-between;
+
+        .text-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: right;
+
+            .name {
+                font-size: $large-font;
+                font-weight: 600;
+                color: $base-purple;
+            }
+            
+            .symbol {
+                font-size: $hefty-font;
+            }
         }
     }
 }

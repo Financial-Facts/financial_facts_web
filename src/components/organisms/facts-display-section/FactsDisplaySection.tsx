@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import LoadingSpinner from '../../atoms/loading-spinner/loading-spinner';
 import ZeroState from '../../atoms/zero-state/ZeroState';
 import ButtonOptionSideNav from '../../molecules/button-option-side-nav/ButtonOptionSideNav';
@@ -12,26 +12,29 @@ import { useSelector } from 'react-redux';
 import { MobileState } from '../../../store/mobile/mobile.slice';
 import PeriodicDataVisualization from '../../molecules/periodic-data-visualization/PeriodicDataVisualization';
 import FactsIdentity from '../../atoms/facts-identity/FactsIdentity';
-import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import fetchIdentity from '../../../hooks/fetchIdentity';
 
 export interface FactsDisplaySectionProps {
     cik: string
-
+    taxonomy: Taxonomy | undefined,
+    selectedDataKey: string | undefined
 }
+
 export type SPAN = 'ALL' | 'TTM' | 'T3Y' | 'TFY' | 'TTY';
 
-function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
+function FactsDisplaySection({ cik, taxonomy, selectedDataKey }: FactsDisplaySectionProps) {
 
-    const location = useLocation();
-    const [ taxonomy, setTaxonomy ] = useState<Taxonomy | undefined>(undefined);
-    const [ selectedDataKey, setDataKey ] = useState<string | undefined>(CONSTANTS.EMPTY);
+    const navigate = useNavigate();
     const [ chartWrapperRef, setChartWrapperRef ] = useState<HTMLDivElement | null>(null);
     const [ factsWrapperRef, setFactsWrapperRef ] = useState<HTMLDivElement | null>(null);
     const { facts, loading, error, notFound } = fetchFacts(cik);
+    const { identity, loadingIdentity, identityError } = fetchIdentity(cik);
     const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
-    const { identity } = !!location.state ? { identity: location.state } : fetchIdentity(cik);
 
+    const isLoading = useMemo(() => loading || loadingIdentity, [ loading, loadingIdentity ]);
+    const isError = useMemo(() => identityError || error, [ identityError, error]);
+    
     useEffect(() => {
         if (!mobile.mobile && chartWrapperRef && factsWrapperRef) {
             const observerId = ResizeObserverService.matchHeight(chartWrapperRef, factsWrapperRef);
@@ -60,7 +63,7 @@ function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
     const renderZeroState = () => {
         let message = CONSTANTS.EMPTY;
         let support = CONSTANTS.EMPTY;
-        if (facts && taxonomy) {
+        if (facts && taxonomy && taxonomy in facts.facts) {
             message = 'Select a Dataset';
             support = 'View historical data for selected taxonomy';
         } else {
@@ -84,16 +87,33 @@ function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
         return {};
     }
 
+
+    const buildUri = (
+        taxonomy: Taxonomy | undefined,
+        dataKey: string | undefined
+    ): string => {
+        if (taxonomy && dataKey) {
+            return `/facts/${cik}/${encodeURIComponent(taxonomy)}/${encodeURIComponent(dataKey)}`;
+        }
+        if (taxonomy) {
+            return `/facts/${cik}/${encodeURIComponent(taxonomy)}`;
+        }
+        return `/facts/${cik}`;
+    }
+
     return (
         <section className={`facts-display-section
-            ${loading || error ? 'text-container-height' : CONSTANTS.EMPTY}`}>
+            ${(isLoading || isError) ? 'text-container-height' : CONSTANTS.EMPTY}`}>
             {
-                loading ? <LoadingSpinner size='LARGE' color='PURPLE'/> :
-                error ? <ZeroState message={'Error'}
+                isLoading ? <LoadingSpinner size='LARGE' color='PURPLE' minHeight={750}/> :
+                isError ? <ZeroState message={'Error'}
                     supportText={`${ notFound ?
                         `Facts for ${cik} not found` :
                         'Failed to collect financial facts'}`}/> :
                     <>
+                        { 
+                            mobile.mobile && <FactsIdentity identity={identity}/>
+                        }
                         {
                             facts ? 
                                 <ButtonOptionSideNav
@@ -104,8 +124,7 @@ function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
                                         keys: getTaxonomyKeys(),
                                         selectedKey: taxonomy,
                                         selectedKeySetter: (taxonomy) => {
-                                            setDataKey(CONSTANTS.EMPTY);
-                                            setTaxonomy(taxonomy);
+                                            navigate(buildUri(taxonomy, undefined));
                                         },
                                         isFoldable: true
                                     }, {
@@ -113,7 +132,9 @@ function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
                                         keys: facts && taxonomy && facts.facts[taxonomy] ?
                                             Object.keys(facts.facts[taxonomy]) : [],
                                         selectedKey: selectedDataKey,
-                                        selectedKeySetter: setDataKey,
+                                        selectedKeySetter: (dataKey) => {
+                                            navigate(buildUri(taxonomy, dataKey))
+                                        },
                                         includeSearch: true,
                                         isScrollable: true
                                     }]}/> :
@@ -121,11 +142,10 @@ function FactsDisplaySection({ cik }: FactsDisplaySectionProps) {
                         }
                         <div className='main-content' ref={(ref) => initRef(ref, setChartWrapperRef)}>
                             { 
-                                identity &&
-                                    <FactsIdentity identity={identity}/>
+                                !mobile.mobile && <FactsIdentity identity={identity}/>
                             }
                             {
-                                facts && taxonomy && selectedDataKey ?
+                                facts && taxonomy && selectedDataKey && selectedDataKey in facts.facts[taxonomy] ?
                                     <div className='chart-wrapper'>
                                         <PeriodicDataVisualization
                                             cik={cik}

@@ -12,8 +12,8 @@ import InformationIcon from '../../molecules/information-icon/InformationIcon'
 import { messaging } from '../../../constants/messaging'
 import listenForWindowClick from '../../../hooks/listenForWindowClick'
 import { Subject } from 'rxjs'
-import SvgIcon from '../../atoms/svg-icon/SvgIcon'
 import { useNavigate } from 'react-router-dom'
+import SubmitButton from '../../molecules/submit-button/submit-button'
 
 const hideDataSubject = new Subject<void>();
 
@@ -78,13 +78,13 @@ function DiscountDisplaySection() {
         <section className={`discount-display-section full`}>
             <h2 className='discounts-display-header'>
                 Discounts
-                <SvgIcon src={'/assets/list.svg'}
+                {/* <SvgIcon src={'/assets/list.svg'}
                     height={'16px'}
                     width={'16px'}
                     color='#F5F5F5'
                     tooltipMessage={messaging.discountListLink}
                     isButton={true}
-                    onClick={() => navigate('/discount')}/>
+                    onClick={() => navigate('/discount')}/> */}
             </h2>
             <h3>
                 See firms that match our criteria and their&nbsp;
@@ -113,6 +113,12 @@ function DiscountDisplaySection() {
                                 itemWidth={CARD_WIDTH}
                                 element={discountCardsList}/>
                     }
+                    <SubmitButton
+                        text="View all"
+                        outcome={'neutral'}
+                        loading={false}
+                        iconSource='/assets/redirect.svg'
+                        onClick={() => navigate('/discount')}/>
                 </div>
             )}
         </section>

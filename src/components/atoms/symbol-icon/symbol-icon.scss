@@ -13,6 +13,7 @@
 .symbol-icon-wrapper {
     height: var(--icon-height, 50px);
     width: var(--icon-width, 50px);
+    min-width: var(--icon-width, 50px);
     border-radius: 50%;
     overflow: hidden;
 

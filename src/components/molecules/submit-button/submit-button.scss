@@ -4,18 +4,19 @@
 .submit-button {
     background: $base-purple;
     color: $off-white;
-    font-size: $normal-font;
+    font-size: var(--submit-button-font-size, $normal-font);
     font-family: $league-spartan;
     font-weight: 600;
     cursor: pointer;
     border-radius: 4px;
     border: 1px solid $dark-gray;
     transition-duration: 0.4s;
-    height: 32px;
-    width: 82px;
+    height: var(--submit-button-height, 32px);
+    width: var(--submit-button-width, 82px);
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: var(--submit-button-padding, 0);
     
     img {
         height: 75%;
