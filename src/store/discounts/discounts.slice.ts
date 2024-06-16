@@ -165,6 +165,7 @@ export const discountsSlice = createSlice({
       if (state.allDiscounts.length === 0) {
         state.allDiscounts = action.payload.sort(getSortFunction('lastUpdated', 'DESC'));
         state.filteredDiscounts = [...state.allDiscounts];
+        state.filteredDiscounts.sort(getSortFunction(state.filteredSort.sortBy, state.filteredSort.sortOrder));
       }
       state.loading = false;
     });
