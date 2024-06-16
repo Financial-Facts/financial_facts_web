@@ -8,21 +8,6 @@ export const handleEnterKeyEvent = <T> (e: React.KeyboardEvent<T>, handler: () =
     }
 }
 
-export const initRef = <T> (ref: T | null, setter?: (_: T) => void) => {
-    if (ref && setter) {
-        setter(ref);
-    }
-};
-
-export const fetchChildren = (element: Element): Element[] => {
-    let result: Element[] = [];
-    const children = Array.from(element.children);
-    children.forEach(child => {
-        result = [...result, ...fetchChildren(child)];
-    });
-    return [...result, element];
-}
-
 export function days_since(date: Date): number {
     const d1 = new Date(date);
     const d2 = new Date();

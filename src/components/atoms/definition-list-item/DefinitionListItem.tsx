@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './DefinitionListItem.scss';
-import { handleEnterKeyEvent, initRef } from '../../../utilities';
+import { handleEnterKeyEvent } from '../../../utilities';
 import ResizeObserverService from '../../../services/resize-observer-service/resize-observer.service';
 import { CONSTANTS } from '../../../constants/constants';
 
@@ -13,9 +13,9 @@ export interface DefinitionListItemProps {
 function DefinitionListItem({ word, expandedHeight, definitionElement }: DefinitionListItemProps) {
 
     const [ expanded, setExpanded ] = useState<boolean>(false);
-    const [ listItemRef, setListItemRef ] = useState<HTMLLIElement | null>(null);
-    const [ contentRef, setContentRef ] = useState<HTMLDivElement | null>(null);
-
+    const contentRef = useRef<HTMLDivElement | null>(null);
+    const listItemRef = useRef<HTMLLIElement | null>(null);
+    
     const setListItemExpandedHeight = (ref: HTMLLIElement, height: number) => {
         ref.style.setProperty('--list-item-expanded-height', height + 'px');
     }
@@ -28,19 +28,21 @@ function DefinitionListItem({ word, expandedHeight, definitionElement }: Definit
     }
 
     useEffect(() => {
-        if (listItemRef) {
-            if (expanded && contentRef) {
-                const observerId = ResizeObserverService.onSizeChange(contentRef, () => {
-                    setListItemExpandedHeight(listItemRef, contentRef.clientHeight);
+        const currentListItemRef = listItemRef.current;
+        const currentContentRef = contentRef.current;
+        if (currentListItemRef) {
+            if (expanded && currentContentRef) {
+                const observerId = ResizeObserverService.onSizeChange(currentContentRef, () => {
+                    setListItemExpandedHeight(currentListItemRef, currentContentRef.clientHeight);
                 });
                 return (() => {
                     ResizeObserverService.disconnectObserver(observerId);
                 });
             } else {
-                listItemRef.style.setProperty('--list-item-expanded-height', `${expandedHeight}px`);
+                currentListItemRef.style.setProperty('--list-item-expanded-height', `${expandedHeight}px`);
             }
         }
-    }, [ expanded, contentRef ]);
+    }, [ expanded, contentRef.current ]);
 
     return <li className={`definitions-list-item ${expanded && 'expanded'}`}
         tabIndex={0}
@@ -48,8 +50,8 @@ function DefinitionListItem({ word, expandedHeight, definitionElement }: Definit
         aria-expanded={expanded}
         onClick={handleClick}
         onKeyDown={(e) => handleEnterKeyEvent(e, () => setExpanded(current => !current))}
-        ref={(ref) => initRef(ref, setListItemRef)}>
-        <div className='list-item-content' ref={(ref) => initRef(ref, setContentRef)}>
+        ref={listItemRef}>
+        <div className='list-item-content' ref={contentRef}>
             <div className={`word-container ${expanded && 'expanded'}`}>
                 <span className='word'>{ word }</span>
                 <span>(?)</span>

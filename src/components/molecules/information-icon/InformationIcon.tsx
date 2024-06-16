@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SvgIcon from "../../atoms/svg-icon/SvgIcon";
-import { handleEnterKeyEvent, initRef } from "../../../utilities";
+import { handleEnterKeyEvent } from "../../../utilities";
 import './InformationIcon.scss';
 import listenForWindowClick from "../../../hooks/listenForWindowClick";
 
@@ -22,23 +22,25 @@ function InformationIcon({
     screenSide = 'left'
 }: InformationIconProps) {
 
-    const [ dialogRef, setDialogRef ] = useState<HTMLDialogElement | null>(null);
     const [ showDialog, setShowDialog ] = useState<boolean>(false);
-    const [ infoIconRef, setInfoIconRef ] = useState<HTMLDivElement | null>(null);
+
+    const dialogRef = useRef<HTMLDialogElement | null>(null);
+    const infoIconRef = useRef<HTMLDivElement | null>(null);
 
     listenForWindowClick(() => {
         setShowDialog(false);
-    }, infoIconRef);
+    }, infoIconRef.current);
 
     useEffect(() => {
-        if (!dialogRef) {
+        const currentDialogRef = dialogRef.current;
+        if (!currentDialogRef) {
             return;
         }
 
         if (showDialog) {
-            dialogRef.show();
+            currentDialogRef.show();
         } else {
-            dialogRef.close();
+            currentDialogRef.close();
         }
     }, [ showDialog ]);
 
@@ -51,9 +53,9 @@ function InformationIcon({
                 isButton={true}
                 color={color}
                 onClick={() => setShowDialog(current => !current)}
-                setExternalRef={setInfoIconRef}/>
+                setExternalRef={infoIconRef}/>
             <div className={`popup-wrapper ${alignPopup} ${screenSide}`}>
-                <dialog ref={(ref) => initRef(ref, setDialogRef)}
+                <dialog ref={dialogRef}
                     className="message-dialog"
                     onClick={() => setShowDialog(current => !current)}
                     onKeyDown={(e) => handleEnterKeyEvent(e, () => setShowDialog(current => !current))}>

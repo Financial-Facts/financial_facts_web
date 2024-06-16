@@ -1,7 +1,6 @@
 import { ReactElement } from 'react';
 import ButtonOptionList from "../button-option-list/ButtonOptionList";
 import './ButtonOptionSideNav.scss';
-import { initRef } from '../../../utilities';
 
 export type Orientation = 'vertical' | 'horizontal';
 
@@ -21,9 +20,8 @@ export interface ButtonSideNavConfigItem<T extends string> {
 export interface ButtonOptionSideNavProps {
     buttonOptionSideNavConfig: ButtonSideNavConfigItem<any>[],
     orientation: Orientation
-    refSetter?: (_: HTMLDivElement | null) => void
+    refSetter: React.MutableRefObject<HTMLDivElement | null>
 }
-
 
 function ButtonOptionSideNav({ buttonOptionSideNavConfig, orientation, refSetter }: ButtonOptionSideNavProps) {
 
@@ -69,7 +67,7 @@ function ButtonOptionSideNav({ buttonOptionSideNavConfig, orientation, refSetter
         }, []);
 
     return (
-        <div className={`side-nav-wrapper ${orientation}`} ref={(ref) => initRef(ref, refSetter)}>
+        <div className={`side-nav-wrapper ${orientation}`} ref={refSetter}>
             {
                 renderNavSections()
             }

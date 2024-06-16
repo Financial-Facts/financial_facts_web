@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { handleEnterKeyEvent, initRef } from '../../../utilities';
+import { useEffect, useRef } from 'react';
+import { handleEnterKeyEvent } from '../../../utilities';
 import './SvgIcon.scss';
 import { ReactSVG } from 'react-svg';
 import { CONSTANTS } from '../../../constants/constants';
@@ -13,7 +13,7 @@ export interface InfoIconProps {
     tooltipMessage?: string,
     isButton?: boolean,
     onClick?: () => void,
-    setExternalRef?: React.Dispatch<React.SetStateAction<HTMLDivElement | null>>
+    setExternalRef?: React.MutableRefObject<HTMLDivElement | null>
 }
 
 function SvgIcon({ 
@@ -28,8 +28,8 @@ function SvgIcon({
     setExternalRef
 }: InfoIconProps) {
 
-    const [ iconWrapperRef, setIconWrapperRef ] = useState<HTMLDivElement | null>(null);
-
+    const iconWrapperRef = useRef<HTMLDivElement | null>(null);
+    
     const setPropertyIfExists = (ref: HTMLElement, variableName: string, property: string | undefined): void => {
         if (!!property) {
             ref.style.setProperty(variableName, property);
@@ -37,26 +37,27 @@ function SvgIcon({
     }
 
     useEffect(() => {
-        if (iconWrapperRef) {
-            iconWrapperRef.style.setProperty('--svg-height', height);
-            iconWrapperRef.style.setProperty('--svg-width', width);
+        const currentIconWrapperRef = iconWrapperRef.current; 
+        if (currentIconWrapperRef) {
+            currentIconWrapperRef.style.setProperty('--svg-height', height);
+            currentIconWrapperRef.style.setProperty('--svg-width', width);
 
-            setPropertyIfExists(iconWrapperRef, '--svg-wrapper-padding', isButton ? '4px' : wrapperPadding);
-            setPropertyIfExists(iconWrapperRef, '--svg-color', color);
+            setPropertyIfExists(currentIconWrapperRef, '--svg-wrapper-padding', isButton ? '4px' : wrapperPadding);
+            setPropertyIfExists(currentIconWrapperRef, '--svg-color', color);
         }
-    }, [ iconWrapperRef ]);
+    }, [ iconWrapperRef.current ]);
 
     return (
         <div className={`svg-icon-wrapper ${isButton ? 'svg-button-wrapper' : CONSTANTS.EMPTY}`}
             title={tooltipMessage}
             role={ isButton ? 'button' : 'img' }
             tabIndex={ isButton ? 0 : -1 }
-            ref={(ref) => initRef(ref, (ref) => {
+            ref={(ref) => {
                 if (!!setExternalRef) {
-                    setExternalRef(ref);
+                    setExternalRef.current = ref;
                 }
-                setIconWrapperRef(ref);
-            })}
+                iconWrapperRef.current = ref;
+            }}
             onClick={() => !!onClick && onClick()}
             onKeyDown={(e) => !!onClick && handleEnterKeyEvent(e, onClick)}>
             <ReactSVG src={src} className='svg-component'/>

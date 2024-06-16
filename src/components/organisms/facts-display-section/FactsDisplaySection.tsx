@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import LoadingSpinner from '../../atoms/loading-spinner/loading-spinner';
 import ZeroState from '../../atoms/zero-state/ZeroState';
 import ButtonOptionSideNav from '../../molecules/button-option-side-nav/ButtonOptionSideNav';
@@ -7,7 +7,6 @@ import { CONSTANTS } from '../../../constants/constants';
 import fetchFacts from '../../../hooks/fetchFacts';
 import { Facts, Taxonomy } from '../../../services/facts/facts.typings';
 import ResizeObserverService from '../../../services/resize-observer-service/resize-observer.service';
-import { initRef } from '../../../utilities';
 import { useSelector } from 'react-redux';
 import { MobileState } from '../../../store/mobile/mobile.slice';
 import PeriodicDataVisualization from '../../molecules/periodic-data-visualization/PeriodicDataVisualization';
@@ -26,8 +25,8 @@ export type SPAN = 'ALL' | 'TTM' | 'T3Y' | 'TFY' | 'TTY';
 function FactsDisplaySection({ cik, taxonomy, selectedDataKey }: FactsDisplaySectionProps) {
 
     const navigate = useNavigate();
-    const [ chartWrapperRef, setChartWrapperRef ] = useState<HTMLDivElement | null>(null);
-    const [ factsWrapperRef, setFactsWrapperRef ] = useState<HTMLDivElement | null>(null);
+    const chartWrapperRef = useRef<HTMLDivElement | null>(null);
+    const factsWrapperRef = useRef<HTMLDivElement | null>(null);
     const { facts, loading, error, notFound } = fetchFacts(cik);
     const { identity, loadingIdentity, identityError } = fetchIdentity(cik);
     const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
@@ -36,15 +35,17 @@ function FactsDisplaySection({ cik, taxonomy, selectedDataKey }: FactsDisplaySec
     const isError = useMemo(() => identityError || error, [ identityError, error]);
     
     useEffect(() => {
-        if (!mobile.mobile && chartWrapperRef && factsWrapperRef) {
-            const observerId = ResizeObserverService.matchHeight(chartWrapperRef, factsWrapperRef);
+        const currentChartWrapperRef = chartWrapperRef.current;
+        const currentFactsWrapperRef = factsWrapperRef.current;
+        if (!mobile.mobile && currentChartWrapperRef && currentFactsWrapperRef) {
+            const observerId = ResizeObserverService.matchHeight(currentChartWrapperRef, currentFactsWrapperRef);
             return (() => {
                 ResizeObserverService.disconnectObserver(observerId);
             });
-        } else if (factsWrapperRef) {
-            factsWrapperRef.style.height = CONSTANTS.EMPTY;
+        } else if (currentFactsWrapperRef) {
+            currentFactsWrapperRef.style.height = CONSTANTS.EMPTY;
         }
-    }, [ chartWrapperRef, mobile ]);
+    }, [ chartWrapperRef.current, mobile ]);
 
     const getTaxonomyKeys = (): Taxonomy[] => {
         if (facts) {
@@ -118,7 +119,7 @@ function FactsDisplaySection({ cik, taxonomy, selectedDataKey }: FactsDisplaySec
                             facts ? 
                                 <ButtonOptionSideNav
                                     orientation={ mobile.mobile ? 'horizontal' : 'vertical' }
-                                    refSetter={setFactsWrapperRef}
+                                    refSetter={factsWrapperRef}
                                     buttonOptionSideNavConfig={[{
                                         label: 'Taxonomy',
                                         keys: getTaxonomyKeys(),
@@ -140,7 +141,7 @@ function FactsDisplaySection({ cik, taxonomy, selectedDataKey }: FactsDisplaySec
                                     }]}/> :
                                 undefined
                         }
-                        <div className='main-content' ref={(ref) => initRef(ref, setChartWrapperRef)}>
+                        <div className='main-content' ref={chartWrapperRef}>
                             { 
                                 !mobile.mobile && <FactsIdentity identity={identity}/>
                             }

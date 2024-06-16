@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import ArrowNavWrapper from '../../atoms/arrow-nav-wrapper/arrow-nav-wrapper'
 import LoadingSpinner from '../../atoms/loading-spinner/loading-spinner'
@@ -7,7 +7,6 @@ import DiscountCard from '../../molecules/discount-card/DiscountCard'
 import './DiscountDisplaySection.scss'
 import { CONSTANTS } from '../../../constants/constants'
 import { DiscountState } from '../../../store/discounts/discounts.slice'
-import { initRef } from '../../../utilities'
 import InformationIcon from '../../molecules/information-icon/InformationIcon'
 import { messaging } from '../../../constants/messaging'
 import listenForWindowClick from '../../../hooks/listenForWindowClick'
@@ -29,11 +28,11 @@ function DiscountDisplaySection() {
 
     const navigate = useNavigate();
     const [ numCardsToDisplay, setNumCardsToDisplay ] = useState(calculateNumCardsToDisplay());
-    const [ discountListRef, setDiscountListRef ] = useState<HTMLUListElement | null>(null);
+    const discountListRef = useRef<HTMLUListElement | null>(null);
 
     const usingArrowNavigation = numCardsToDisplay === 1;
     const discountCardsList = useMemo(() =>
-        <ul ref={(ref) => initRef(ref, setDiscountListRef)}
+        <ul ref={discountListRef}
             className={ 'discounts' }
             style={{
                 "--discount-card-width": `${CARD_WIDTH}px`
@@ -49,10 +48,11 @@ function DiscountDisplaySection() {
     [ allDiscounts ]);
 
     listenForWindowClick((target: Element) => {
-        if (!target.classList.contains('symbol-icon')) {
+        if (!target.classList.contains('symbol-icon') &&
+            !discountListRef.current?.contains(target)) {
             hideDataSubject.next();
         }
-    }, discountListRef);
+    });
 
     useEffect(() => {
         const listener = () => {
@@ -65,26 +65,20 @@ function DiscountDisplaySection() {
     }, [ loading ]);
 
     useEffect(() => {
-        if (discountListRef) {
-            discountListRef.style.width = `${numCardsToDisplay * CARD_WIDTH}px`;
-            discountListRef.scrollTo({
+        const currentDiscountListRef = discountListRef.current;
+        if (currentDiscountListRef) {
+            currentDiscountListRef.style.width = `${numCardsToDisplay * CARD_WIDTH}px`;
+            currentDiscountListRef.scrollTo({
                 left: 0,
                 behavior: 'instant'
             });
         }
-    }, [ discountListRef, numCardsToDisplay ]);
+    }, [ discountListRef.current, numCardsToDisplay ]);
 
     return (
         <section className={`discount-display-section full`}>
             <h2 className='discounts-display-header'>
                 Discounts
-                {/* <SvgIcon src={'/assets/list.svg'}
-                    height={'16px'}
-                    width={'16px'}
-                    color='#F5F5F5'
-                    tooltipMessage={messaging.discountListLink}
-                    isButton={true}
-                    onClick={() => navigate('/discount')}/> */}
             </h2>
             <h3>
                 See firms that match our criteria and their&nbsp;

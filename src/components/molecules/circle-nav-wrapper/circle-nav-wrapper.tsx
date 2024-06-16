@@ -6,7 +6,7 @@ import NavCircleList from '../../atoms/nav-circle-list/NavCircleList';
 
 export interface CircleNavWrapperProps {
     element: JSX.Element
-    elementRef: HTMLUListElement | null
+    elementRef: React.MutableRefObject<HTMLUListElement | null>
     listLength: number
     numItemsToDisplay: number,
     itemWidth: number
@@ -19,13 +19,11 @@ function CircleNavWrapper({
     numItemsToDisplay,
     itemWidth
 }: CircleNavWrapperProps) {
+    
+    const numOfCircles = Math.ceil(listLength / numItemsToDisplay);
 
     const [ navCircles, setNavCircles ] = useState<boolean[]>(numItemsToDisplay === 0 ? [] : () => {
-        const numOfCircles = Math.ceil(listLength / numItemsToDisplay);
-        const circles = [];
-        for (let i = 0; i < numOfCircles; i++) {
-            circles.push(i === 0)
-        }
+        const circles: boolean[] = [...Array(numOfCircles)].map((_, index) => index === 0);
         return circles;
     });
 
@@ -35,19 +33,28 @@ function CircleNavWrapper({
     });
 
     useEffect(() => {
-        if (elementRef) {
-            elementRef.scrollTo(scrollToOptions);
+        setScrollToOptions({
+            left: 0,
+            behavior: 'smooth'
+        });
+        const circles: boolean[] = [...Array(numOfCircles)].map((_, index) => index === 0);
+        setNavCircles(circles);
+    }, [ numItemsToDisplay ]);
+
+    useEffect(() => {
+        if (elementRef.current) {
+            elementRef.current.scrollTo(scrollToOptions);
         }
     }, [ scrollToOptions ]);
 
     useEffect(() => {
-        if (elementRef) {
-            const subscription = updateSelectedCircleOnScroll(elementRef);
+        if (elementRef.current) {
+            const subscription = updateSelectedCircleOnScroll(elementRef.current);
             return () => {
                 subscription.unsubscribe();
             };
         }
-    }, [ elementRef, navCircles ]);
+    }, [ elementRef.current, navCircles ]);
 
     const updateSelectedCircleOnScroll = (listElement: HTMLUListElement) =>
         fromEvent<InputEvent>(listElement, 'scroll')
@@ -57,7 +64,7 @@ function CircleNavWrapper({
                     const element = target as HTMLElement;
                     const elementWidth = numItemsToDisplay * itemWidth;
                     const navCircleIndex = Math.ceil(element.scrollLeft / elementWidth);
-                    setNavCircles([...navCircles].map((_, index) => index === navCircleIndex));
+                    setNavCircles(current => current.map((_, index) => index === navCircleIndex));
                 }
             });
 

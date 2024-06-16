@@ -7,7 +7,7 @@ export type Direction = 'LEFT' | 'RIGHT';
 
 export interface ArrowNavWrapperProps {
     element: JSX.Element
-    elementRef: HTMLUListElement | null
+    elementRef: React.MutableRefObject<HTMLUListElement | null>
     itemWidth: number
 }
 
@@ -26,19 +26,19 @@ function ArrowNavWrapper({
     const [ showRightArrow, setShowRightArrow ] = useState<boolean>(true);
     
     useEffect(() => {
-        if (elementRef) {
-            elementRef.scrollTo(scrollToOptions);
+        if (elementRef.current) {
+            elementRef.current.scrollTo(scrollToOptions);
         }
     }, [ scrollToOptions ]);
 
     useEffect(() => {
-        if (elementRef) {
-            const subscription = updateArrowsOnScroll(elementRef);
+        if (elementRef.current) {
+            const subscription = updateArrowsOnScroll(elementRef.current);
             return () => {
                 subscription.unsubscribe();
             };
         }
-    }, [ elementRef, itemWidth ]); 
+    }, [ elementRef.current, itemWidth ]); 
 
     const updateArrowsOnScroll = (listElement: HTMLUListElement) =>
         fromEvent<InputEvent>(listElement, 'scroll')
@@ -53,14 +53,15 @@ function ArrowNavWrapper({
             });
 
     const handleArrowClick = (arrow: 'RIGHT' | 'LEFT') => {
-        if (elementRef) {
+        const currentElementRef = elementRef.current;
+        if (currentElementRef) {
             setScrollToOptions(current => {
-                const currentLeft = elementRef.scrollLeft;
+                const currentLeft = currentElementRef.scrollLeft;
                 const delta = arrow === 'LEFT' ? -itemWidth : itemWidth;
                 return {
                     ...current,
                     ...{
-                        left: Math.min(Math.max(0, currentLeft + delta), elementRef.scrollWidth)
+                        left: Math.min(Math.max(0, currentLeft + delta), currentElementRef.scrollWidth)
                     }
                 }
             });

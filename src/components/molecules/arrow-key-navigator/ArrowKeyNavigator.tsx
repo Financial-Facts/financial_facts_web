@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { cleanKey, initRef } from "../../../utilities";
+import { useEffect, useRef, useState } from "react";
+import { cleanKey } from "../../../utilities";
 import ArrowNavWrapper from "../../atoms/arrow-nav-wrapper/arrow-nav-wrapper";
 import './ArrowKeyNavigator.scss';
 import ResizeObserverService from "../../../services/resize-observer-service/resize-observer.service";
@@ -12,32 +12,35 @@ export interface ArrowKeyNavigatorProps<T extends string> {
 
 function ArrowKeyNavigator<T extends string>({ keyOptions, keySetter }: ArrowKeyNavigatorProps<T>) {
 
-    const [ keyListRef, setKeyListRef ] = useState<HTMLUListElement | null>(null);
-    const [ itemWidth, setItemWidth ] = useState<number>(keyListRef ? keyListRef.clientWidth : 200);
+    const keyListRef = useRef<HTMLUListElement | null>(null);
+    const [ itemWidth, setItemWidth ] = useState<number>(keyListRef.current ? keyListRef.current.clientWidth : 200);
 
     useEffect(() => {
-        if (keyListRef) {
-            const observerId = ResizeObserverService.onSizeChange(keyListRef, () => {
-                const width = keyListRef.clientWidth;
+        const currentKeyListRef = keyListRef.current;
+        if (currentKeyListRef) {
+            const observerId = ResizeObserverService.onSizeChange(currentKeyListRef, () => {
+                const width = currentKeyListRef.clientWidth;
                 setItemWidth(width);
-                keyListRef.style.setProperty('--item-width', `${width}px`);
+                currentKeyListRef.style.setProperty('--item-width', `${width}px`);
             });
             return (() => ResizeObserverService.disconnectObserver(observerId));
         }
-    }, [ keyListRef ]);
+    }, [ keyListRef.current ]);
 
     
     useEffect(() => {
-        if (keyOptions.length > 0 && keyListRef) {
-            keyListRef.scrollTo({
+        const currentKeyListRef = keyListRef.current;
+        if (keyOptions.length > 0 && currentKeyListRef) {
+            currentKeyListRef.scrollTo({
                 left: 0,
                 behavior: 'instant'
             });
         }
-    }, [ keyListRef, keyOptions ]);
+    }, [ keyListRef.current, keyOptions ]);
     
     useEffect(() => {
-        if (keyListRef) {
+        const currentKeyListRef = keyListRef.current;
+        if (currentKeyListRef) {
             const listener = (event: Event) => {
                 if (event.target) {
                     const element = event.target as HTMLElement;
@@ -47,12 +50,12 @@ function ArrowKeyNavigator<T extends string>({ keyOptions, keySetter }: ArrowKey
                     }
                 }
             };
-            keyListRef.addEventListener('scroll', listener);
+            currentKeyListRef.addEventListener('scroll', listener);
             return () => {
-                keyListRef.removeEventListener('scroll', listener);
+                currentKeyListRef.removeEventListener('scroll', listener);
             };
         }
-    }, [ keyListRef, keyOptions, itemWidth ]);
+    }, [ keyListRef.current, keyOptions, itemWidth ]);
 
     const renderKeyListItems = () => keyOptions.map(key => 
         <li className='key-option' key={key}>
@@ -61,7 +64,7 @@ function ArrowKeyNavigator<T extends string>({ keyOptions, keySetter }: ArrowKey
     );
 
     const renderKeyList = () =>
-        <ul ref={ (ref) => initRef(ref, setKeyListRef) }
+        <ul ref={keyListRef}
             className="key-option-list">
             { renderKeyListItems() }
         </ul>

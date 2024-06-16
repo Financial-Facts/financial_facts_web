@@ -1,5 +1,4 @@
 import './ResponsiveTable.scss';
-import { initRef } from '../../../utilities';
 import ZeroState from '../../atoms/zero-state/ZeroState';
 
 export interface ResponsiveTableProps {
@@ -7,7 +6,7 @@ export interface ResponsiveTableProps {
     renderTableHeader: () => JSX.Element,
     renderTableBody: () => JSX.Element,
     zeroStateCondition: boolean,
-    wrapperRefSetter?:  React.Dispatch<React.SetStateAction<HTMLDivElement | null>>
+    wrapperRefSetter: React.MutableRefObject<HTMLDivElement | null>
 }
 
 function ResponsiveTable({
@@ -19,7 +18,7 @@ function ResponsiveTable({
 }: ResponsiveTableProps) {
     
     return (
-        <div className={`responsive-table-wrapper ${className}`} ref={ (ref) => initRef(ref, wrapperRefSetter) }>  
+        <div className={`responsive-table-wrapper ${className}`} ref={wrapperRefSetter}>  
             <table>
                 { renderTableHeader() }
                 { !zeroStateCondition && renderTableBody() }

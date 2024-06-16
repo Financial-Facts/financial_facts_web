@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import './SearchBar.scss';
 import { CONSTANTS } from '../../../constants/constants';
-import { initRef } from '../../../utilities';
 import { fromEvent } from 'rxjs/internal/observable/fromEvent';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { IdentityRequestAction } from '../../molecules/expandable-search/reducers/identity-request.reducer';
@@ -12,26 +11,27 @@ export interface SearchBarProps {
 
 function SearchBar({ identityRequestDispatch }: SearchBarProps) {
 
-    const [ searchBarRef, setSearchBarRef ] = useState<HTMLInputElement | null>(null);
-
+    const searchBarRef = useRef<HTMLInputElement | null>(null);
+    
     useEffect(() => {
-        if (searchBarRef) {
-            const inputSubscription = subscribeToInputEvents(searchBarRef);
+        const currentSearchBarRef = searchBarRef.current;
+        if (currentSearchBarRef) {
+            const inputSubscription = subscribeToInputEvents(currentSearchBarRef);
             return () => {
                 if (inputSubscription) {
                     inputSubscription.unsubscribe();
                 }
             }
         }
-    }, [ searchBarRef ]);
+    }, [ searchBarRef.current ]);
 
     const subscribeToInputEvents = (searchBar: HTMLInputElement) => 
         fromEvent<InputEvent>(searchBar, 'input')
             .pipe(
                 map(event => {
                     const target = event.target;
-                    if (target && target === searchBarRef) {
-                        return searchBarRef.value;
+                    if (target && searchBarRef.current && target === searchBarRef.current) {
+                        return searchBarRef.current.value;
                     }
                 }),
                 debounceTime(CONSTANTS.DEBOUNCE_TIME),
@@ -51,7 +51,7 @@ function SearchBar({ identityRequestDispatch }: SearchBarProps) {
     return (
         <div className='input-wrapper'>
             <input type='text'
-                ref={ (ref) => initRef(ref, setSearchBarRef) }
+                ref={searchBarRef}
                 role={'search'}
                 className='search-bar'
                 placeholder='Search for facts...'>    
