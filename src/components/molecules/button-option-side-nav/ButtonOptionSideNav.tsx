@@ -20,7 +20,7 @@ export interface ButtonSideNavConfigItem<T extends string> {
 export interface ButtonOptionSideNavProps {
     buttonOptionSideNavConfig: ButtonSideNavConfigItem<any>[],
     orientation: Orientation
-    refSetter: React.MutableRefObject<HTMLDivElement | null>
+    refSetter?: React.MutableRefObject<HTMLDivElement | null>
 }
 
 function ButtonOptionSideNav({ buttonOptionSideNavConfig, orientation, refSetter }: ButtonOptionSideNavProps) {

@@ -5,11 +5,10 @@ export interface NavCircleListProps {
   itemWidth: number,
   numItemsToDisplay: number,
   navCircles: boolean[],
-  setNavCircles: (_: boolean[]) => void,
   setScrollToOptions: (_: (current: ScrollToOptions) => ScrollToOptions) => void
 }
 
-function NavCircleList({ itemWidth, numItemsToDisplay, navCircles, setNavCircles, setScrollToOptions }: NavCircleListProps) {
+function NavCircleList({ itemWidth, numItemsToDisplay, navCircles, setScrollToOptions }: NavCircleListProps) {
 
     const renderNavCircles = () => {
       return navCircles.map((isActive, index) => {
@@ -21,7 +20,6 @@ function NavCircleList({ itemWidth, numItemsToDisplay, navCircles, setNavCircles
     }
 
     const handleCircleSelection = (clickedIndex: number) => {
-        setNavCircles(navCircles.map((_navCircle, circleIndex) => circleIndex === clickedIndex));
         setScrollToOptions(current => ({
             ...current,
             ...{

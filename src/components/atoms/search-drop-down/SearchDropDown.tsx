@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { fromEvent } from 'rxjs/internal/observable/fromEvent';
 import { filter } from 'rxjs/internal/operators/filter';
 import { map } from 'rxjs/internal/operators/map';
@@ -19,18 +19,19 @@ export interface SearchDropDownProps {
 function SearchDropDown({ identities, identityRequestDispatch }: SearchDropDownProps) {
 
     const navigate = useNavigate();
-    const [ searchResultsRef, setSearchResultsRef ] = useState<HTMLDivElement | null>(null);
+    const searchResultsRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        if (searchResultsRef) {
-            const inputSubscription = subscribeToScrollEvents(searchResultsRef);
+        const currentSearchResultsRef = searchResultsRef.current;
+        if (currentSearchResultsRef) {
+            const inputSubscription = subscribeToScrollEvents(currentSearchResultsRef);
             return () => {
                 if (inputSubscription) {
                     inputSubscription.unsubscribe();
                 }
             }
         }
-    }, [ searchResultsRef ]);
+    }, [ searchResultsRef.current ]);
 
     const subscribeToScrollEvents = (searchResults: HTMLDivElement) => 
         fromEvent<InputEvent>(searchResults, 'scroll')
@@ -94,7 +95,7 @@ function SearchDropDown({ identities, identityRequestDispatch }: SearchDropDownP
             renderTableHeader={renderTableHeader}
             renderTableBody={renderTableBody}
             zeroStateCondition={ identities.length === 0}
-            wrapperRefSetter={setSearchResultsRef}/>
+            wrapperRefSetter={searchResultsRef}/>
     )
   }
   

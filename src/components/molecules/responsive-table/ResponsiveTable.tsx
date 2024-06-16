@@ -6,7 +6,7 @@ export interface ResponsiveTableProps {
     renderTableHeader: () => JSX.Element,
     renderTableBody: () => JSX.Element,
     zeroStateCondition: boolean,
-    wrapperRefSetter: React.MutableRefObject<HTMLDivElement | null>
+    wrapperRefSetter?: React.MutableRefObject<HTMLDivElement | null>
 }
 
 function ResponsiveTable({

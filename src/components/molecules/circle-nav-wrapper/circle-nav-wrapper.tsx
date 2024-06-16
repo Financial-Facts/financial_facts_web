@@ -20,26 +20,15 @@ function CircleNavWrapper({
     itemWidth
 }: CircleNavWrapperProps) {
     
+    const [ selectedIndex, setSelectedIndex ] = useState<number>(0);
     const numOfCircles = Math.ceil(listLength / numItemsToDisplay);
-
-    const [ navCircles, setNavCircles ] = useState<boolean[]>(numItemsToDisplay === 0 ? [] : () => {
-        const circles: boolean[] = [...Array(numOfCircles)].map((_, index) => index === 0);
-        return circles;
-    });
-
+    const navCircles: boolean[] = numItemsToDisplay === 0 ? [] :
+        [...Array(numOfCircles)].map((_, index) => index === selectedIndex);
+    
     const [ scrollToOptions, setScrollToOptions ] = useState<ScrollToOptions>({
         left: 0,
         behavior: 'smooth',
     });
-
-    useEffect(() => {
-        setScrollToOptions({
-            left: 0,
-            behavior: 'smooth'
-        });
-        const circles: boolean[] = [...Array(numOfCircles)].map((_, index) => index === 0);
-        setNavCircles(circles);
-    }, [ numItemsToDisplay ]);
 
     useEffect(() => {
         if (elementRef.current) {
@@ -64,7 +53,7 @@ function CircleNavWrapper({
                     const element = target as HTMLElement;
                     const elementWidth = numItemsToDisplay * itemWidth;
                     const navCircleIndex = Math.ceil(element.scrollLeft / elementWidth);
-                    setNavCircles(current => current.map((_, index) => index === navCircleIndex));
+                    setSelectedIndex(navCircleIndex);
                 }
             });
 
@@ -75,8 +64,7 @@ function CircleNavWrapper({
                 itemWidth={itemWidth}
                 numItemsToDisplay={numItemsToDisplay}
                 setScrollToOptions={setScrollToOptions}
-                navCircles={navCircles}
-                setNavCircles={setNavCircles}/>
+                navCircles={navCircles}/>
         </>
     )
   }
