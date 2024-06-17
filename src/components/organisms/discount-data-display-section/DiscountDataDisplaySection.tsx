@@ -69,14 +69,15 @@ function DiscountDataDisplaySection({ discount, loading, error }: DiscountDataDi
             deselectable: true
         }];
         
-        return mobile.mobile ? 
-            <ButtonOptionSideNav
-                buttonOptionSideNavConfig={fullConfig.slice(0, 1)}
-                orientation={'horizontal'}/> :
-            <ButtonOptionSideNav
-                buttonOptionSideNavConfig={fullConfig}
-                orientation={'vertical'}/> 
-    }, [ mobile, valuationKey, periodicDataKey, keyOptions ]);
+        return !discount ? undefined : 
+            mobile.mobile ? 
+                <ButtonOptionSideNav
+                    buttonOptionSideNavConfig={fullConfig.slice(0, 1)}
+                    orientation={'horizontal'}/> :
+                <ButtonOptionSideNav
+                    buttonOptionSideNavConfig={fullConfig}
+                    orientation={'vertical'}/> 
+    }, [ discount, mobile, valuationKey, periodicDataKey, keyOptions ]);
 
     const renderSelectValuationKey = () => 
         loading ?
@@ -84,6 +85,8 @@ function DiscountDataDisplaySection({ discount, loading, error }: DiscountDataDi
         error ?
             <ZeroState message={'Error'}
                 supportText={'An error occurred while collecting discount details'}/> :
+        !discount ?
+            <ZeroState message={'Discount not found'} supportText={'Discount not found for provided CIK'}/> :
         discount && valuationKey ?
             <>
                 { !mobile.mobile && discountDefinition }

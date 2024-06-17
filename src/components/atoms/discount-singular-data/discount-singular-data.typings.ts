@@ -24,6 +24,19 @@ export type BrpSingularDataKeyOption =
     'sharesOutstanding' |
     'psBenchmarkRatio';
 
+export const PercentageKeys: (DcfSingularDataKeyOption | SpSingularDataKeyOption | BrpSingularDataKeyOption)[] = [
+    'longTermGrowthRate',
+    'wacc'
+];
+
+export const CurrencyKeys: (DcfSingularDataKeyOption | SpSingularDataKeyOption | BrpSingularDataKeyOption)[] = [
+    'enterpriseValue',
+    'freeCashFlowT1',
+    'marketPrice',
+    'netDebt',
+    'terminalValue',
+    'ttmRevenue',
+];
 
 export const DcfSingularDataKeys: DcfSingularDataKeyOption[] = [
     'cik',

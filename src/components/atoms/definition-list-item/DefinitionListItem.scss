@@ -23,12 +23,13 @@
         box-sizing: border-box;
 
         .word-container {
-            padding: 8px 16px;
+            padding: 0 16px;
             background: $light-gray;
             height: var(--definition-list-item-default-height);
             box-sizing: inherit;
             display: flex;
             justify-content: space-between;
+            align-items: center;
             
             .word {
                 margin: 0;

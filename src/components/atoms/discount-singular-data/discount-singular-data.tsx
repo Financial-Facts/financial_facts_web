@@ -3,7 +3,8 @@ import './discount-singular-data.scss';
 import { cleanKey } from '../../../utilities';
 import InformationIcon from '../../molecules/information-icon/InformationIcon';
 import { messaging } from '../../../constants/messaging';
-import { SpSingularDataKeys, SpSingularDataKeyOption, DcfSingularDataKeys, DcfSingularDataKeyOption, BrpSingularDataKeys, BrpSingularDataKeyOption } from './discount-singular-data.typings';
+import { SpSingularDataKeys, SpSingularDataKeyOption, DcfSingularDataKeys, DcfSingularDataKeyOption, BrpSingularDataKeys, BrpSingularDataKeyOption, PercentageKeys, CurrencyKeys } from './discount-singular-data.typings';
+import FormatService from '../../../services/format/format.service';
 
 export interface DiscountSingularDataProps {
     valuation: StickerPrice | BenchmarkRatioPrice | DiscountedCashFlowPrice
@@ -20,19 +21,29 @@ function DiscountSingularData({ valuation }: DiscountSingularDataProps) {
         return acc;
     }, {});
 
-    const renderDataListItem = (key: string, value: number | string) =>
+    const renderDataListItem = (
+        key: DcfSingularDataKeyOption | SpSingularDataKeyOption | BrpSingularDataKeyOption,
+        value: number | string
+    ) =>
         (<li className='data-list-item' key={key}>
             <span className='text'>
                 { cleanKey(key) }
                 { key === 'debtYears' && <InformationIcon message={messaging.debtYears} alignPopup='center'/>}
             </span>
-            <span className='text'>{ value }</span>
+            <span className='text'>
+                { 
+                    PercentageKeys.includes(key) ? `${ FormatService.roundToDollarValue(Number(value)) }%` : 
+                    CurrencyKeys.includes(key) ? FormatService.formatToDollarValue(Number(value)) :
+                    value
+                }
+            </span>
         </li>);
 
     const renderDataList = () =>
         <ul className={`data-list`}>
             { Object.keys(singularData).map(key => {
-                return renderDataListItem(key, singularData[key])
+                const cast = key as DcfSingularDataKeyOption | SpSingularDataKeyOption | BrpSingularDataKeyOption;
+                return renderDataListItem(cast, singularData[key])
             }) }
         </ul>
     

@@ -30,6 +30,7 @@
     
         th, td {
             padding: 8px;
+            text-wrap: nowrap;
         }
 
         tr :nth-child(odd) {
