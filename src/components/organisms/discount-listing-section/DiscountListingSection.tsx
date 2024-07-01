@@ -6,7 +6,7 @@ import DiscountTable from '../../molecules/discount-table/DiscountTable'
 import MultiFunctionSideNav from '../../molecules/multi-function-side-nav/MultiFunctionSideNav';
 import { Option } from '../../atoms/multi-select/MultiSelect';
 import { cleanKey } from '../../../utilities';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { MultiValue } from 'react-select';
 import { MobileState } from '../../../store/mobile/mobile.slice';
 import { AppDispatch } from '../../../store/store';
@@ -57,6 +57,15 @@ function DiscountListingSection() {
     const absoluteMinimumPrice = useMemo(() => getExtreme(allDiscounts, 'MIN'), [ allDiscounts ]);
     const absoluteMaximumPrice = useMemo(() => getExtreme(allDiscounts, 'MAX'), [ allDiscounts ]);
     const [ selectedTableKeys, setSelectedTableKeys ] = useState<MultiValue<Option<keyof SimpleDiscount>>>([...defaultSelectedKeys]);
+
+    useEffect(() => {
+        if (selectedTableKeys.length > 0 && !selectedTableKeys.find(option => option.value === filteredSort.sortBy)) {
+            dispatch(sortDiscounts({
+                sortBy: selectedTableKeys[0].value,
+                sortOrder: 'ASC'
+            }));
+        }
+    }, []);
 
     const tableFieldOptions = useMemo((): Option<keyof SimpleDiscount>[] =>
         keyOptions.map(key => ({
@@ -161,6 +170,10 @@ function DiscountListingSection() {
     const resetFilter = (): void => {
         dispatch(resetFilteredDiscounts());
         setSelectedTableKeys([...defaultSelectedKeys]);
+        dispatch(sortDiscounts({
+            sortBy: defaultSelectedKeys[0].value,
+            sortOrder: 'ASC'
+        }));
     }
 
     return (
