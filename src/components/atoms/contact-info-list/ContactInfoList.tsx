@@ -9,6 +9,10 @@ function ContactInfoList() {
             <img src='/assets/logo.svg' className='logo'/>
             <ul className='contact-list'>
                 <li className='row'>
+                    <img src='/assets/twitter.svg' className='icon'/>
+                    <Link to={ environment.twitterUrl }>Financial Facts Twitter</Link>
+                </li>
+                <li className='row'>
                     <img src='/assets/github.svg' className='icon'/>
                     <Link to={ environment.githubUrl }>Financial Facts Github</Link>
                 </li>

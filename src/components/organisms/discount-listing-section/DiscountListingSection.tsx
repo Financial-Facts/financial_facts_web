@@ -44,7 +44,9 @@ const keyOptions: (keyof SimpleDiscount)[] = [
     'stickerPrice',
     'discountedCashFlowPrice',
     'benchmarkRatioPrice',
-    'marketPrice'
+    'marketPrice',
+    'annualDividend',
+    'averageVolume'
 ];
 
 function DiscountListingSection() {

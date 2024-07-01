@@ -1,3 +1,4 @@
+import { Discount } from "../../../types/discount.typings";
 
 export type SingularDataKeyOption = SpSingularDataKeyOption | DcfSingularDataKeyOption | BrpSingularDataKeyOption;
 
@@ -35,8 +36,13 @@ export const CurrencyKeys: (DcfSingularDataKeyOption | SpSingularDataKeyOption |
     'marketPrice',
     'netDebt',
     'terminalValue',
-    'ttmRevenue',
+    'ttmRevenue'
 ];
+
+export const DiscountCurrencyKeys: (keyof Discount)[] = [
+    'annualDividend',
+    'marketPrice'
+]
 
 export const DcfSingularDataKeys: DcfSingularDataKeyOption[] = [
     'cik',

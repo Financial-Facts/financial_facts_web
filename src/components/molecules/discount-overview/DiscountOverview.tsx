@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import FormatService from '../../../services/format/format.service';
 import { MobileState } from '../../../store/mobile/mobile.slice';
 import { Discount } from '../../../types/discount.typings';
-import LinearLoopAnimation from '../linear-loop-animation/LinearLoopAnimation';
+import LinearLoopAnimation from '../../atoms/linear-loop-animation/LinearLoopAnimation';
 import './DiscountOverview.scss';
 
 export interface DiscountOverProps {

@@ -20,7 +20,9 @@ export interface SimpleDiscount {
     stickerPrice: number,
     discountedCashFlowPrice: number,
     benchmarkRatioPrice: number,
-    marketPrice: number
+    marketPrice: number,
+    annualDividend: number,
+    averageVolume: number
 }
 
 export interface BulkIdentitiesWrapper {

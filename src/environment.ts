@@ -5,6 +5,7 @@ export const environment = {
     fmpDocsUrl: 'https://site.financialmodelingprep.com/developer/docs',
     factsGatewayUrl: 'https://l1o9ve56r2.execute-api.us-east-1.amazonaws.com/financial-facts/api',
     githubUrl: 'https://github.com/Financial-Facts',
+    twitterUrl: 'https://x.com/FinancialFactsX',
     linkedInUrl: 'https://www.linkedin.com/in/matthew-gabriel-9b508a17a',
     emailPublicToken: 'vJ1G8MaAAI8Flleft',
     emailServiceId: 'service_9d1x574',

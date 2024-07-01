@@ -26,8 +26,8 @@ function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
     
     const { sortBy, sortOrder } = useSelector< { discounts: DiscountState }, DiscountSort>((state) => state.discounts.filteredSort );
     
-    const currencyKeys = new Set<string>([
-        'marketPrice', 'stickerPrice', 'discountedCashFlowPrice', 'benchmarkRatioPrice'
+    const currencyKeys = new Set<keyof SimpleDiscount>([
+        'marketPrice', 'stickerPrice', 'discountedCashFlowPrice', 'benchmarkRatioPrice', 'annualDividend'
     ]);
 
     const displayedFields = useMemo(() =>

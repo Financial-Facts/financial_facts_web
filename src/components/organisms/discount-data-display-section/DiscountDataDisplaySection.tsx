@@ -91,7 +91,7 @@ function DiscountDataDisplaySection({ discount, loading, error }: DiscountDataDi
             <>
                 { !mobile.mobile && discountDefinition }
                 <ValuationPrice price={discount[valuationKey].price} lastUpdated={discount.lastUpdated}/>
-                <DiscountSingularData valuation={discount[valuationKey]}/>
+                <DiscountSingularData title={'Valuation Inputs'} valuation={discount[valuationKey]}/>
             </> :
         <ZeroState message={'Select a Valuation'} supportText={'View the calculated valuation data'}/>
 

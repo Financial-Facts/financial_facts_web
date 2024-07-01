@@ -27,6 +27,9 @@
 
     .data-list-item:hover {
         background: $magnolia-white;
+        outline: 1px solid $light-purple;
+        outline-offset: -1px;
+        border-radius: 4px;
     }
 }
 

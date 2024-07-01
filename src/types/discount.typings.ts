@@ -79,6 +79,14 @@ export interface Discount {
     lastUpdated: Date
     active: boolean
     marketPrice: number
+    annualDividend: number
+    averageVolume: number
+    description: string
+    ceo: string
+    exchange: string
+    industry: string
+    location: string
+    website: string
     stickerPrice: StickerPrice
     benchmarkRatioPrice: BenchmarkRatioPrice
     discountedCashFlowPrice: DiscountedCashFlowPrice
