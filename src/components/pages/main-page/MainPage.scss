@@ -1,0 +1,21 @@
+.discounts-definition {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+
+    .discounts-description {
+        margin-bottom: 16px;
+    }
+
+    .criteria-list-header {
+        text-decoration: underline;
+        align-self: center;
+    }
+
+    #criteria, #examples {
+        align-self: center;
+        text-align: left;
+        line-height: 24px;
+        margin-left: 16px;
+    }
+}

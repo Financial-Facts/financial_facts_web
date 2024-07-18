@@ -2,8 +2,8 @@
 
 
 .expandable-menu {
-    height: 64px;
-    width: 64px;
+    height: var(--sticky-menu-height);
+    width: var(--sticky-menu-height);
     align-items: center;
     justify-content: center;
 

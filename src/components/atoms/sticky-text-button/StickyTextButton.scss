@@ -1,0 +1,17 @@
+@import 'src/variables';
+
+.sticky-text-button {
+    
+    .text-button {
+        color: $dark-gray;
+        background: inherit;
+        padding: 4px;
+    }
+
+    .text-button:hover {
+        color: $base-purple;
+        outline: 1px solid $base-purple;
+        outline-offset: 2px;
+        border-radius: 4px;
+    }
+}

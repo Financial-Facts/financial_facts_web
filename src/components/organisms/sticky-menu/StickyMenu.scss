@@ -1,31 +1,32 @@
 @import 'src/variables';
 
 .sticky-menu {
+    width: 100%;
     position: fixed;
-    right: 32px;
-    top: 32px;
     display: flex;
+    justify-content: space-between;
     z-index: 4;
     gap: 16px;
+    background: $light-gray;
+    box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.25);
+    --sticky-menu-height: 64px;
 
-    .sticky-menu-option {
+    .redirect-options-list {
         display: flex;
-        border-radius: 4px;
-        background: $light-gray;
-        box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.25);
+        align-items: center;
+        max-width: 400px;
+        flex: 1;
+        justify-content: space-between;
+        flex-wrap: wrap;
     }
-}
 
-@media only screen and (max-width: 576px) {
-
-    .sticky-menu {
-        flex-direction: column-reverse;
-        align-items: flex-end;
-        right: 16px;
-        top: 16px;
-
+    .options-list {
+        display: flex;
+        align-items: center;
+        
         .sticky-menu-option {
-            max-width: calc(100vw - 48px);
+            display: flex;
+            max-height: var(--sticky-menu-height);
         }
     }
 

@@ -6,7 +6,6 @@ import { Subject } from 'rxjs/internal/Subject';
 import { ClosurePayload } from '../../organisms/sticky-menu/StickyMenu';
 import './expandable-menu.scss';
 import { PageState, Page } from '../../../store/page/page.typings';
-import { MobileState } from '../../../store/mobile/mobile.slice';
 import watchForMenuClosure from '../../../hooks/watchForMenuClosure';
 
 export interface ExpandableMenuProps  { 
@@ -17,7 +16,6 @@ function ExpandableMenu({ $closeDropdowns }: ExpandableMenuProps) {
 
     const [ isExpanded, setIsExpanded ] = useState(false);
     const pages = useSelector<{ page: PageState }, PageState>((state) => state.page);
-    const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
     watchForMenuClosure($closeDropdowns, (payload) => setIsExpanded(!payload.includes('ALL') && !payload.includes('NAV')));
 
     useEffect(() => {
@@ -36,16 +34,12 @@ function ExpandableMenu({ $closeDropdowns }: ExpandableMenuProps) {
     }
 
     const renderDropdownMenuListItems = (pageList: Page[]) => 
-        mobile.size === 'SMALL' ? 
-            pageList.map(page => {
-                return buildListItem(page);
-            }) :
-            pageList.reduce<JSX.Element[]>((acc, page) => {
-                if (page !== 'Main') {
-                    acc.push(buildListItem(page));
-                }
-                return acc;
-            }, []);
+        pageList.reduce<JSX.Element[]>((acc, page) => {
+            if (page !== 'Main') {
+                acc.push(buildListItem(page));
+            }
+            return acc;
+        }, []);
     
     return (
         <nav className={'sticky-menu-option expandable-menu'}

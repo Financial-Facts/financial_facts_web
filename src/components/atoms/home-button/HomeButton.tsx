@@ -10,9 +10,10 @@ function HomeButton() {
     return (
         <div className='sticky-menu-option home-button'>
             <SvgIcon
-                src={'/assets/home.svg'}
-                height={'48px'}
-                width={'48px'}
+                src={'/assets/logo.svg'}
+                height={'calc(var(--sticky-menu-height) - 8px)'}
+                width={'calc(var(--sticky-menu-height) - 8px)'}
+                wrapperPadding='0'
                 isButton={true}
                 onClick={() => navigate('/')}/>
         </div>

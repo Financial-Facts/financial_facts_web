@@ -3,8 +3,7 @@
 
 .full {
     min-height: 500px;
-    padding: 50px 0;
-    background: center / contain no-repeat, lightgray 50% url('/assets/discount_display_background.png');
+    padding: 50px;
 
     .body .discounts {
         margin-bottom: 30px;
@@ -13,19 +12,20 @@
 
 .discount-display-section {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     flex-direction: column;
     justify-content: flex-start;
-    width: 100%;
     background-size: cover;
     box-sizing: border-box;
+    width: 100%;
+    max-width: 1250px;
 
     .discounts-display-header {
         display: flex;
         align-items: center;
         color: $base-purple;
         font-size: $x-large-font;
-        margin: 0 5%;
+        margin: 0;
         text-align: center;
 
         .svg-icon-wrapper {
@@ -37,8 +37,7 @@
 
     h3 {
         font-size: clamp($plus-font, 5vw, $large-font);
-        margin: 17px 10% 21px 10%;
-        text-align: center;
+        margin: 17px 0;
 
         .valuation-text {
             display: inline-flex;
@@ -63,27 +62,42 @@
         --submit-button-height: auto;
         --submit-button-width: auto;
         --submit-button-padding: 8px 8px 8px 16px;
-        --submit-button-font-size: clamp(24px, 5vw, 32px);
+        --submit-button-font-size: 24px;
         --svg-wrapper-padding: 4px 8px 8px;
+        width: 100%;
 
         .discounts {
             display: flex;
             padding: 0;
             list-style: none;
-            width: 840px;
+            width: 100%;
             overflow-x: auto;
             overflow-y: hidden;
             scroll-snap-type: x mandatory;
             -ms-overflow-style: none;  /* IE and Edge */
             scrollbar-width: none;  /* Firefox */
+            align-self: flex-start;
+            min-width: 250px;
         }
 
         .nav-circle-wrapper {
-            width: 410px;
+            width: 100%;
         }
 
         .submit-button {
             margin-top: 30px;
         }
+    }
+}
+
+@media only screen and (max-width: 576px) {
+
+    .full {
+        padding: 32px;
+    }
+
+    .discount-display-section {
+        align-items: center;
+        text-align: center;
     }
 }

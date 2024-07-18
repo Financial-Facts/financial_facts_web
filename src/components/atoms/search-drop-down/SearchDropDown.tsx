@@ -1,25 +1,41 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { fromEvent } from 'rxjs/internal/observable/fromEvent';
 import { filter } from 'rxjs/internal/operators/filter';
 import { map } from 'rxjs/internal/operators/map';
 import './SearchDropDown.scss';
 import { CONSTANTS } from '../../../constants/constants';
-import { Identity } from '../../../services/bulk-entities/bulk-entities.typings';
+import { Identity, IdentityRequest } from '../../../services/bulk-entities/bulk-entities.typings';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { useNavigate } from 'react-router-dom';
 import ResponsiveTable from '../../molecules/responsive-table/ResponsiveTable';
 import { handleEnterKeyEvent } from '../../../utilities';
-import { IdentityRequestAction } from '../../molecules/expandable-search/reducers/identity-request.reducer';
+import fetchIdentities from '../../../hooks/fetchIdentities';
 
 export interface SearchDropDownProps {
-    identities: Identity[],
-    identityRequestDispatch: React.Dispatch<IdentityRequestAction>
+    initialIdentities: Identity[],
+    identityRequest: IdentityRequest
 }
 
-function SearchDropDown({ identities, identityRequestDispatch }: SearchDropDownProps) {
+function SearchDropDown({
+    initialIdentities,
+    identityRequest
+}: SearchDropDownProps) {
 
     const navigate = useNavigate();
     const searchResultsRef = useRef<HTMLDivElement | null>(null);
+
+    const [ allIdentities, setAllIdentities ] = useState<Identity[]>([...initialIdentities]);
+    const [ extensionRequest, setExtensionRequest ] = useState<IdentityRequest | null>(null);
+    const { identities, loading, error } = fetchIdentities(extensionRequest);
+
+    useEffect(() => {
+        if (!loading && !error && identities.length > 0) {
+            setAllIdentities(current => [
+                ...current,
+                ...identities
+            ]);
+        }
+    }, [ loading, error ]);
 
     useEffect(() => {
         const currentSearchResultsRef = searchResultsRef.current;
@@ -31,7 +47,7 @@ function SearchDropDown({ identities, identityRequestDispatch }: SearchDropDownP
                 }
             }
         }
-    }, [ searchResultsRef.current ]);
+    }, [ searchResultsRef.current, allIdentities ]);
 
     const subscribeToScrollEvents = (searchResults: HTMLDivElement) => 
         fromEvent<InputEvent>(searchResults, 'scroll')
@@ -39,22 +55,19 @@ function SearchDropDown({ identities, identityRequestDispatch }: SearchDropDownP
                 map(event => event.target),
                 filter(target => {
                     if (target &&
-                        identities.length > 0 &&
-                        identities.length % CONSTANTS.IDENTITY_BATCH_SIZE === 0) {
+                        allIdentities.length > 0 &&
+                        allIdentities.length % CONSTANTS.IDENTITY_BATCH_SIZE === 0) {
                         const element = target as HTMLElement;
                         const percentScrolled = (element.scrollTop / (element.scrollHeight - element.offsetHeight)) * 100;
                         return percentScrolled > CONSTANTS.SEARCH_SCROLL_FETCH_THRESHOLD;
                     }
                     return false;
                 }),
-                map(() => identities.length),
                 distinctUntilChanged())
-            .subscribe(startIndex => identityRequestDispatch({
-                type: 'set_start_and_limit',
-                payload: {
-                    startIndex: startIndex,
-                    limit: CONSTANTS.IDENTITY_BATCH_SIZE - 1
-                }
+            .subscribe(() => setExtensionRequest({
+                ...identityRequest,
+                startIndex: allIdentities.length,
+                limit: CONSTANTS.IDENTITY_BATCH_SIZE - 1
             }));
 
     const handleClick = (identity: Identity) => {
@@ -78,7 +91,7 @@ function SearchDropDown({ identities, identityRequestDispatch }: SearchDropDownP
         </tbody>
     
     const renderTableRows = () => {
-        return identities.map(identity =>
+        return allIdentities.map(identity =>
             <tr key={identity.cik}
                 tabIndex={0}
                 onClick={() => handleClick(identity)}
@@ -94,7 +107,7 @@ function SearchDropDown({ identities, identityRequestDispatch }: SearchDropDownP
             className='search-results-table'
             renderTableHeader={renderTableHeader}
             renderTableBody={renderTableBody}
-            zeroStateCondition={ identities.length === 0}
+            zeroStateCondition={ allIdentities.length === 0}
             wrapperRefSetter={searchResultsRef}/>
     )
   }

@@ -4,6 +4,8 @@ import { CONSTANTS } from '../../../constants/constants';
 import { fromEvent } from 'rxjs/internal/observable/fromEvent';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { IdentityRequestAction } from '../../molecules/expandable-search/reducers/identity-request.reducer';
+import { useSelector } from 'react-redux';
+import { MobileState } from '../../../store/mobile/mobile.slice';
 
 export interface SearchBarProps {
     identityRequestDispatch: React.Dispatch<IdentityRequestAction>
@@ -11,6 +13,7 @@ export interface SearchBarProps {
 
 function SearchBar({ identityRequestDispatch }: SearchBarProps) {
 
+    const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
     const searchBarRef = useRef<HTMLInputElement | null>(null);
     
     useEffect(() => {
@@ -54,7 +57,7 @@ function SearchBar({ identityRequestDispatch }: SearchBarProps) {
                 ref={searchBarRef}
                 role={'search'}
                 className='search-bar'
-                placeholder='Search for facts...'>    
+                placeholder={ mobile.size === 'SMALL' ? 'Search...' : `Search for facts...`}>    
             </input>
         </div>
     )

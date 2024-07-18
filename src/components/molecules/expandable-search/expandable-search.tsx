@@ -9,7 +9,6 @@ import { CONSTANTS } from '../../../constants/constants';
 import LoadingSpinner from '../../atoms/loading-spinner/loading-spinner';
 import SvgIcon from '../../atoms/svg-icon/SvgIcon';
 import watchForMenuClosure from '../../../hooks/watchForMenuClosure';
-import ZeroState from '../../atoms/zero-state/ZeroState';
 import { identityRequestReducer } from './reducers/identity-request.reducer';
 import fetchIdentities from '../../../hooks/fetchIdentities';
 
@@ -30,7 +29,7 @@ function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchPro
     const [ displaySearchFilter, setDisplaySearchFilter ] = useState(isStandalone);
     const [ identityRequest, identityRequestDispatch ] = useReducer(identityRequestReducer, {
         startIndex: 0,
-        limit: CONSTANTS.IDENTITY_BATCH_SIZE,
+        limit: CONSTANTS.IDENTITY_BATCH_SIZE - 1,
         searchBy: 'SYMBOL',
         sortBy: 'SYMBOL',
         order: 'ASC',
@@ -41,6 +40,8 @@ function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchPro
 
     const displaySearchResults = useMemo(() => !!identityRequest.keyword, [ identityRequest.keyword ]);
 
+    console.log(displaySearchResults);
+    
     let timeout: NodeJS.Timeout | undefined;
 
     const handleOpenEvent = (): void => {
@@ -59,49 +60,53 @@ function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchPro
     }
 
     return (
-        <div className={`sticky-menu-option search
-            ${ isStandalone ? 'standalone-search-bar' : 'sticky-search-bar'}
-            ${ !isStandalone && displaySearchBar ? 'display-search-bar' : CONSTANTS.EMPTY }
-            ${ displaySearchFilter && !isStandalone ? 'display-filter-form' : CONSTANTS.EMPTY}
-            ${ displaySearchResults && !isStandalone ? 'display-search-results' : CONSTANTS.EMPTY}`}
-            aria-expanded={ displaySearchBar }>
-            <div className='search-bar-wrapper'>
-                <SvgIcon src='/assets/magnifying-glass.svg'
-                    height='48px'
-                    width='48px'
-                    isButton={!displaySearchBar}
-                    onClick={handleOpenEvent}/>
-                {
-                    displaySearchBar &&
-                        <>
-                            <SearchBar identityRequestDispatch={identityRequestDispatch}/>
-                            { 
-                                !isStandalone &&
-                                    <SvgIcon src='/assets/x.svg'
-                                        height='30px'
-                                        width='30px'
-                                        isButton={true}
-                                        onClick={handleCloseEvent}/>
-                            }
-                        </>
-                }
+        <div className='sticky-menu-option expandable-search'>
+            <div className={`search
+                ${ isStandalone ? 'standalone-search-bar' : 'sticky-search-bar'}
+                ${ !isStandalone && displaySearchBar ? 'display-search-bar' : CONSTANTS.EMPTY }`}
+                aria-expanded={ displaySearchBar }>
+                <div className='search-bar-wrapper'>
+                    <SvgIcon src='/assets/magnifying-glass.svg'
+                        height='48px'
+                        width='48px'
+                        isButton={!displaySearchBar}
+                        onClick={handleOpenEvent}/>
+                    {
+                        displaySearchBar &&
+                            <>
+                                <SearchBar identityRequestDispatch={identityRequestDispatch}/>
+                                { 
+                                    !isStandalone &&
+                                        <SvgIcon src='/assets/x.svg'
+                                            height='30px'
+                                            width='30px'
+                                            isButton={true}
+                                            onClick={handleCloseEvent}/>
+                                }
+                            </>
+                    }
+                </div>
             </div>
             {
-                displaySearchFilter && 
-                    <SearchFilterForm
-                        identityRequest={identityRequest} 
-                        identityRequestDispatch={identityRequestDispatch}
-                        renderDelay={isStandalone ? 0 : 400}/>
-            }
-            {
-                displaySearchResults ?
-                    loading ? 
-                        <LoadingSpinner size={'SMALL'} color={'PURPLE'}/> : 
-                        <SearchDropDown
-                            identities={identities}
-                            identityRequestDispatch={identityRequestDispatch}/> :
-                    isStandalone &&
-                        <ZeroState message={'No input'} supportText={'Use the search bar to find company filings'}/>
+                <div className={`expandable-search-dropdown
+                    ${ displaySearchFilter ? 'display-filter-form' : CONSTANTS.EMPTY}
+                    ${ displaySearchResults ? 'display-search-results' : CONSTANTS.EMPTY}`}>
+                    {
+                        displaySearchFilter && 
+                            <SearchFilterForm
+                                identityRequest={identityRequest} 
+                                identityRequestDispatch={identityRequestDispatch}
+                                renderDelay={isStandalone ? 0 : 400}/>
+                    }
+                    {
+                        displaySearchResults && loading ? 
+                            <LoadingSpinner size={'SMALL'} color={'PURPLE'}/> :
+                        displaySearchResults && !loading &&
+                            <SearchDropDown
+                                initialIdentities={identities}
+                                identityRequest={identityRequest}/>
+                    }
+                </div>
             }
         </div>
     )

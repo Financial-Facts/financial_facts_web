@@ -16,10 +16,8 @@ export interface HeaderProps {
 function Header({ text, subtext, symbol, size = 'LARGE', adjacentNavigationState }: HeaderProps) {
     return (
       <header className={`header`}>
+        <StickyMenu/>
         <div className="primary-content-wrapper">
-          <div className="logo-wrapper">
-              <img src="/assets/logo.svg" className="logo"/>
-          </div>
           <div className={`title-wrapper`}>
               { symbol && <SymbolIcon symbol={symbol} size={"LARGE"}/> }
               <div className={`text-wrapper ${size}`}>
@@ -27,9 +25,7 @@ function Header({ text, subtext, symbol, size = 'LARGE', adjacentNavigationState
                 { subtext ? <h2>{ subtext }</h2> : undefined }
               </div>
           </div>
-          <div className="logo-wrapper"></div>
         </div>
-        <StickyMenu/>
         {
           !!adjacentNavigationState &&
             <AdjacentNavigationArrows adjacentNavigationState={adjacentNavigationState}/>

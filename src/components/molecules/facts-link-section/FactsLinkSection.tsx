@@ -1,24 +1,15 @@
-import { useNavigate } from 'react-router-dom';
 import './FactsLinkSection.scss';
-import SubmitButton from '../submit-button/submit-button';
+import CompanySearchSection from '../company-search-section/CompanySearchSection';
 
 function FactsLinkSection() {
 
-    const navigate = useNavigate();
-
     return (
       <section className='facts-link-section'>
-        <h2>Facts</h2>
-        <h3>Looking for raw data for a specific company?</h3>
-        <div className='search-navigation-button-wrapper'>
-            <SubmitButton
-              text='Search'
-              outcome={'neutral'}
-              loading={false}
-              iconSource='/assets/magnifying-glass.svg'
-              onClick={() => navigate('/facts')}/>
+        <div className='main-content'>
+          <h2>Facts</h2>
+          <h3>Looking for raw data from a specific company?</h3>
+          <CompanySearchSection isStandalone={true}/>
         </div>
-        <div role='img' className='company-icon-list-box'/>
       </section>
     )
 }

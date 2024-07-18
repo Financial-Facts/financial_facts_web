@@ -42,7 +42,7 @@ function SvgIcon({
             currentIconWrapperRef.style.setProperty('--svg-height', height);
             currentIconWrapperRef.style.setProperty('--svg-width', width);
 
-            setPropertyIfExists(currentIconWrapperRef, '--svg-wrapper-padding', isButton ? '4px' : wrapperPadding);
+            setPropertyIfExists(currentIconWrapperRef, '--svg-wrapper-padding', wrapperPadding ? wrapperPadding : isButton ? '4px' : wrapperPadding);
             setPropertyIfExists(currentIconWrapperRef, '--svg-color', color);
         }
     }, [ iconWrapperRef.current ]);

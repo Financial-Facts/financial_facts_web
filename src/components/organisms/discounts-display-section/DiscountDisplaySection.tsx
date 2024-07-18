@@ -19,23 +19,38 @@ const hideDataSubject = new Subject<void>();
 function DiscountDisplaySection() {
     
     const { allDiscounts, loading } = useSelector< { discounts: DiscountState }, DiscountState>((state) => state.discounts);
-    
-    const CARD_WIDTH = 250;
+    const discountListRef = useRef<HTMLUListElement | null>(null);
+    const MIN_CARD_WIDTH = 235;
+
     const calculateNumCardsToDisplay = (): number => {
-        const viewportWidth = window.visualViewport ? window.visualViewport.width : window.innerWidth;
-        return Math.max(1, Math.floor((viewportWidth - 150) / CARD_WIDTH));
+        if (discountListRef.current) {
+            const width = discountListRef.current.clientWidth;
+            const numCards = Math.max(1, Math.floor((width) / MIN_CARD_WIDTH));
+            if (discountListRef.current) {
+                setCardWidth(discountListRef.current.clientWidth / numCards);
+            }
+            return Math.max(1, Math.floor((width) / MIN_CARD_WIDTH));
+        }
+        return 4;
     }
 
+    const calculateCardWidth = (): number => discountListRef.current ? 
+        discountListRef.current.clientWidth / numCardsToDisplay :
+        MIN_CARD_WIDTH;
+
     const navigate = useNavigate();
-    const [ numCardsToDisplay, setNumCardsToDisplay ] = useState(calculateNumCardsToDisplay());
-    const discountListRef = useRef<HTMLUListElement | null>(null);
+    const [ numCardsToDisplay, setNumCardsToDisplay ] = useState(4);
+    const [ cardWidth, setCardWidth ] = useState(calculateCardWidth());
 
     const usingArrowNavigation = numCardsToDisplay === 1;
     const discountCardsList = useMemo(() =>
-        <ul ref={discountListRef}
+        <ul ref={(ref) => {
+                discountListRef.current = ref;
+                setNumCardsToDisplay(calculateNumCardsToDisplay());
+            }}
             className={ 'discounts' }
             style={{
-                "--discount-card-width": `${CARD_WIDTH}px`
+                "--discount-card-width": `${cardWidth}px`
             } as React.CSSProperties }>
             { 
                 allDiscounts.map(discount =>
@@ -45,7 +60,7 @@ function DiscountDisplaySection() {
                         hideDataTrigger$={hideDataSubject.asObservable()}/>)
             }
         </ul>,
-    [ allDiscounts ]);
+    [ allDiscounts, cardWidth ]);
 
     listenForWindowClick((target: Element) => {
         if (!target.classList.contains('symbol-icon') &&
@@ -67,7 +82,6 @@ function DiscountDisplaySection() {
     useEffect(() => {
         const currentDiscountListRef = discountListRef.current;
         if (currentDiscountListRef) {
-            currentDiscountListRef.style.width = `${numCardsToDisplay * CARD_WIDTH}px`;
             currentDiscountListRef.scrollTo({
                 left: 0,
                 behavior: 'instant'
@@ -100,11 +114,11 @@ function DiscountDisplaySection() {
                             <CircleNavWrapper listLength={allDiscounts.length}
                                 numItemsToDisplay={numCardsToDisplay}
                                 elementRef={discountListRef}
-                                itemWidth={CARD_WIDTH}
+                                itemWidth={cardWidth}
                                 element={discountCardsList}/> :
                             <ArrowNavWrapper
                                 elementRef={discountListRef}
-                                itemWidth={CARD_WIDTH}
+                                itemWidth={cardWidth}
                                 element={discountCardsList}/>
                     }
                     <SubmitButton

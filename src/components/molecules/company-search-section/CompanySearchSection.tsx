@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Subject } from 'rxjs/internal/Subject';
 import LoadingSpinner from '../../atoms/loading-spinner/loading-spinner';
 import SymbolIcon from '../../atoms/symbol-icon/symbol-icon';
@@ -6,17 +6,26 @@ import { ClosurePayload } from '../../organisms/sticky-menu/StickyMenu';
 import ExpandableSearch from '../expandable-search/expandable-search';
 import './CompanySearchSection.scss';
 import fetchIdentities from '../../../hooks/fetchIdentities';
-import { CONSTANTS } from '../../../constants/constants';
 import { IdentityRequest } from '../../../services/bulk-entities/bulk-entities.typings';
+import LinearLoopAnimation from '../../atoms/linear-loop-animation/LinearLoopAnimation';
+import { CONSTANTS } from '../../../constants/constants';
 
+export interface CompanySearchSectionProps {
+    isStandalone?: boolean
+}
 
-function CompanySearchSection() {
+function CompanySearchSection({ isStandalone = true }: CompanySearchSectionProps) {
 
-    const SIZE_BACKGROUND_IMG = 114; 
-    const NUM_BACKGROUND_ROWS = window.outerHeight / SIZE_BACKGROUND_IMG;
+    const SIZE_BACKGROUND_IMG = 114;
+    const BACKGROUND_MAX_HEIGHT = 500;
+    const BACKGROUND_MAX_WIDTH = 1150;
+
+    const NUM_BACKGROUND_ROWS = Math.ceil(BACKGROUND_MAX_HEIGHT / SIZE_BACKGROUND_IMG);
+    const NUM_BACKGROUNDS_COLUMNS = Math.ceil((BACKGROUND_MAX_WIDTH / SIZE_BACKGROUND_IMG));
+    const backgroundRef = useRef<HTMLDivElement | null>(null);
 
     const calculateIdentityLimit = (): number => 
-        Math.round((window.outerWidth / SIZE_BACKGROUND_IMG) * NUM_BACKGROUND_ROWS);
+        Math.ceil(NUM_BACKGROUNDS_COLUMNS * NUM_BACKGROUND_ROWS * 1.25);
 
     const [ imagesLoaded, setImagesLoaded ] = useState(0);
     const identityRequest: IdentityRequest = useMemo(() => ({
@@ -37,24 +46,40 @@ function CompanySearchSection() {
             setImageNotFound={() => setImagesLoaded((current) => current + 1)}/>)
     , [ identities ]);
 
-    const isLoadingImages = identityImages.length === 0 || imagesLoaded !== identityImages.length;
+    const isLoadingImages = identityImages.length === 0 || imagesLoaded < NUM_BACKGROUND_ROWS * NUM_BACKGROUNDS_COLUMNS;
     
+    const symbolsRows = useMemo(() => {
+        if (backgroundRef.current) {
+            let result: JSX.Element[] = [];
+            for (let x = 0; x < NUM_BACKGROUND_ROWS; x++) {
+                result.push(
+                    <LinearLoopAnimation
+                        duration='60s'
+                        direction={ x % 2 === 0 ? 'reverse' : 'forward' }
+                        element={
+                            <div className='symbol-row'>
+                                { identityImages.slice(x * NUM_BACKGROUNDS_COLUMNS, (x + 1) * NUM_BACKGROUNDS_COLUMNS) }
+                            </div>
+                        }/>
+                )
+            }
+            return result;
+        }
+    }, [ identityImages, backgroundRef.current ]);
+
     return (
         <section className='company-search-section'>
-            { isLoadingImages ? <LoadingSpinner size={'LARGE'} color={'PURPLE'}/> : undefined }
-            <div className={`${ isLoadingImages ? 'hide' : CONSTANTS.EMPTY}` }>
+            { isLoadingImages ? <LoadingSpinner size={'LARGE'} color={'PURPLE'} minHeight={500}/> : undefined }
+            <div className={`${ isLoadingImages ? 'hide' : 'content-container'}` }>
+                <div className={`search-background
+                    ${ isStandalone ? 'standalone-search-background' : CONSTANTS.EMPTY}`}
+                    ref={backgroundRef}>
+                    { symbolsRows }
+                </div>
                 <div className='company-search-container'>
                     <div className='company-search-wrapper'>
-                        <div className='divider-text'>Search for Public Entities</div>
-                        <div className='search-wrapper'>
-                            <ExpandableSearch $closeDropdowns={new Subject<ClosurePayload[]>()} isStandalone={true}/>                                
-                        </div>
+                        <ExpandableSearch $closeDropdowns={new Subject<ClosurePayload[]>()} isStandalone={true}/> 
                     </div>
-                </div>
-                <div className='search-background'>
-                    {
-                        identityImages
-                    }
                 </div>
             </div>
         </section>

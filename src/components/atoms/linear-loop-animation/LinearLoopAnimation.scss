@@ -5,17 +5,23 @@
     height: 100%;
     -webkit-animation: linear infinite;
     -webkit-animation-name: run;
-    -webkit-animation-duration: 40s;
+}
+
+.forward {
+    --start: 0;
+    --end: 100%;
+}
+
+.reverse {
+    --start: 100%;
+    --end: 0;
 }
 
 @-webkit-keyframes run {
     0% {
-        right: 0;
-    }
-    50% {
-    //   right: 50%;
+        right: var(--start);
     }
     100% {
-        right: 100%;
+        right: var(--end);
     }
 }

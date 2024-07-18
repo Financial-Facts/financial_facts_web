@@ -1,16 +1,36 @@
 @import 'src/variables';
 
 .company-search-section {
-    height: 750px;
+    height: 100%;
     width: 100%;
+
+    .content-container {
+        position: relative;
+        height: inherit;
+        width: inherit;
+    }
+
+    .standalone-search-background {
+        opacity: 80%;
+        border-radius: 8px;
+    }
 
     .search-background {
         display: flex;
-        height: 100%;
-        flex-direction: row;
+        height: 500px;
+        flex-direction: column;
         background-color: $dark-gray;
-        justify-content: space-around;
-        flex-wrap: wrap;
+        justify-content: center;
+        overflow: hidden;
+
+        .symbol-row {
+            display: flex;
+            min-width: 100%;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-height: 114px;
+            overflow: hidden;
+        }
 
         .symbol-icon-wrapper {
             padding: 32px;
@@ -20,43 +40,55 @@
     
     .company-search-container {
         display: flex;
-        height: 0;
-        position: relative;
+        height: 100%;
+        width: 100%;
+        position: absolute;
         flex-direction: column;
         align-items: center;
         z-index: 1;
-        top: 50px;
+        top: 25%;
 
         .company-search-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            width: min(calc(100% - 64px), 700px);
-            min-height: 650px;
+            width: 70%;
             background: $off-white;
-            border-radius: 24px;
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
             box-sizing: border-box;
-            padding-bottom: 32px;
-
-            div {
-                max-width: 1000px;
-            }
-        
-            .divider-text {
-                margin: 32px 0;
-            }
+            max-width: 750px;
         
             .search-wrapper {
-                width: calc(80% + 32px);
-                height: calc(100% - 96px);
+                width: 100%;
+                height: 100%;
             }
 
-            .standalone-search-bar {
-                height: 100%;
-                display: flex;
+            .expandable-search {
+                width: 100%;
+
+                .input-wrapper {
+                    padding-right: 32px;
+                }
+
+                .expandable-search-dropdown {
+                    width: 100%;
+                    left: 0;
+
+                    .responsive-table-wrapper {
+                        max-width: none;
+                    }
+                }
             }
         }
     }
     
+}
+
+@media only screen and (max-width: 576px) {
+
+    .company-search-section .company-search-container .company-search-wrapper {
+        width: 90%;
+    }
 }

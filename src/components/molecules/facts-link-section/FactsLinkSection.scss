@@ -1,32 +1,41 @@
 @import 'src/variables';
 
 .facts-link-section {
-    height: 500px;
     width: 100%;
     display: flex;
-    align-items: center;
     justify-content: center;
-    flex-direction: column;
+    background: $light-gray;
 
+    .main-content {
+        padding: 50px;
+        box-sizing: border-box;
+        width: 100%;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        flex-direction: column;
+        max-width: 1250px;
+    }
+    
     h2 {
         color: $base-purple;
         font-family: $league-spartan;
         font-size: $x-large-font;
-        margin: 0 5%;
-        text-align: center;
+        margin: 0;
+        text-align: right;
     }
 
     h3 {
         font-family: $league-spartan;
         font-size: clamp($plus-font, 5vw, $large-font);
-        margin: 17px 10% 21px 10%;
-        text-align: center;
+        margin: 17px 0 21px 0;
+        text-align: right;
         line-height: 32px;
     }
 
     .search-navigation-button-wrapper {
         max-height: 0;
-        max-width: 0;
+        width: 100%;
         position: relative;
         top: 82.5px;
         display: flex;
@@ -36,11 +45,11 @@
         --submit-button-height: auto;
         --submit-button-width: auto;
         --submit-button-padding: 8px 8px 8px 16px;
-        --submit-button-font-size: clamp(24px, 5vw, 32px);
+        --submit-button-font-size: 24px;
     }
 
     .company-icon-list-box {
-        width: calc(100% - 216px);
+        width: 100%;
         height: 215px;
         background-image: url('/assets/companies.png');
         background-size: cover;
@@ -52,8 +61,13 @@
 
 @media only screen and (max-width: 576px) {
 
-    .facts-link-section .company-icon-list-box {
-        width: calc(100% - 100px);
+    .facts-link-section .main-content {
+        padding: 32px;
+        align-items: center;
+
+        h3 {
+            text-align: center;
+        }
     }
 }
 

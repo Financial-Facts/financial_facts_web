@@ -47,7 +47,7 @@ export function identityRequestReducer(state: IdentityRequest, action: IdentityR
         case ('reset'): {
             return {
                 startIndex: 0,
-                limit: CONSTANTS.IDENTITY_BATCH_SIZE,
+                limit: CONSTANTS.IDENTITY_BATCH_SIZE - 1,
                 searchBy: 'SYMBOL',
                 sortBy: 'SYMBOL',
                 order: 'ASC',

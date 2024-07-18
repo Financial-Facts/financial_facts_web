@@ -21,7 +21,8 @@ function FactsPage() {
                   cik={cik}
                   taxonomy={decodedTaxonomy as Taxonomy}
                   selectedDataKey={decodedSelectedDataKey}/> :
-              <CompanySearchSection key={'company-search-section'}/>
+              <CompanySearchSection key={'company-search-section'}
+                isStandalone={false}/>
         ]}/>
     )
 }
