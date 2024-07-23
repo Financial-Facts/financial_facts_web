@@ -20,24 +20,10 @@ input {
     border-width: 0;
 }
 
-ul {
+ul, ol {
     padding-inline-start: 0;
     margin-block-start: 0;
     margin-block-end: 0;
-}
-
-.valuation-definition {
-    line-height: 20px;
-    font-size: $normal-font;
-    
-    .subheader {
-        margin: 0;
-    }
-
-    p {
-        margin: 0 0 16px 0;
-    }
-
 }
 
 .flex-start {

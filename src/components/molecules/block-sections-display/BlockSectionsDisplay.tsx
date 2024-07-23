@@ -8,7 +8,8 @@ export interface BlockSection {
     content: JSX.Element
     link: {
         label: string
-        url: string
+        url: string,
+        newTab?: boolean
     }
 }
 
@@ -31,7 +32,7 @@ function BlockSectionsDisplay({ blocks }: BlockSectionDisplayProps) {
                         <span className='block-title'>{ block.title }</span>
                         { block.content }
                     </div>
-                    <Link to={block.link.url} className='block-link'>{block.link.label}</Link>
+                    <Link to={block.link.url} className='block-link' target={ block.link.newTab ? '_blank' : '_self' }>{block.link.label}</Link>
                 </div>
             )
         }

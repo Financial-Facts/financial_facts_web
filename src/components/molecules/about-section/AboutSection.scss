@@ -3,14 +3,125 @@
 .about-section {
     display: flex;
     flex-direction: column;
-    padding: 32px;
     line-height: 20px;
     font-size: clamp($normal-font, 2vw, $above-normal-font);
     line-height: 24px;
+    background: $off-white;
+    box-sizing: border-box;
+        
+    .about-information {
+        background: #F7EEFD;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 32px;
+        gap: 32px;
+        box-sizing: border-box;
+        
+        .philosophy-block .support-img {
+            box-shadow: -12px 0 12px 0 rgba(0, 0, 0, 0.25);
+        }
 
-    .definitions-section {
-        max-width: none;
-        padding: 0 0 32px 16px;
+        .origins-block .support-img {
+            box-shadow: 12px 0 12px 0 rgba(0, 0, 0, 0.25);
+        }
+        
+        .philosophy-block, .origins-block {
+            display: flex;
+            color: $dark-gray;
+            max-height: 500px;
+            max-width: 1200px;
+            gap: 32px;
+
+            .text-container {
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                width: 50%;
+                align-items: center;
+                
+                p {
+                    max-width: 400px;
+                }
+            }
+    
+            .support-img {
+                object-fit: cover;
+                width: 50%;
+                object-fit: cover;
+            }
+    
+            h3 {
+                margin: 0;
+                width: 100%;
+                max-width: 400px;
+            }
+        }
     }
 
+    .origins-block .text-container {
+        align-items: flex-end;
+    }
+
+    .definitions-header {
+        border-bottom: 2px solid rgba(41, 41, 41, .2);
+        padding-bottom: 12px;
+        margin: 64px 32px 32px 32px;
+
+    }
+
+    .block-sections-display {
+        background: $off-white;
+        margin-top: 0;
+        padding: 0 0 32px 0;
+    }
+    
+    .centered-title {
+        align-self: center;
+        margin: 48px 0 24px 0;
+    }
+
+
 } 
+
+@media only screen and (max-width: 768px) {
+    .about-section .about-information {
+        .philosophy-block, .origins-block {
+            max-height: unset;
+        }
+    }
+
+}
+
+@media only screen and (max-width: 576px) {
+
+    .about-section .about-information {
+
+        .philosophy-block, .origins-block {
+            .text-container {
+                width: 100%;
+                align-items: center;
+            }
+    
+            img.support-img {
+                width: 100%;
+                margin: 0;
+            }
+        }
+
+        .philosophy-block {
+            flex-direction: column;
+        }
+
+        .origins-block {
+            flex-direction: column-reverse;
+        }
+    }
+
+    .definitions-header {
+        margin: 64px 16px 16px 16px;
+    }
+
+}

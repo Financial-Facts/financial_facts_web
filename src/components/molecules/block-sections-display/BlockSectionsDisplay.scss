@@ -9,13 +9,13 @@
     background: $light-gray;
     padding: 18px;
     box-sizing: border-box;
+    flex-wrap: wrap;
 
     .block {
         display: flex;
         flex-direction: column;
         align-items: center;
-        min-width: 250px;
-        width: 50%;
+        min-width: 300px;
         max-width: 500px;
         padding: 32px;
         text-align: center;
@@ -23,6 +23,7 @@
         line-height: 20px;
         box-sizing: border-box;
         justify-content: space-between;
+        flex: 33%;
 
         .block-header {
             display: flex;
@@ -44,13 +45,29 @@
     }
 }
 
+.definition-block-contents {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+    color: $disabled-gray;
+    
+    .list-title {
+        margin: 16px 0 8px 0;
+        align-self: center;
+        color: $dark-gray;
+    }
+
+    .list {
+        align-self: center;
+        text-align: left;
+        line-height: 24px;
+        margin-left: 16px;
+    }
+}
+
 @media only screen and (max-width: 576px) {
 
-    .block-sections-display {
-        flex-wrap: wrap;
-        
-        .block {
-            width: 100%;
-        }
+    .block-sections-display .block {
+        width: 100%;
     }
 }

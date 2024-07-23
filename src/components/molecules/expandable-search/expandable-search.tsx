@@ -38,10 +38,7 @@ function ExpandableSearch({ $closeDropdowns, isStandalone }: ExpandableSearchPro
 
     const { identities, loading } = fetchIdentities(identityRequest.keyword ? identityRequest : null);
 
-    const displaySearchResults = useMemo(() => !!identityRequest.keyword, [ identityRequest.keyword ]);
-
-    console.log(displaySearchResults);
-    
+    const displaySearchResults = useMemo(() => !!identityRequest.keyword, [ identityRequest.keyword ]);    
     let timeout: NodeJS.Timeout | undefined;
 
     const handleOpenEvent = (): void => {

@@ -45,7 +45,6 @@
     
         .definition-container {
             display: flex;
-            justify-content: center;
             height: calc(100% - var(--definition-list-item-default-height));
             background: $thistle;
             padding: 24px 16px;

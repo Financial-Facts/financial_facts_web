@@ -1,0 +1,15 @@
+@import 'src/variables';
+
+.valuation-definition {
+    line-height: 20px;
+    font-size: $normal-font;
+    
+    .subheader {
+        margin: 0;
+    }
+
+    p {
+        margin: 0 0 16px 0;
+    }
+
+}

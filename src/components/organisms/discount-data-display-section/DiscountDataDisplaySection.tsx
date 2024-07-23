@@ -10,12 +10,12 @@ import PeriodicDataVisualization from "../../molecules/periodic-data-visualizati
 import ValuationPrice from "../../atoms/valuation-price/ValuationPrice";
 import ArrowKeyNavigator from "../../molecules/arrow-key-navigator/ArrowKeyNavigator";
 import LoadingSpinner from "../../atoms/loading-spinner/loading-spinner";
-import StickerPriceDefinition from "../../molecules/sticker-price-definition/StickerPriceDefinition";
 import DropdownInformationList from "../../atoms/dropdown-information-list/DropdownInformationList";
-import DcfPriceDefinition from "../../molecules/dcf-price-definition/DcfPriceDefinition";
-import BrPriceDefinition from "../../molecules/br-price-definition/BrPriceDefinition";
 import { buildPeriodicDataMap } from "./DiscountDataDisplaySection.utils";
 import { Discount } from "../../../types/discount.typings";
+import ValuationPriceDefinitionDropdownItem from "../../molecules/valuation-price-definition-dropdown-item/ValuationPriceDefinitionDropdownItem";
+import { cleanKey } from "../../../utilities";
+import { messaging } from "../../../constants/messaging";
 
 export interface DiscountDataDisplaySectionProps {
     discount: Discount | null,
@@ -36,13 +36,14 @@ function DiscountDataDisplaySection({ discount, loading, error }: DiscountDataDi
 
     const keyOptions: PeriodicDataKeyOption[] = useMemo(() => getKeyOptions(valuationKey), [ valuationKey ]);
     const valuationHasPeriodicData = keyOptions.length > 0;
-    const discountDefinition = 
+    const discountDefinition = valuationKey ? 
         <DropdownInformationList
             listItem={
-                valuationKey === 'stickerPrice' ? <StickerPriceDefinition/> :
-                valuationKey === 'discountedCashFlowPrice' ? <DcfPriceDefinition/> :
-                <BrPriceDefinition/>
-            }/>
+                <ValuationPriceDefinitionDropdownItem
+                    word={cleanKey(valuationKey)}
+                    messaging={messaging.descriptions[valuationKey]}
+                    elementId={valuationKey}/>
+            }/> : undefined;
 
     const buttonOptionSideNav = useMemo(() => {
         const fullConfig: ButtonSideNavConfigItem<any>[] = [{
