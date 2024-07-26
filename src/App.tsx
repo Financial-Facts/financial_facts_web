@@ -63,8 +63,8 @@ function App() {
       <OnNavigation/>
       <Routes>
         <Route path="/" element={<MainPage/>}/>
-        <Route path="/discount" element={<DiscountSelectionPage/>}/>
-        <Route path="/discount/:cik" element={<DiscountDataPage/>}/>
+        <Route path="/discounts" element={<DiscountSelectionPage/>}/>
+        <Route path="/discounts/:cik" element={<DiscountDataPage/>}/>
         <Route path='/facts' element={<FactsPage/>}>
           <Route path=":cik" element={<FactsPage/>}/>
           <Route path=":cik/:taxonomy" element={<FactsPage/>}/>

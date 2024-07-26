@@ -1,4 +1,3 @@
-import { MultiValue } from "react-select"
 import { Bounds } from "../../atoms/price-range/PriceRange"
 import { ToggleOption } from "../../atoms/search-form-toggle/SearchFormToggle"
 import { Option } from '../../atoms/multi-select/MultiSelect';
@@ -12,8 +11,8 @@ export interface MultiSelect<T extends string> {
     type: 'MULTI_SELECT',
     label: string,
     options: Option<T>[],
-    value: MultiValue<Option<T>>,
-    selectionSetter: (_: MultiValue<Option<T>>) => void
+    value: Option<T>[],
+    selectionSetter: (_: Option<T>[]) => void
 }
 
 export interface PriceRange {

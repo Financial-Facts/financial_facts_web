@@ -17,6 +17,7 @@ function MainPage() {
         <Header key='header' text="Financial Facts" subtext="Your Gateway to Undervalued Stocks!"/>,
         <About key='about-section'/>,
         <BlockSectionsDisplay
+            key={`block-sections-display`}
             blocks={[
               CONSTANTS.BLOCK_CONFIGS.DISCOUNT,
               CONSTANTS.BLOCK_CONFIGS.FACTS

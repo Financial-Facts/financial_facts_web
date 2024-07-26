@@ -10,7 +10,7 @@ function LinearLoopAnimation({ element, duration, direction = 'forward' }: Linea
 
     return(
         <div className={`linear-loop-animated-wrapper ${direction}`} style={{
-            '-webkit-animation-duration': duration || '40s'
+            'WebkitAnimationDuration': duration || '40s'
         } as React.CSSProperties}>
             { element }
             { element }

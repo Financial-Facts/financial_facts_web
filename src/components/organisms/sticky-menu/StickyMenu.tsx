@@ -30,8 +30,8 @@ function StickyMenu() {
             <HomeButton/>
             {
                 mobile.size !== 'SMALL' && <div className='redirect-options-list'>
-                    <StickyTextButton text={'Facts'} url={'/Facts'}/>
-                    <StickyTextButton text={'Discounts'} url={'/Discount'}/>
+                    <StickyTextButton text={'Facts'} url={'/facts'}/>
+                    <StickyTextButton text={'Discounts'} url={'/discounts'}/>
                     <StickyTextButton text={'About'} url={'/about'}/>
                 </div>
             }

@@ -54,6 +54,7 @@ function CompanySearchSection({ isStandalone = true }: CompanySearchSectionProps
             for (let x = 0; x < NUM_BACKGROUND_ROWS; x++) {
                 result.push(
                     <LinearLoopAnimation
+                        key={`symbol-row-${x}`}
                         duration='60s'
                         direction={ x % 2 === 0 ? 'reverse' : 'forward' }
                         element={

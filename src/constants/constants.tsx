@@ -29,7 +29,7 @@ export const CONSTANTS = {
             title: 'Discounts',
             link: {
                 label: 'View all',
-                url: '/discount'
+                url: '/discounts'
             },
             content: <DiscountDefinitionBlock/>
         },

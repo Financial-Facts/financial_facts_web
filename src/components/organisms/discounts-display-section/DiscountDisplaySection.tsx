@@ -126,7 +126,7 @@ function DiscountDisplaySection() {
                         outcome={'neutral'}
                         loading={false}
                         iconSource='/assets/redirect.svg'
-                        onClick={() => navigate('/discount')}/>
+                        onClick={() => navigate('/discounts')}/>
                 </div>
             )}
         </section>

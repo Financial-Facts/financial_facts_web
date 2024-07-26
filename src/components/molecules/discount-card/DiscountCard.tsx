@@ -37,7 +37,7 @@ function DiscountCard({ discount, hideDataTrigger$ }: DiscountCardProps ) {
         if (!displayData) {
             setDisplayData(true);
         } else {
-            navigate(`/discount/${ discount.cik }`);
+            navigate(`/discounts/${ discount.cik }`);
         }
     }
 

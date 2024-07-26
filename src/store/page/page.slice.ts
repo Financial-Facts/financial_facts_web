@@ -12,7 +12,7 @@ const initialState: PageState = {
     },
     'Discount': {
         active: false,
-        link: '/discount'
+        link: '/discounts'
     },
     'Facts': {
         active: false,

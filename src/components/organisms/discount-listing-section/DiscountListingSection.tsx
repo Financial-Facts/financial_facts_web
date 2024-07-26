@@ -7,7 +7,6 @@ import MultiFunctionSideNav from '../../molecules/multi-function-side-nav/MultiF
 import { Option } from '../../atoms/multi-select/MultiSelect';
 import { cleanKey } from '../../../utilities';
 import { useEffect, useMemo, useState } from 'react';
-import { MultiValue } from 'react-select';
 import { MobileState } from '../../../store/mobile/mobile.slice';
 import { AppDispatch } from '../../../store/store';
 import { getExtreme } from './DiscountListingSection.utils';
@@ -16,22 +15,22 @@ import { SimpleDiscount } from '../../../services/bulk-entities/bulk-entities.ty
 
 type TrueOrFalse = 'true' | 'false';
 
-const defaultSelectedKeys: MultiValue<Option<keyof SimpleDiscount>> = [
+const defaultSelectedKeys: Option<keyof SimpleDiscount>[] = [
     {
-        value: 'name',
-        label: cleanKey('name')
+        id: 'name',
+        name: cleanKey('name')
     }, {
-        value: 'stickerPrice',
-        label: cleanKey('stickerPrice')
+        id: 'stickerPrice',
+        name: cleanKey('stickerPrice')
     }, {
-        value: 'discountedCashFlowPrice',
-        label: cleanKey('discountedCashFlowPrice')
+        id: 'discountedCashFlowPrice',
+        name: cleanKey('discountedCashFlowPrice')
     }, {
-        value: 'benchmarkRatioPrice',
-        label: cleanKey('benchmarkRatioPrice')
+        id: 'benchmarkRatioPrice',
+        name: cleanKey('benchmarkRatioPrice')
     }, {
-        value: 'marketPrice',
-        label: cleanKey('marketPrice')
+        id: 'marketPrice',
+        name: cleanKey('marketPrice')
     }
 ];
 
@@ -56,12 +55,12 @@ function DiscountListingSection() {
     const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
     const absoluteMinimumPrice = useMemo(() => getExtreme(allDiscounts, 'MIN'), [ allDiscounts ]);
     const absoluteMaximumPrice = useMemo(() => getExtreme(allDiscounts, 'MAX'), [ allDiscounts ]);
-    const [ selectedTableKeys, setSelectedTableKeys ] = useState<MultiValue<Option<keyof SimpleDiscount>>>([...defaultSelectedKeys]);
+    const [ selectedTableKeys, setSelectedTableKeys ] = useState<Option<keyof SimpleDiscount>[]>([...defaultSelectedKeys]);
 
     useEffect(() => {
-        if (selectedTableKeys.length > 0 && !selectedTableKeys.find(option => option.value === filteredSort.sortBy)) {
+        if (selectedTableKeys.length > 0 && !selectedTableKeys.find(option => option.id === filteredSort.sortBy)) {
             dispatch(sortDiscounts({
-                sortBy: selectedTableKeys[0].value,
+                sortBy: selectedTableKeys[0].id,
                 sortOrder: 'ASC'
             }));
         }
@@ -69,9 +68,8 @@ function DiscountListingSection() {
 
     const tableFieldOptions = useMemo((): Option<keyof SimpleDiscount>[] =>
         keyOptions.map(key => ({
-            value: key,
-            label: cleanKey(key),
-            color: '#8C19D3'
+            id: key,
+            name: cleanKey(key)
         }))
     , [ allDiscounts ]);
 
@@ -147,17 +145,17 @@ function DiscountListingSection() {
 
     const multiSelectConfig: MultiSelect<keyof SimpleDiscount> = useMemo(() => ({
         type: 'MULTI_SELECT',
-        label: 'Display Fields',
+        label: 'Displayed Columns',
         options: tableFieldOptions,
         value: selectedTableKeys,
         selectionSetter: (selection) => {
             let selectedTableKeys: Option<keyof SimpleDiscount>[] = [];
             if (selection.length > 0) {
-                const sortedSelections = Array.from(selection).sort((a, b) => 
-                    keyOptions.indexOf(a.value) - keyOptions.indexOf(b.value));
-                if (!sortedSelections.some(option => option.value === filteredSort.sortBy)) {
+                const sortedSelections = selection.sort((a, b) => 
+                    keyOptions.indexOf(a.id) - keyOptions.indexOf(b.id));
+                if (!sortedSelections.some(option => option.id === filteredSort.sortBy)) {
                     dispatch(sortDiscounts({
-                        sortBy: sortedSelections[0].value,
+                        sortBy: sortedSelections[0].id,
                         sortOrder: 'ASC'
                     }));
                 }
@@ -171,7 +169,7 @@ function DiscountListingSection() {
         dispatch(resetFilteredDiscounts());
         setSelectedTableKeys([...defaultSelectedKeys]);
         dispatch(sortDiscounts({
-            sortBy: defaultSelectedKeys[0].value,
+            sortBy: defaultSelectedKeys[0].id,
             sortOrder: 'ASC'
         }));
     }
@@ -191,7 +189,7 @@ function DiscountListingSection() {
                         ]}
                         label='Discount Filters'
                         orientation={ mobile.mobile ? 'horizontal' : 'vertical'}
-                        labelButtonOnClick={resetFilter}/>
+                        bottomButtonOnClick={resetFilter}/>
                     <DiscountTable
                         discounts={filteredDiscounts}
                         fieldOptions={selectedTableKeys}/>

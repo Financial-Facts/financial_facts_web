@@ -6,17 +6,26 @@
     max-width: 300px;
     border-right: 1px solid rgba(41, 41, 41, .2);
     height: 100%;
-    --multi-function-gap: 24px;
+    --multi-function-gap: 32px;
+
+    .main-content {
+        flex-direction: column;
+    }
 }
 
 .multi-function-horizontal {
     width: 100%;
     border-bottom: 1px solid rgba(41, 41, 41, .2);
-    flex-wrap: wrap;
     --multi-function-gap: 16px;
+    flex-direction: column;
 
-    .item {
-        flex: 33%;
+    .main-content {
+        flex-direction: row;
+        flex-wrap: wrap;
+        
+        .item {
+            flex: 33%;
+        }
     }
 }
 
@@ -26,49 +35,63 @@
     padding: 24px;
     box-sizing: border-box;
     background: $magnolia-white;
-    gap: var(--multi-function-gap);
+    justify-content: space-between;
 
-    .side-nav-label {
+    .main-content {
+        display: flex;
+        gap: var(--multi-function-gap);
+        width: 100%;
+
+        .side-nav-label {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 0 0 8px 0;
+            gap: 8px;
+            align-items: center;
+            flex-direction: row;
+    
+            .svg-icon-wrapper {
+                background: $base-purple;
+                border-radius: 4px;
+            }
+        }
+    
+            
+        .two-halves-item {
+            gap: var(--multi-function-gap);
+        }
+    
+        .item {
+            display: flex;
+            flex-direction: column;
+            height: fit-content;
+    
+            .item-label {
+                padding: 4px;
+                font-size: $normal-font;
+                display: flex;
+                justify-content: center;
+                margin-bottom: 4px;
+                width: fit-content;
+                text-wrap: nowrap;
+            }
+    
+            .multi-toggle {
+                gap: 4px;
+                padding: 4px;
+                text-wrap: nowrap;
+            }
+        }
+    }
+
+
+    .bottom-button-container {
         width: 100%;
         display: flex;
         justify-content: center;
-        flex-wrap: wrap;
-        margin: 0 0 8px 0;
-        gap: 8px;
-        align-items: center;
-        flex-direction: row;
+        margin-top: var(--multi-function-gap);
 
-        .svg-icon-wrapper {
-            background: $base-purple;
-            border-radius: 4px;
-        }
-    }
-
-        
-    .two-halves-item {
-        gap: var(--multi-function-gap);
-    }
-
-    .item {
-        display: flex;
-        flex-direction: column;
-        height: fit-content;
-
-        .item-label {
-            padding: 4px;
-            font-size: $normal-font;
-            border-bottom: 2px solid rgba(41, 41, 41, .2);
-            display: flex;
-            justify-content: center;
-            margin-bottom: 16px;
-            width: fit-content;
-            text-wrap: nowrap;
-        }
-
-        .multi-toggle {
-            gap: 4px;
-            padding: 4px;
-            text-wrap: nowrap;
-        }
     }
 }

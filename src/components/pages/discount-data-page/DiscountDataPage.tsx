@@ -32,7 +32,7 @@ function DiscountDataPage() {
 
         if (index !== -1) {
             return {
-                uri: '/discount',
+                uri: '/discounts',
                 previousItem: index !== 0 ?
                     buildNavigationItem(discountList[index - 1]) :
                     undefined,

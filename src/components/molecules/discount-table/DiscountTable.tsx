@@ -4,7 +4,6 @@ import { cleanKey } from '../../../utilities';
 import FormatService from '../../../services/format/format.service';
 import { useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
-import { MultiValue } from 'react-select';
 import { Option } from '../../atoms/multi-select/MultiSelect';
 import ResponsiveTable from '../responsive-table/ResponsiveTable';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,10 +12,11 @@ import { DiscountSort, DiscountState, sortDiscounts } from '../../../store/disco
 import InformationIcon from '../information-icon/InformationIcon';
 import { messaging } from '../../../constants/messaging';
 import { CONSTANTS } from '../../../constants/constants';
+import SvgIcon from '../../atoms/svg-icon/SvgIcon';
 
 export interface DiscountTableProps {
     discounts: SimpleDiscount[],
-    fieldOptions: MultiValue<Option<keyof SimpleDiscount>>
+    fieldOptions: Option<keyof SimpleDiscount>[]
 }
 
 function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
@@ -31,7 +31,7 @@ function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
     ]);
 
     const displayedFields = useMemo(() =>
-        fieldOptions.map(option => option.value)
+        fieldOptions.map(option => option.id)
     , [ fieldOptions ]);
 
     const updateSortByKey = (key: keyof SimpleDiscount) => {
@@ -78,13 +78,15 @@ function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
                                             key === 'active' &&
                                                 <InformationIcon
                                                     message={messaging.active}
-                                                    color='#F5F5F5'/>
+                                                    color='currentColor'/>
                                         }
                                     </span>
                                     { 
                                         sortBy === key &&
-                                            <img src='/assets/sort-arrows-icon.svg'
-                                                className={`sortArrow`}/>
+                                            <SvgIcon
+                                                src={'/assets/sort-arrows-icon.svg'}
+                                                height={'15px'}
+                                                width={'15px'}/>
                                     }
                                 </div>
                             </th>) 
@@ -97,7 +99,7 @@ function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
             {
                 discounts.map(discount => 
                     <tr key={discount.cik}
-                        onClick={() => navigate(`/discount/${discount.cik}`, {
+                        onClick={() => navigate(`/discounts/${discount.cik}`, {
                             state: {
                                 useFilteredDiscounts: true
                             }

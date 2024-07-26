@@ -14,14 +14,14 @@ export interface MultiFunctionSideNavProps<T extends string, J extends string> {
     label: string
     items: SideNavItem<T, J>[]
     orientation: Orientation
-    labelButtonOnClick?: () => void
+    bottomButtonOnClick?: () => void
 }
 
 function MultiFunctionSideNav<T extends string, J extends string>({ 
     label,
     items,
     orientation,
-    labelButtonOnClick
+    bottomButtonOnClick
 }: MultiFunctionSideNavProps<T, J>) {
     const halfSizedItems = new Set<SideNavItemType>(['PRICE_RANGE', 'SEARCH', 'TITLE', 'TOGGLE']);
     const fullSizedItems = new Set<SideNavItemType>(['MULTI_SELECT', 'TOGGLE_GROUP']);
@@ -119,22 +119,26 @@ function MultiFunctionSideNav<T extends string, J extends string>({
 
     return (
         <div className={`multi-side-nav multi-function-${orientation}`}>
-            <h2 className='side-nav-label'>
-                { label }
+            <div className='main-content'>
+                <h2 className='side-nav-label'>
+                    { label }
+                </h2>
                 { 
-                    !!labelButtonOnClick && 
+                    renderSideNavBuckets(items)
+                }
+            </div>
+            { 
+                !!bottomButtonOnClick && 
+                    <div className='bottom-button-container'>
                         <SubmitButton
                             text='Reset'
                             outcome={submitOutcome}
                             loading={false}
                             onClick={() => {
-                                labelButtonOnClick();
+                                bottomButtonOnClick();
                                 handleSetTimer();
                             }}/>
-                }
-            </h2>
-            { 
-                renderSideNavBuckets(items)
+                    </div>
             }
         </div>
     )
