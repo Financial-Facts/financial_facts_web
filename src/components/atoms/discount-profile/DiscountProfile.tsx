@@ -36,7 +36,8 @@ function DiscountProfile({ discount }: DiscountProfileProps) {
                         'exchange',
                         'industry',
                         'annualDividend',
-                        'averageVolume'
+                        'averageVolume',
+                        'ttmInsiderPurchases'
                     ]
                 }}/>
             </div>

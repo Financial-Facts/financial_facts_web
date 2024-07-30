@@ -45,7 +45,8 @@ const keyOptions: (keyof SimpleDiscount)[] = [
     'benchmarkRatioPrice',
     'marketPrice',
     'annualDividend',
-    'averageVolume'
+    'averageVolume',
+    'ttmInsiderPurchases'
 ];
 
 function DiscountListingSection() {

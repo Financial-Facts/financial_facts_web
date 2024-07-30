@@ -22,7 +22,8 @@ export interface SimpleDiscount {
     benchmarkRatioPrice: number,
     marketPrice: number,
     annualDividend: number,
-    averageVolume: number
+    averageVolume: number,
+    ttmInsiderPurchases: number
 }
 
 export interface BulkIdentitiesWrapper {

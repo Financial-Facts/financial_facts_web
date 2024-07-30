@@ -87,6 +87,7 @@ export interface Discount {
     industry: string
     location: string
     website: string
+    ttmInsiderPurchases: number
     stickerPrice: StickerPrice
     benchmarkRatioPrice: BenchmarkRatioPrice
     discountedCashFlowPrice: DiscountedCashFlowPrice
