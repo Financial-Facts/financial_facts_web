@@ -46,7 +46,8 @@ const keyOptions: (keyof SimpleDiscount)[] = [
     'marketPrice',
     'annualDividend',
     'averageVolume',
-    'ttmInsiderPurchases'
+    'ttmInsiderPurchases',
+    'discountFromStickerPrice'
 ];
 
 function DiscountListingSection() {
