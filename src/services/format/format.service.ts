@@ -10,10 +10,22 @@ const FormatService = {
         return formatter.format(value);
     },
 
+    formatToPercentValue: (value: number): string => {
+        return `${roundToDollarValue(value)}%`
+    },
+
+    formatToDecimalValue: (value: number): string => {
+        return String(roundToDollarValue(value));
+    },
+
     roundToDollarValue: (value: number): number => {
-        return Math.round(value * 100)  / 100;
+        return roundToDollarValue(value);
     }
 
 }
+
+const roundToDollarValue = (value: number): number => {
+    return Math.round(value * 100)  / 100;
+};
 
 export default FormatService;

@@ -30,6 +30,10 @@ function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
         'marketPrice', 'stickerPrice', 'discountedCashFlowPrice', 'benchmarkRatioPrice', 'annualDividend'
     ]);
 
+    const percentKeys = new Set<keyof SimpleDiscount>([
+        'discountFromStickerPrice'
+    ]);
+
     const displayedFields = useMemo(() =>
         fieldOptions.map(option => option.id)
     , [ fieldOptions ]);
@@ -110,6 +114,9 @@ function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
                                     let value = discount[key as keyof SimpleDiscount]; 
                                     if (currencyKeys.has(key)) {
                                         value = FormatService.formatToDollarValue(value as number);
+                                    }
+                                    if (percentKeys.has(key)) {
+                                        value = FormatService.formatToPercentValue(value as number);
                                     }
                                     return <td key={`${discount.cik}-${key}`} className={`${key}-flex`}>{ String(value) }</td>
                                 })

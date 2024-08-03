@@ -1,12 +1,12 @@
 import './DiscountListingSection.scss';
 import { useDispatch, useSelector } from 'react-redux'
 import LoadingSpinner from '../../atoms/loading-spinner/loading-spinner'
-import { DiscountState, resetFilteredDiscounts, sortDiscounts, updateFilterHideValuationPrices, updateFilterKeyword, updateFilterPriceBounds } from '../../../store/discounts/discounts.slice'
+import { DiscountState, resetFilteredDiscounts, setSelectedTableKeys, sortDiscounts, updateFilterHideValuationPrices, updateFilterKeyword, updateFilterPriceBounds } from '../../../store/discounts/discounts.slice'
 import DiscountTable from '../../molecules/discount-table/DiscountTable'
 import MultiFunctionSideNav from '../../molecules/multi-function-side-nav/MultiFunctionSideNav';
 import { Option } from '../../atoms/multi-select/MultiSelect';
 import { cleanKey } from '../../../utilities';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { MobileState } from '../../../store/mobile/mobile.slice';
 import { AppDispatch } from '../../../store/store';
 import { getExtreme } from './DiscountListingSection.utils';
@@ -14,25 +14,6 @@ import { KeywordSearch, MultiSelect, PriceRange, ToggleGroup } from '../../molec
 import { SimpleDiscount } from '../../../services/bulk-entities/bulk-entities.typings';
 
 type TrueOrFalse = 'true' | 'false';
-
-const defaultSelectedKeys: Option<keyof SimpleDiscount>[] = [
-    {
-        id: 'name',
-        name: cleanKey('name')
-    }, {
-        id: 'stickerPrice',
-        name: cleanKey('stickerPrice')
-    }, {
-        id: 'discountedCashFlowPrice',
-        name: cleanKey('discountedCashFlowPrice')
-    }, {
-        id: 'benchmarkRatioPrice',
-        name: cleanKey('benchmarkRatioPrice')
-    }, {
-        id: 'marketPrice',
-        name: cleanKey('marketPrice')
-    }
-];
 
 const keyOptions: (keyof SimpleDiscount)[] = [
     'cik',
@@ -53,11 +34,10 @@ const keyOptions: (keyof SimpleDiscount)[] = [
 function DiscountListingSection() {
 
     const dispatch = useDispatch<AppDispatch>();
-    const { allDiscounts, filteredDiscounts, loading, filteredFilter, filteredSort } = useSelector< { discounts: DiscountState }, DiscountState>((state) => state.discounts);
+    const { allDiscounts, filteredDiscounts, loading, filteredFilter, filteredSort, selectedTableKeys } = useSelector< { discounts: DiscountState }, DiscountState>((state) => state.discounts);
     const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
     const absoluteMinimumPrice = useMemo(() => getExtreme(allDiscounts, 'MIN'), [ allDiscounts ]);
     const absoluteMaximumPrice = useMemo(() => getExtreme(allDiscounts, 'MAX'), [ allDiscounts ]);
-    const [ selectedTableKeys, setSelectedTableKeys ] = useState<Option<keyof SimpleDiscount>[]>([...defaultSelectedKeys]);
 
     useEffect(() => {
         if (selectedTableKeys.length > 0 && !selectedTableKeys.find(option => option.id === filteredSort.sortBy)) {
@@ -163,17 +143,12 @@ function DiscountListingSection() {
                 }
                 selectedTableKeys = sortedSelections;
             }
-            setSelectedTableKeys(selectedTableKeys);
+            dispatch(setSelectedTableKeys((selectedTableKeys)));
         }
     }), [ tableFieldOptions, selectedTableKeys, filteredSort ]);
               
     const resetFilter = (): void => {
         dispatch(resetFilteredDiscounts());
-        setSelectedTableKeys([...defaultSelectedKeys]);
-        dispatch(sortDiscounts({
-            sortBy: defaultSelectedKeys[0].id,
-            sortOrder: 'ASC'
-        }));
     }
 
     return (

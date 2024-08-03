@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
 import { Discount } from '../../../types/discount.typings';
 import DefinitionListItem from '../definition-list-item/DefinitionListItem';
-import DiscountSingularData from '../discount-singular-data/discount-singular-data';
+import SingularDataList from '../singular-data-list/SingularDataList';
 import DropdownInformationList from '../dropdown-information-list/DropdownInformationList';
 import './DiscountProfile.scss';
+import FormatService from '../../../services/format/format.service';
 
 export interface DiscountProfileProps {
     discount: Discount
@@ -26,20 +27,18 @@ function DiscountProfile({ discount }: DiscountProfileProps) {
                         }/>
                     </>}/>
             <div className='company-information-wrapper'>
-                <DiscountSingularData 
+                <SingularDataList 
                     title='Company Profile'
-                    discountData={{
-                    discount: discount,
-                    discountKeys: [
-                        'ceo',
-                        'location',
-                        'exchange',
-                        'industry',
-                        'annualDividend',
-                        'averageVolume',
-                        'ttmInsiderPurchases'
-                    ]
-                }}/>
+                    singularData={{
+                        ceo: discount.ceo,
+                        location: discount.location,
+                        exchange: discount.exchange,
+                        industry: discount.industry,
+                        annualDividend: FormatService.formatToDollarValue(discount.annualDividend),
+                        averageVolume: String(discount.averageVolume),
+                        ttmInsiderPurchases: String(discount.ttmInsiderPurchases)
+                    }
+                }/>
             </div>
         </section>
     )

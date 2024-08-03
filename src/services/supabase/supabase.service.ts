@@ -4,7 +4,6 @@ import { environment } from '../../environment';
 import { Identity, IdentityRequest, SimpleDiscount } from '../bulk-entities/bulk-entities.typings';
 import ApiResponseError from '../../errors/ApiResponseError';
 import { Discount } from '../../types/discount.typings';
-import formatService from '../format/format.service';
 
 class SupabaseService {
 
@@ -29,9 +28,9 @@ class SupabaseService {
         data.forEach(simpleDiscount => {
             if (simpleDiscount.marketPrice < simpleDiscount.stickerPrice) {
                 const percent = 1 - (simpleDiscount.marketPrice / simpleDiscount.stickerPrice);
-                simpleDiscount.discountFromStickerPrice = `${formatService.roundToDollarValue(percent * 100)}%`;
+                simpleDiscount.discountFromStickerPrice = percent * 100;
             } else {
-                simpleDiscount.discountFromStickerPrice = '0';
+                simpleDiscount.discountFromStickerPrice = 0;
             }
         })
         

@@ -19,6 +19,7 @@ export interface PeriodicData {
 export type StickerPriceInput = StickerPricePeriodicData & {
     cik: string
     debtYears: number,
+    ffyEstimatedEpsGrowthRate: number
 }
 
 export interface StickerPricePeriodicData {

@@ -24,7 +24,7 @@ export interface SimpleDiscount {
     annualDividend: number,
     averageVolume: number,
     ttmInsiderPurchases: number,
-    discountFromStickerPrice: string
+    discountFromStickerPrice: number
 }
 
 export interface BulkIdentitiesWrapper {

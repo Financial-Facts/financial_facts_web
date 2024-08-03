@@ -4,7 +4,7 @@ import ButtonOptionSideNav, { ButtonSideNavConfigItem } from "../../molecules/bu
 import './DiscountDataDisplaySection.scss';
 import { DcfPeriodicDataKeys, PeriodicDataKeyOption, SpPeriodicDataKeys, Valuation } from './DiscountDataDisplaySection.typings';
 import { useSelector } from "react-redux";
-import DiscountSingularData from "../../atoms/discount-singular-data/discount-singular-data";
+import SingularDataList from "../../atoms/singular-data-list/SingularDataList";
 import { MobileState } from "../../../store/mobile/mobile.slice";
 import PeriodicDataVisualization from "../../molecules/periodic-data-visualization/PeriodicDataVisualization";
 import ValuationPrice from "../../atoms/valuation-price/ValuationPrice";
@@ -16,6 +16,7 @@ import { Discount } from "../../../types/discount.typings";
 import ValuationPriceDefinitionDropdownItem from "../../molecules/valuation-price-definition-dropdown-item/ValuationPriceDefinitionDropdownItem";
 import { cleanKey } from "../../../utilities";
 import { messaging } from "../../../constants/messaging";
+import FormatService from "../../../services/format/format.service";
 
 export interface DiscountDataDisplaySectionProps {
     discount: Discount | null,
@@ -80,6 +81,41 @@ function DiscountDataDisplaySection({ discount, loading, error }: DiscountDataDi
                     orientation={'vertical'}/> 
     }, [ discount, mobile, valuationKey, periodicDataKey, keyOptions ]);
 
+    const buildDiscountSingularData = (discount: Discount, valuationKey: Valuation): Record<string, string>  => {
+        switch(valuationKey) {
+            case 'stickerPrice': {
+                const valuationInput = discount[valuationKey].input;
+                return {
+                    debtYears: String(valuationInput.debtYears),
+                    FiveYearAnalystAvgGrowthEstimate: FormatService.formatToPercentValue(valuationInput.ffyEstimatedEpsGrowthRate)
+                }
+            }
+            case 'benchmarkRatioPrice': {
+                const valuationInput = discount[valuationKey].input;
+                return {
+                    industry: valuationInput.industry,
+                    psBenchmarkRatio: FormatService.formatToDecimalValue(valuationInput.psBenchmarkRatio),
+                    ttmRevenue: FormatService.formatToDollarValue(valuationInput.ttmRevenue),
+                    sharesOutstanding: String(valuationInput.sharesOutstanding)
+                }
+
+            }
+            case 'discountedCashFlowPrice': {
+                const valuationInput = discount[valuationKey].input;
+                return {
+                    dilutedSharesOutstanding: String(valuationInput.dilutedSharesOutstanding),
+                    enterpriseValue: FormatService.formatToDollarValue(valuationInput.enterpriseValue),
+                    freeCashFlowT1: FormatService.formatToDollarValue(valuationInput.freeCashFlowT1),
+                    longTermGrowthRate: FormatService.formatToPercentValue(valuationInput.longTermGrowthRate),
+                    marketPrice: FormatService.formatToDollarValue(valuationInput.marketPrice),
+                    netDebt: FormatService.formatToDollarValue(valuationInput.netDebt),
+                    terminalValue: FormatService.formatToDollarValue(valuationInput.terminalValue),
+                    wacc: FormatService.formatToPercentValue(valuationInput.wacc)
+                }
+            }
+        }
+    }
+
     const renderSelectValuationKey = () => 
         loading ?
             <LoadingSpinner size={'LARGE'} color={'PURPLE'} minHeight={200}/> :
@@ -92,7 +128,9 @@ function DiscountDataDisplaySection({ discount, loading, error }: DiscountDataDi
             <>
                 { !mobile.mobile && discountDefinition }
                 <ValuationPrice price={discount[valuationKey].price} lastUpdated={discount.lastUpdated}/>
-                <DiscountSingularData title={'Valuation Inputs'} valuation={discount[valuationKey]}/>
+                <SingularDataList
+                    title={'Valuation Inputs'}
+                    singularData={buildDiscountSingularData(discount, valuationKey)}/>
             </> :
         <ZeroState message={'Select a Valuation'} supportText={'View the calculated valuation data'}/>
 
