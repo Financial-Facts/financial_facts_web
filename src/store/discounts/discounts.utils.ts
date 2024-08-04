@@ -29,6 +29,9 @@ export const filterForValuation = (
     valuationKey: Valuation
 ): SimpleDiscount[] => discounts.filter(discount => discount.marketPrice < discount[valuationKey]);
 
+export const filterExpired = (
+    discounts: SimpleDiscount[]
+): SimpleDiscount[] => discounts.filter(simpleDiscount => simpleDiscount.isDeleted === 'N');
 
 export const filterDiscountState = (discounts: SimpleDiscount[], filter: DiscountFilter) => {
     if (filter.hideValuesAbove.benchmarkRatioPrice) {
@@ -41,6 +44,10 @@ export const filterDiscountState = (discounts: SimpleDiscount[], filter: Discoun
 
     if (filter.hideValuesAbove.stickerPrice) {
         discounts = filterForValuation(discounts, 'stickerPrice');
+    }
+
+    if (!filter.showExpired) {
+        discounts = filterExpired(discounts);
     }
 
     if (!!filter.keyword) {

@@ -53,11 +53,13 @@ function DiscountDisplaySection() {
                 "--discount-card-width": `${cardWidth}px`
             } as React.CSSProperties }>
             { 
-                allDiscounts.map(discount =>
-                    <DiscountCard
-                        key={discount.cik}
-                        discount={ discount }
-                        hideDataTrigger$={hideDataSubject.asObservable()}/>)
+                allDiscounts
+                    .filter(discount => discount.isDeleted === 'N')
+                    .map(discount =>
+                        <DiscountCard
+                            key={discount.cik}
+                            discount={ discount }
+                            hideDataTrigger$={hideDataSubject.asObservable()}/>)
             }
         </ul>,
     [ allDiscounts, cardWidth ]);

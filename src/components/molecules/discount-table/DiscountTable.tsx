@@ -103,6 +103,7 @@ function DiscountTable({ discounts, fieldOptions }: DiscountTableProps) {
             {
                 discounts.map(discount => 
                     <tr key={discount.cik}
+                        className={`${discount.isDeleted === 'Y' ? 'expired' : CONSTANTS.EMPTY}`}
                         onClick={() => navigate(`/discounts/${discount.cik}`, {
                             state: {
                                 useFilteredDiscounts: true

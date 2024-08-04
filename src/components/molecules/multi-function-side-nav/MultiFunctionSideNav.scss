@@ -59,15 +59,22 @@
         }
     
             
-        .two-halves-item {
+        .item.two-halves-item {
             gap: var(--multi-function-gap);
+            flex-direction: row;
+            flex-wrap: wrap;
+
+            >div {
+                flex: 50%;
+            }
         }
     
         .item {
             display: flex;
             flex-direction: column;
             height: fit-content;
-    
+            z-index: 1;
+
             .item-label {
                 padding: 4px;
                 font-size: $normal-font;

@@ -1,7 +1,7 @@
 import './DiscountListingSection.scss';
 import { useDispatch, useSelector } from 'react-redux'
 import LoadingSpinner from '../../atoms/loading-spinner/loading-spinner'
-import { DiscountState, resetFilteredDiscounts, setSelectedTableKeys, sortDiscounts, updateFilterHideValuationPrices, updateFilterKeyword, updateFilterPriceBounds } from '../../../store/discounts/discounts.slice'
+import { DiscountState, resetFilteredDiscounts, setSelectedTableKeys, sortDiscounts, updateFilterHideValuationPrices, updateFilterKeyword, updateFilterPriceBounds, updateFilterShowExpired } from '../../../store/discounts/discounts.slice'
 import DiscountTable from '../../molecules/discount-table/DiscountTable'
 import MultiFunctionSideNav from '../../molecules/multi-function-side-nav/MultiFunctionSideNav';
 import { Option } from '../../atoms/multi-select/MultiSelect';
@@ -10,7 +10,7 @@ import { useEffect, useMemo } from 'react';
 import { MobileState } from '../../../store/mobile/mobile.slice';
 import { AppDispatch } from '../../../store/store';
 import { getExtreme } from './DiscountListingSection.utils';
-import { KeywordSearch, MultiSelect, PriceRange, ToggleGroup } from '../../molecules/multi-function-side-nav/MultiFunctionSideNav.typings';
+import { KeywordSearch, MultiSelect, PriceRange, Toggle, ToggleGroup } from '../../molecules/multi-function-side-nav/MultiFunctionSideNav.typings';
 import { SimpleDiscount } from '../../../services/bulk-entities/bulk-entities.typings';
 
 type TrueOrFalse = 'true' | 'false';
@@ -106,6 +106,26 @@ function DiscountListingSection() {
         }]
     }), [ filteredFilter.hideValuesAbove ]);
 
+    const deletedToggleConfig: Toggle<TrueOrFalse> = useMemo(() => ({
+        type: 'TOGGLE',
+        label: 'Show expired',
+        selectedId: filteredFilter.showExpired ? 'true' : 'false',
+        options: [
+            {
+                id: 'true',
+                label: 'true'
+            },
+            {
+                id: 'false',
+                label: 'false'
+            }
+        ],
+        selectionSetter: (value) => {
+            dispatch(updateFilterShowExpired(value === 'false' ? false : true));
+        },
+        showToggleLabel: true
+    }), [ filteredFilter.showExpired ]);
+
     const keywordSearchConfig: KeywordSearch = useMemo(() => ({
         type: 'SEARCH',
         label: 'Keyword Search',
@@ -159,8 +179,9 @@ function DiscountListingSection() {
                 <>
                    <MultiFunctionSideNav
                         items={[
-                            toggleGroupConfig, 
                             keywordSearchConfig,
+                            deletedToggleConfig,
+                            toggleGroupConfig,
                             priceBoundsSliderConfig,
                             multiSelectConfig
                         ]}

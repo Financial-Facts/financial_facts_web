@@ -24,6 +24,7 @@ export interface SimpleDiscount {
     annualDividend: number,
     averageVolume: number,
     ttmInsiderPurchases: number,
+    isDeleted: 'Y' | 'N',
     discountFromStickerPrice: number
 }
 

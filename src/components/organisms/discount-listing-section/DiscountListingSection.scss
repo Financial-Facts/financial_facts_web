@@ -14,14 +14,6 @@
 
     .discount-listing-section {
         flex-direction: column;
-        height: 750px;
-    }
-}
-
-@media only screen and (max-width: 576px) {
-
-    .discount-listing-section {
-        flex-direction: column;
         height: 1000px;
     }
 }

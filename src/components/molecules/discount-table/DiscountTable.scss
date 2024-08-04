@@ -47,6 +47,10 @@
                     border-bottom: 1px solid $light-gray;
                 }
             }
+
+            .expired {
+                background: $light-red;
+            }
     
             tr:hover {
                 background: $magnolia-white;

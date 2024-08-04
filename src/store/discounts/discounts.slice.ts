@@ -32,6 +32,7 @@ export interface DiscountFilter {
     hideValuesAbove: HideValuationPrices
     keyword: string
     priceBounds: Bounds
+    showExpired: boolean
 }
 
 const defaultSelectedTableKeys: Option<keyof SimpleDiscount>[]= [
@@ -75,7 +76,8 @@ export const discountsSlice = createSlice({
             priceBounds: {
                 lowerBound: 0,
                 upperBound: 0
-            }
+            },
+            showExpired: false
         },
         selectedTableKeys: [...defaultSelectedTableKeys],
         loading: false
@@ -105,6 +107,11 @@ export const discountsSlice = createSlice({
             state.filteredDiscounts = filterDiscountState([...state.allDiscounts], state.filteredFilter);
             state.filteredDiscounts.sort(getSortFunction(state.filteredSort.sortBy, state.filteredSort.sortOrder));
         },
+        updateFilterShowExpired: (state, action: PayloadAction<boolean>) => {
+            state.filteredFilter.showExpired = action.payload;
+            state.filteredDiscounts = filterDiscountState([...state.allDiscounts], state.filteredFilter);
+            state.filteredDiscounts.sort(getSortFunction(state.filteredSort.sortBy, state.filteredSort.sortOrder));
+        },
         setSelectedTableKeys: (state, action: PayloadAction<Option<keyof SimpleDiscount>[]>) => {
             state.selectedTableKeys = action.payload;
         },
@@ -122,11 +129,13 @@ export const discountsSlice = createSlice({
                     lowerBound: getExtreme(state.allDiscounts, 'MIN'),
                     upperBound: getExtreme(state.allDiscounts, 'MAX')
                 },
+                showExpired: false
             };
             state.filteredSort = {
                 sortBy: defaultSelectedTableKeys[0].id,
                 sortOrder: 'ASC'
             };
+            state.filteredDiscounts = filterDiscountState([...state.allDiscounts], state.filteredFilter);
             state.filteredDiscounts.sort(getSortFunction(state.filteredSort.sortBy,  state.filteredSort.sortOrder));
         }
     },
@@ -141,6 +150,7 @@ export const discountsSlice = createSlice({
             if (state.allDiscounts.length === 0) {
                 state.allDiscounts = action.payload.sort(getSortFunction('lastUpdated', 'DESC'));
                 state.filteredDiscounts = [...state.allDiscounts];
+                state.filteredDiscounts = filterDiscountState([...state.allDiscounts], state.filteredFilter);
                 state.filteredDiscounts.sort(getSortFunction(state.filteredSort.sortBy, state.filteredSort.sortOrder));
             }
             state.loading = false;
@@ -154,7 +164,8 @@ export const {
     updateFilterHideValuationPrices,
     updateFilterKeyword,
     resetFilteredDiscounts,
-    setSelectedTableKeys
+    setSelectedTableKeys,
+    updateFilterShowExpired
 } = discountsSlice.actions;
 
 export default discountsSlice;
