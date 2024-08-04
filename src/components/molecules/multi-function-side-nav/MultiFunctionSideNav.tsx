@@ -23,8 +23,8 @@ function MultiFunctionSideNav<T extends string, J extends string>({
     orientation,
     bottomButtonOnClick
 }: MultiFunctionSideNavProps<T, J>) {
-    const halfSizedItems = new Set<SideNavItemType>(['PRICE_RANGE', 'SEARCH', 'TITLE', 'TOGGLE', 'MULTI_SELECT']);
-    const fullSizedItems = new Set<SideNavItemType>(['TOGGLE_GROUP']);
+    const halfSizedItems = new Set<SideNavItemType>(['PRICE_RANGE', 'SEARCH', 'TITLE', 'TOGGLE']);
+    const fullSizedItems = new Set<SideNavItemType>(['TOGGLE_GROUP', 'MULTI_SELECT']);
     const [ submitOutcome, setSubmitOutcome ] = useState<Outcome>('neutral');
     let timeout: ReturnType<typeof setTimeout>;
 

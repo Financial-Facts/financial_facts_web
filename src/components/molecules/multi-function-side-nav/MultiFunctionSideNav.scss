@@ -61,18 +61,12 @@
             
         .item.two-halves-item {
             gap: var(--multi-function-gap);
-            flex-direction: row;
-            flex-wrap: wrap;
-
-            >div {
-                flex: 50%;
-            }
+            justify-content: space-between;
         }
     
         .item {
             display: flex;
             flex-direction: column;
-            height: fit-content;
             z-index: 1;
 
             .item-label {
@@ -100,5 +94,12 @@
         justify-content: center;
         margin-top: var(--multi-function-gap);
 
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .multi-function-horizontal .main-content {
+        flex-direction: column;
+        flex-wrap: nowrap;
     }
 }
