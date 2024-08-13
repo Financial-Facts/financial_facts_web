@@ -14,11 +14,11 @@ function SingularDataList({ title, singularData }: SingularDataListProps) {
         key: string,
         value: string
     ) => <li className='data-list-item' key={key}>
-            <span className='text'>
+            <span className='text key'>
                 { cleanKey(key) }
                 { key === 'debtYears' && <InformationIcon message={messaging.debtYears} alignPopup='center'/>}
             </span>
-            <span className='text'>
+            <span className='text value'>
                 { value }
             </span>
         </li>;

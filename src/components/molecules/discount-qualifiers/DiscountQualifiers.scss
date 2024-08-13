@@ -1,0 +1,55 @@
+@import 'src/variables';
+
+.discount-qualifiers-section {
+    font-size: $normal-font;
+    width: 100%;
+    box-sizing: border-box;
+
+    .title {
+        display: flex;
+        align-items: center;
+    }
+
+    .qualifiers-display {
+        display: flex;
+
+        .side-text {
+            background: $light-gray;
+            padding: 0 8px 0 16px;
+            position: sticky;
+            left: 0;
+            max-height: 32px;
+
+            .years {
+                height: 100px;
+            }
+        }
+        
+        .qualifiers-table {
+            box-shadow: inset 0px 0px 12px 2px rgba(0, 0, 0, 0.25);
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+
+            .border-right {
+                border-right: 1px solid $medium-gray;
+            }
+
+            .qualifier-data, .qualifier-header {
+                text-align: center;
+                text-wrap: nowrap;
+                width: fit-content;
+                box-sizing: border-box;
+            }
+        
+            .key-header {
+                padding: 16px 36px 8px;
+            }
+        
+            .qualifier-data {
+                padding: 8px 16px 16px 16px;
+            }
+    
+        }
+    }
+
+}

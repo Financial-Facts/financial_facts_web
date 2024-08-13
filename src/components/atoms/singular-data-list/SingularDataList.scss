@@ -23,6 +23,14 @@
                 background: inherit;
             }
         }
+
+        .key {
+            padding-right: 16px;
+        }
+
+        .value {
+            text-align: end;
+        }
     }
 
     .data-list-item:hover {

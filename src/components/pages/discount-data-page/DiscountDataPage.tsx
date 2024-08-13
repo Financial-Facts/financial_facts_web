@@ -10,7 +10,7 @@ import PageLayout from '../../templates/page-layout/page-layout';
 import loadDiscounts from '../../../hooks/loadDiscounts';
 import { AdjacentNavigationState } from '../../molecules/adjacent-navigation-arrows/AdjacentNavigationArrows';
 import DiscountOverview from '../../molecules/discount-overview/DiscountOverview';
-import DiscountProfile from '../../atoms/discount-profile/DiscountProfile';
+import DiscountProfile from '../../molecules/discount-profile/DiscountProfile';
 
 
 function DiscountDataPage() {
@@ -64,7 +64,7 @@ function DiscountDataPage() {
                 discount ? <DiscountOverview key={`${cik}-discount-overview`}
                     discount={discount}/> : undefined,
                 discount ? <DiscountProfile key={`${cik}-discount-profile`}
-                    discount={discount}/> : undefined,
+                    discount={discount}/> : undefined,,
                 <DiscountDataDisplaySection key={`${cik}-discount-data-section`}
                     discount={discount}
                     loading={loading}

@@ -90,9 +90,16 @@ export interface Discount {
     website: string
     ttmInsiderPurchases: number
     isDeleted: 'Y' | 'N',
+    deletedReason?: string
+    qualifiers: Qualifier[],
     stickerPrice: StickerPrice
     benchmarkRatioPrice: BenchmarkRatioPrice
     discountedCashFlowPrice: DiscountedCashFlowPrice
 }
 
-  
+export interface Qualifier {
+    cik: string
+    type: 'annualRoic' | 'annualRevenue' | 'annualEPS' | 'annualEquity' | 'annualOperatingCashFlow',
+    periods: number,
+    value: number
+}
