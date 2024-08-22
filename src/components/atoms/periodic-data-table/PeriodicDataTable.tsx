@@ -1,13 +1,13 @@
 import FormatService from '../../../services/format/format.service';
 import { filterBySpan } from '../../../utilities';
 import { SPAN } from '../../organisms/facts-display-section/FactsDisplaySection';
-import { TableData } from '../periodic-data-chart/PeriodicDataChart.typings';
+import { TableData, TableDataType } from '../periodic-data-chart/PeriodicDataChart.typings';
 import './PeriodicDataTable.scss';
 
 export interface PeriodicDataTableProps {
     tableData: TableData,
     span: SPAN,
-    dataType?: 'PERCENT' | 'CURRENCY'
+    dataType?: TableDataType
 };
 
 function PeriodicDataTable({ tableData, span, dataType }: PeriodicDataTableProps) {

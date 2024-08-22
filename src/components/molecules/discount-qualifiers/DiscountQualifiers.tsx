@@ -19,12 +19,12 @@ const typeTitleMap: Record<string, string> = {
 
 function DiscountQualifiers({ qualifiers }: DiscountQualifiersProps) {
 
-    const periodMap: Record<string, number[]> = qualifiers.reduce<Record<string, number[]>>((acc, qualifier) => {
+    const periodMap = qualifiers.reduce<Record<string, Record<number, number>>>((acc, qualifier) => {
         const { type } = qualifier;
         if (!acc[type]) {
-            acc[type] = [];
+            acc[type] = {};
         }
-        acc[type].push(qualifier.periods);
+        acc[type][qualifier.periods] = qualifier.value;
         return acc;
     }, {});
 
@@ -33,7 +33,7 @@ function DiscountQualifiers({ qualifiers }: DiscountQualifiersProps) {
             <th className='side-text'></th>
             {
                 Object.keys(periodMap).map(header => 
-                    <th colSpan={periodMap[header].length} 
+                    <th colSpan={Object.keys(periodMap[header]).length} 
                         className='qualifier-header key-header'
                         key={header}>{ `${typeTitleMap[header]}` }
                     </th>)
@@ -44,13 +44,16 @@ function DiscountQualifiers({ qualifiers }: DiscountQualifiersProps) {
                 <span className='row-header years'>Years</span>
             </th>
             {
-                Object.values(periodMap).reduce<JSX.Element[]>((acc, periods, periodsIndex) => {
+                Object.keys(periodMap).reduce<JSX.Element[]>((acc, qualifierType, periodsIndex) => {
+                    const periods = periodMap[qualifierType];
                     const isLastPeriodSet = periodsIndex === Object.values(periodMap).length - 1;
-                    periods.forEach((period, index) => {
-                        const isLastPeriod = index === periods.length - 1;
+                    const periodKeys = Object.keys(periods).sort((a, b) => Number(a) - Number(b));
+                    periodKeys.forEach((period, index) => {
+                        const isLastPeriod = index === periodKeys.length - 1;
                         acc.push(
                             <th className={`qualifier-header ${ 
-                                !isLastPeriodSet && isLastPeriod ? 'border-right' : CONSTANTS.EMPTY}`}>
+                                !isLastPeriodSet && isLastPeriod ? 'border-right' : CONSTANTS.EMPTY}`}
+                                key={`${qualifierType}-${period}`}>
                                 { period }
                             </th>)
                     })
@@ -64,11 +67,13 @@ function DiscountQualifiers({ qualifiers }: DiscountQualifiersProps) {
         <tr>
             <td className='side-text'></td>
             {
-                qualifiers.map(qualifier =>
-                    <td className='qualifier-data'
-                        key={`${qualifier.cik}-${qualifier.type}-${qualifier.periods}`}>
-                            { FormatService.formatToPercentValue(qualifier.value) }
-                    </td>)
+                Object.keys(periodMap).map(qualifierType => 
+                    Object.keys(periodMap[qualifierType]).map(numPeriods => 
+                        <td className='qualifier-data'
+                            key={`$${qualifierType}-${numPeriods}`}>
+                                { FormatService.formatToPercentValue(periodMap[qualifierType][Number(numPeriods)]) }
+                        </td>
+                    ))
             }
         </tr>
     </tbody>;

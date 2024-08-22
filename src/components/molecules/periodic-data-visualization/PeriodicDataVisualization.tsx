@@ -8,8 +8,10 @@ import SearchFormToggle, { ToggleOption } from "../../atoms/search-form-toggle/S
 import { SPAN } from "../../organisms/facts-display-section/FactsDisplaySection";
 import { UnitData, UnitPeriod } from "../../../services/facts/facts.typings";
 import { cleanKey } from '../../../utilities';
+import { CONSTANTS } from '../../../constants/constants';
 
 const percentKeys = new Set<string>(['annualROIC']);
+const ratioKeys = new Set<string>(['annualPE']);
 
 const spanToggleOptions: ToggleOption<SPAN>[] = [
     {
@@ -96,11 +98,12 @@ function PeriodicDataVisualization({
             return buildVisualizations(periodicDataKeys.reduce<TableData[]>((acc, key) => {
                 if (key in periodicDataMap) {
                     const isPercent = percentKeys.has(key);
+                    const isRatio = ratioKeys.has(key);
                     acc.push({
-                        label: `${cleanKey(key)} (${isPercent ? '%' : 'USD'})`,
+                        label: `${cleanKey(key)} ${isRatio ? CONSTANTS.EMPTY : isPercent ? '(%)' : '(USD)'}`,
                         periodicData: periodicDataMap[key] as PeriodicData[],
                         index: 0,
-                        dataType: isPercent ? 'PERCENT' : 'CURRENCY'
+                        dataType: isRatio ? 'RATIO' : isPercent ? 'PERCENT' : 'CURRENCY'
                     });
                 }
                 return acc;
