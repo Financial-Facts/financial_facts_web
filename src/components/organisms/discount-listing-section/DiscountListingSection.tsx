@@ -108,7 +108,7 @@ function DiscountListingSection() {
 
     const deletedToggleConfig: Toggle<TrueOrFalse> = useMemo(() => ({
         type: 'TOGGLE',
-        label: 'Show expired',
+        label: 'Show disqualified',
         selectedId: filteredFilter.showExpired ? 'true' : 'false',
         options: [
             {

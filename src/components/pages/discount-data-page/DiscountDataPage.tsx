@@ -11,6 +11,7 @@ import loadDiscounts from '../../../hooks/loadDiscounts';
 import { AdjacentNavigationState } from '../../molecules/adjacent-navigation-arrows/AdjacentNavigationArrows';
 import DiscountOverview from '../../molecules/discount-overview/DiscountOverview';
 import DiscountProfile from '../../molecules/discount-profile/DiscountProfile';
+import DeletedDiscountBanner from '../../atoms/deleted-discount-banner/DeletedDiscountBanner';
 
 
 function DiscountDataPage() {
@@ -63,6 +64,10 @@ function DiscountDataPage() {
                 header,
                 discount ? <DiscountOverview key={`${cik}-discount-overview`}
                     discount={discount}/> : undefined,
+                discount && discount.isDeleted === 'Y' && discount.deletedReason ? 
+                    <DeletedDiscountBanner key={`${cik}-discount-deleted-banner`}
+                        deletedReason={discount.deletedReason}/> :
+                    undefined,
                 discount ? <DiscountProfile key={`${cik}-discount-profile`}
                     discount={discount}/> : undefined,,
                 <DiscountDataDisplaySection key={`${cik}-discount-data-section`}
