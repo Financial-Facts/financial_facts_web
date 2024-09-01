@@ -5,7 +5,7 @@ import './InformationIcon.scss';
 import listenForWindowClick from "../../../hooks/listenForWindowClick";
 
 export interface InformationIconProps {
-    message: string,
+    message: string | JSX.Element,
     color?: string,
     height?: string,
     width?: string,

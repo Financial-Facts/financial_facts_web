@@ -6,21 +6,45 @@
     background: $dark-red;
     color: $off-white;
     box-sizing: border-box;
+    padding: 16px 32px;
+    align-items: center;
 
+    .popup-wrapper .message-dialog {
+        min-width: 300px;
+        max-height: 500px;
+        overflow: auto;
+    }
+
+    .popup-wrapper.left {
+        left: clamp(-150px, 100vw - 1050px, -32px);
+    }
+    
     .warning {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 8px 16px 8px 32px;
         font-size: $hefty-font;
         font-weight: 600;
         box-sizing: inherit;
     }
 
-    .deleted-reason {
-        font-size: $normal-font;
-        width: 100%;
-        padding: 8px 16px;
-        text-align: center;
+    .deleted-reasons {
+        font-size: clamp(16px, 2vw, 18px);
+        flex-direction: column;
+        gap: 8px;
+        list-style-type: none;
+        display: flex;
+        margin: 0 16px;
+
+        li {
+            border-bottom: 1px solid $disabled-gray;
+            padding: 16px 0;
+        }
+
+        :last-child {
+            border-bottom: none;
+        }
+        
     }
+
 }

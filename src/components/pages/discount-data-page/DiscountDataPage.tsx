@@ -64,9 +64,9 @@ function DiscountDataPage() {
                 header,
                 discount ? <DiscountOverview key={`${cik}-discount-overview`}
                     discount={discount}/> : undefined,
-                discount && discount.isDeleted === 'Y' && discount.deletedReason ? 
+                discount && discount.isDeleted === 'Y'  ? 
                     <DeletedDiscountBanner key={`${cik}-discount-deleted-banner`}
-                        deletedReason={discount.deletedReason}/> :
+                        deletedReasons={discount.deletedReasons}/> :
                     undefined,
                 discount ? <DiscountProfile key={`${cik}-discount-profile`}
                     discount={discount}/> : undefined,,

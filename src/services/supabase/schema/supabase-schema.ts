@@ -274,9 +274,12 @@ export type Database = {
           average_volume: number
           ceo: string
           cik: string
+          deleted_reason: string | null
+          deleted_reasons: string[]
           description: string
           exchange: string
           industry: string
+          is_deleted: string
           last_updated: string
           location: string
           market_price: number
@@ -291,9 +294,12 @@ export type Database = {
           average_volume: number
           ceo: string
           cik: string
+          deleted_reason?: string | null
+          deleted_reasons?: string[]
           description: string
           exchange: string
           industry: string
+          is_deleted?: string
           last_updated: string
           location: string
           market_price: number
@@ -308,9 +314,12 @@ export type Database = {
           average_volume?: number
           ceo?: string
           cik?: string
+          deleted_reason?: string | null
+          deleted_reasons?: string[]
           description?: string
           exchange?: string
           industry?: string
+          is_deleted?: string
           last_updated?: string
           location?: string
           market_price?: number
@@ -320,6 +329,35 @@ export type Database = {
           website?: string
         }
         Relationships: []
+      }
+      discount_qualifiers: {
+        Row: {
+          cik: string
+          periods: string
+          type: string
+          value: number
+        }
+        Insert: {
+          cik: string
+          periods: string
+          type: string
+          value: number
+        }
+        Update: {
+          cik?: string
+          periods?: string
+          type?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discount_qualifiers_cik_fkey"
+            columns: ["cik"]
+            isOneToOne: false
+            referencedRelation: "discount"
+            referencedColumns: ["cik"]
+          },
+        ]
       }
       discounted_cash_flow_input: {
         Row: {

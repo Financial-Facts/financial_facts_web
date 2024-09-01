@@ -1,30 +1,23 @@
+import InformationIcon from '../../molecules/information-icon/InformationIcon';
 import './DeletedDiscountBanner.scss';
 
 export interface DeletedDiscountBannerProps {
-    deletedReason: string
+    deletedReasons: string[]
 }
 
-const annualDataKeys: Record<string, string> = {
-    annualROIC: 'Annual ROIC',
-    annualRevenue: 'Annual revenue',
-    annualEPS: 'Annual EPS',
-    annualEquity: 'Annual equity',
-    annualOperatingCashFlow: 'Annual operating cash flow',
-    periods: 'years'
-};
-
-function DeletedDiscountBanner({ deletedReason }: DeletedDiscountBannerProps) {
-
-    const cleanMessage = (reason: string): string => {
-        Object.keys(annualDataKeys).forEach(key => {
-            reason = reason.replace(key, annualDataKeys[key]);
-        });
-        return reason;
-    }
+function DeletedDiscountBanner({ deletedReasons }: DeletedDiscountBannerProps) {
 
     return <section className="deleted-discount-banner">
         <span className='warning'>DISQUALIFIED</span>
-        <span className='deleted-reason'>{ cleanMessage(deletedReason) }</span>
+        <InformationIcon message={
+            <ul className='deleted-reasons'>
+                { deletedReasons.map(reason => 
+                    <li key={reason}>
+                        <span>{ reason }</span>
+                    </li>
+                )}
+            </ul>
+        }/>
     </section>
 
 }
