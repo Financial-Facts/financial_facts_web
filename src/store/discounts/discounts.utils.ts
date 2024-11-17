@@ -52,17 +52,17 @@ export const filterDiscountState = (discounts: SimpleDiscount[], filter: Discoun
 
     if (!!filter.keyword) {
         discounts = discounts.filter(discount => {
-        const lowerKeyword = filter.keyword.toLowerCase();
+            const lowerKeyword = filter.keyword.toLowerCase();
             return discount.cik.toLowerCase().includes(lowerKeyword) ||
                 discount.symbol.toLowerCase().includes(lowerKeyword) || 
                 discount.name.toLowerCase().includes(lowerKeyword);
         });
     }
 
-    if (filter.priceBounds.lowerBound !== 0 && filter.priceBounds.upperBound !== 0) {
+    if (filter.priceBounds.lowerBound !== 0 || filter.priceBounds.upperBound !== 0) {
         discounts = discounts.filter(discount =>
-        discount.marketPrice >= filter.priceBounds.lowerBound &&
-        discount.marketPrice <= filter.priceBounds.upperBound);
+            discount.marketPrice >= filter.priceBounds.lowerBound &&
+            discount.marketPrice <= filter.priceBounds.upperBound);
     }
 
     return discounts;
