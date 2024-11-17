@@ -16,6 +16,7 @@ export interface HideValuationPrices {
 
 export type DiscountState = {
     allDiscounts: SimpleDiscount[]
+    activeDiscounts: SimpleDiscount[]
     filteredDiscounts: SimpleDiscount[]
     filteredSort: DiscountSort
     filteredFilter: DiscountFilter
@@ -61,6 +62,7 @@ export const discountsSlice = createSlice({
     name: 'discounts',
     initialState: {
         allDiscounts: [],
+        activeDiscounts: [],
         filteredDiscounts: [],
         filteredSort: {
             sortBy: 'name',
@@ -149,6 +151,7 @@ export const discountsSlice = createSlice({
         builder.addCase(loadSimpleDiscounts.fulfilled, (state, action) => {
             if (state.allDiscounts.length === 0) {
                 state.allDiscounts = action.payload.sort(getSortFunction('lastUpdated', 'DESC'));
+                state.activeDiscounts = [...state.allDiscounts].filter(discount => discount.isDeleted === 'N');
                 state.filteredDiscounts = [...state.allDiscounts];
                 state.filteredDiscounts = filterDiscountState([...state.allDiscounts], state.filteredFilter);
                 state.filteredDiscounts.sort(getSortFunction(state.filteredSort.sortBy, state.filteredSort.sortOrder));

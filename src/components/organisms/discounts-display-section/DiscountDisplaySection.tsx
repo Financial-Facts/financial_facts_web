@@ -18,7 +18,7 @@ const hideDataSubject = new Subject<void>();
 
 function DiscountDisplaySection() {
     
-    const { allDiscounts, loading } = useSelector< { discounts: DiscountState }, DiscountState>((state) => state.discounts);
+    const { activeDiscounts, loading } = useSelector< { discounts: DiscountState }, DiscountState>((state) => state.discounts);
     const discountListRef = useRef<HTMLUListElement | null>(null);
     const MIN_CARD_WIDTH = 235;
 
@@ -53,8 +53,7 @@ function DiscountDisplaySection() {
                 "--discount-card-width": `${cardWidth}px`
             } as React.CSSProperties }>
             { 
-                allDiscounts
-                    .filter(discount => discount.isDeleted === 'N')
+                activeDiscounts
                     .map(discount =>
                         <DiscountCard
                             key={discount.cik}
@@ -62,7 +61,7 @@ function DiscountDisplaySection() {
                             hideDataTrigger$={hideDataSubject.asObservable()}/>)
             }
         </ul>,
-    [ allDiscounts, cardWidth ]);
+    [ activeDiscounts, cardWidth ]);
 
     listenForWindowClick((target: Element) => {
         if (!target.classList.contains('symbol-icon') &&
@@ -113,7 +112,7 @@ function DiscountDisplaySection() {
                 <div className={`body ${usingArrowNavigation ? 'body-arrows' : CONSTANTS.EMPTY}`}>
                     { 
                         !usingArrowNavigation ? 
-                            <CircleNavWrapper listLength={allDiscounts.length}
+                            <CircleNavWrapper listLength={activeDiscounts.length}
                                 numItemsToDisplay={numCardsToDisplay}
                                 elementRef={discountListRef}
                                 itemWidth={cardWidth}
