@@ -1,24 +1,23 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
 import ArrowNavWrapper from '../../atoms/arrow-nav-wrapper/arrow-nav-wrapper'
 import LoadingSpinner from '../../atoms/loading-spinner/loading-spinner'
 import CircleNavWrapper from '../../molecules/circle-nav-wrapper/circle-nav-wrapper'
 import DiscountCard from '../../molecules/discount-card/DiscountCard'
 import './DiscountDisplaySection.scss'
 import { CONSTANTS } from '../../../constants/constants'
-import { DiscountState } from '../../../store/discounts/discounts.slice'
 import InformationIcon from '../../molecules/information-icon/InformationIcon'
 import { messaging } from '../../../constants/messaging'
 import listenForWindowClick from '../../../hooks/listenForWindowClick'
 import { Subject } from 'rxjs'
 import { useNavigate } from 'react-router-dom'
 import SubmitButton from '../../molecules/submit-button/submit-button'
+import fetchQualifiedDiscounts from '../../../hooks/fetchQualifiedDiscounts'
 
 const hideDataSubject = new Subject<void>();
 
 function DiscountDisplaySection() {
     
-    const { activeDiscounts, loading } = useSelector< { discounts: DiscountState }, DiscountState>((state) => state.discounts);
+    const { qualifiedDiscounts, loading } = fetchQualifiedDiscounts();
     const discountListRef = useRef<HTMLUListElement | null>(null);
     const MIN_CARD_WIDTH = 235;
 
@@ -53,7 +52,7 @@ function DiscountDisplaySection() {
                 "--discount-card-width": `${cardWidth}px`
             } as React.CSSProperties }>
             { 
-                activeDiscounts
+                qualifiedDiscounts
                     .map(discount =>
                         <DiscountCard
                             key={discount.cik}
@@ -61,7 +60,7 @@ function DiscountDisplaySection() {
                             hideDataTrigger$={hideDataSubject.asObservable()}/>)
             }
         </ul>,
-    [ activeDiscounts, cardWidth ]);
+    [ qualifiedDiscounts, cardWidth ]);
 
     listenForWindowClick((target: Element) => {
         if (!target.classList.contains('symbol-icon') &&
@@ -112,7 +111,7 @@ function DiscountDisplaySection() {
                 <div className={`body ${usingArrowNavigation ? 'body-arrows' : CONSTANTS.EMPTY}`}>
                     { 
                         !usingArrowNavigation ? 
-                            <CircleNavWrapper listLength={activeDiscounts.length}
+                            <CircleNavWrapper listLength={qualifiedDiscounts.length}
                                 numItemsToDisplay={numCardsToDisplay}
                                 elementRef={discountListRef}
                                 itemWidth={cardWidth}

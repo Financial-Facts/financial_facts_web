@@ -4,16 +4,32 @@ import { environment } from '../../environment';
 import { Identity, IdentityRequest, SimpleDiscount } from '../bulk-entities/bulk-entities.typings';
 import ApiResponseError from '../../errors/ApiResponseError';
 import { Discount } from '../../types/discount.typings';
+import { from, map, Observable, shareReplay } from 'rxjs';
 
 class SupabaseService {
 
     private client: SupabaseClient<Database>;
+
+    public qualifiedDiscounts$: Observable<SimpleDiscount[]>;
 
     constructor(url: string, key: string) {
         this.client = createClient<Database>(
             url,
             key
         )
+
+        this.qualifiedDiscounts$ = from(this.client
+            .rpc('get_qualified_simple_discount')
+            .returns<SimpleDiscount[]>())
+            .pipe(
+                map(({ data, error }) => {
+                    if (error) {
+                        throw new ApiResponseError(`Error occurred fetching qualified simple discounts: ${error.message}`, error.code);
+                    }
+                    return data;
+                }),
+                shareReplay(1)
+            );
     }
 
     async getSimpleDiscounts(): Promise<SimpleDiscount[]> {

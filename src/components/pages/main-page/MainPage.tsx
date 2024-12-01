@@ -3,14 +3,11 @@ import FactsLinkSection from '../../molecules/facts-link-section/FactsLinkSectio
 import DiscountDisplaySection from '../../organisms/discounts-display-section/DiscountDisplaySection';
 import Header from '../../organisms/header/Header';
 import PageLayout from '../../templates/page-layout/page-layout';
-import loadDiscounts from '../../../hooks/loadDiscounts';
 import { CONSTANTS } from '../../../constants/constants';
 import BlockSectionsDisplay from '../../molecules/block-sections-display/BlockSectionsDisplay';
 
 
 function MainPage() {
-
-    loadDiscounts();
 
     return (
       <PageLayout sections={[
