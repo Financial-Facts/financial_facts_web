@@ -32,8 +32,16 @@ function PriceRange({ boundSetter, minimum, maximum, value }: PriceRangeProps) {
                 className={'price-ranges-slider'}
                 onInput={updateBounds}/>
             <div className='price-indicators'>
-                <span className='bound lower'>${ value[0] }</span>
-                <span className='bound upper'>${ value[1] }</span>
+                <input
+                    type='number'
+                    className='league-spartan bound lower'
+                    value={value[0]}
+                    onChange={ev => updateBounds([Number(ev.target.value), value[1]])}/>
+                <input
+                    type='number'
+                    className='league-spartan bound upper'
+                    value={value[1]}
+                    onChange={ev => updateBounds([value[0], Number(ev.target.value)])}/>
             </div>
         </div>
     )

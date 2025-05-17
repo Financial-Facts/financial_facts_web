@@ -21,19 +21,23 @@
         }
 
         .bound {
-            width: 50%;
-            padding-inline: 0;
+            width: 80px;
+            padding: 8px 0;
             text-align: right;
             background-color: $magnolia-white;
             color: $base-purple;
+            outline: 2px solid $light-purple;
+            border-radius: 4px;
         }
 
         .lower {
             text-align: left;
+            padding-left: 4px;
         }
 
         .upper {
             text-align: right;
+            padding-right: 4px;
         }
     }
 
