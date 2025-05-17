@@ -155,6 +155,8 @@ export const discountsSlice = createSlice({
                 state.filteredDiscounts = [...state.allDiscounts];
                 state.filteredDiscounts = filterDiscountState([...state.allDiscounts], state.filteredFilter);
                 state.filteredDiscounts.sort(getSortFunction(state.filteredSort.sortBy, state.filteredSort.sortOrder));
+                state.filteredFilter.priceBounds.lowerBound = getExtreme(state.allDiscounts, 'MIN');
+                state.filteredFilter.priceBounds.upperBound = getExtreme(state.allDiscounts, 'MAX');
             }
             state.loading = false;
           });

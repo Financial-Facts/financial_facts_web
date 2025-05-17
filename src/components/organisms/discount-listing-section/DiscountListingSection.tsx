@@ -34,7 +34,14 @@ const keyOptions: (keyof SimpleDiscount)[] = [
 function DiscountListingSection() {
 
     const dispatch = useDispatch<AppDispatch>();
-    const { allDiscounts, filteredDiscounts, loading, filteredFilter, filteredSort, selectedTableKeys } = useSelector< { discounts: DiscountState }, DiscountState>((state) => state.discounts);
+    const {
+        allDiscounts,
+        filteredDiscounts,
+        loading,
+        filteredFilter,
+        filteredSort,
+        selectedTableKeys
+    } = useSelector< { discounts: DiscountState }, DiscountState>((state) => state.discounts);
     const mobile = useSelector<{ mobile: MobileState }, MobileState>((state) => state.mobile);
     const absoluteMinimumPrice = useMemo(() => getExtreme(allDiscounts, 'MIN'), [ allDiscounts ]);
     const absoluteMaximumPrice = useMemo(() => getExtreme(allDiscounts, 'MAX'), [ allDiscounts ]);
@@ -140,8 +147,8 @@ function DiscountListingSection() {
         minimum: absoluteMinimumPrice,
         maximum: absoluteMaximumPrice,
         value: [
-            filteredFilter.priceBounds.lowerBound || absoluteMinimumPrice,
-            filteredFilter.priceBounds.upperBound || absoluteMaximumPrice
+            filteredFilter.priceBounds.lowerBound,
+            filteredFilter.priceBounds.upperBound
         ]
     }), [ filteredFilter.priceBounds, absoluteMinimumPrice, absoluteMaximumPrice ]);
 
