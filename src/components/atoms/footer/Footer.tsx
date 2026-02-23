@@ -15,7 +15,7 @@ function Footer() {
                     </span>
                 </div>
                 <div className="column information">
-                    <i>{ (new Date()).getFullYear() } Financial Facts. All Rights Reserved.</i>
+                    <i>2026 Financial Facts. All Rights Reserved.</i>
                     <span className="subtext">
                         Discounts calculated with data provided by <Link to={`${environment.fmpDocsUrl}`} target="_blank">Financial Modeling Prep</Link>
                     </span>

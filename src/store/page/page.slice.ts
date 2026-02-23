@@ -13,10 +13,6 @@ const initialState: PageState = {
     'Discount': {
         active: false,
         link: '/discounts'
-    },
-    'Facts': {
-        active: false,
-        link: '/facts'
     }
 }
 

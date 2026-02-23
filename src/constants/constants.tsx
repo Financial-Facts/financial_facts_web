@@ -1,7 +1,6 @@
 import BenchmarkRatioDefinitionBlock from "../components/atoms/benchmark-ratio-definition-block/BenchmarkRatioDefinitionBlock";
 import DiscountDefinitionBlock from "../components/atoms/discount-definition-block/DiscountDefinitionBlock";
 import DiscountedCashFlowDefinitionBlock from "../components/atoms/discounted-cash-flow-definition-block/DiscountedCashFlowDefinitionBlock";
-import FactsDefinitionBlock from "../components/atoms/facts-definition-block/FactsDefinitionBlock";
 import StickerPriceDefinitionBlock from "../components/atoms/sticker-price-definition-block/StickerPriceDefinitionBlock";
 import { environment } from "../environment";
 
@@ -32,15 +31,6 @@ export const CONSTANTS = {
                 url: '/discounts'
             },
             content: <DiscountDefinitionBlock/>
-        },
-        FACTS: {
-            iconSource: '/assets/facts-icon.svg',
-            title: 'Facts',
-            link: {
-                label: 'Search for facts',
-                url: '/facts'
-            },
-            content: <FactsDefinitionBlock/>
         },
         STICKER_PRICE: {
             iconSource: '/assets/sticker-price-logo.svg',

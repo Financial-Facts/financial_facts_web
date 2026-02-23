@@ -6,8 +6,8 @@ function FactsLinkSection() {
     return (
       <section className='facts-link-section'>
         <div className='main-content'>
-          <h2>Facts</h2>
-          <h3>Looking for raw data from a specific company?</h3>
+          <h2>Search</h2>
+          <h3>Looking for discounts for a specific company?</h3>
           <CompanySearchSection isStandalone={true}/>
         </div>
       </section>

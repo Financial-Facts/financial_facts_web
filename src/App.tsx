@@ -65,11 +65,6 @@ function App() {
         <Route path="/" element={<MainPage/>}/>
         <Route path="/discounts" element={<DiscountSelectionPage/>}/>
         <Route path="/discounts/:cik" element={<DiscountDataPage/>}/>
-        <Route path='/facts' element={<FactsPage/>}>
-          <Route path=":cik" element={<FactsPage/>}/>
-          <Route path=":cik/:taxonomy" element={<FactsPage/>}/>
-          <Route path=":cik/:taxonomy/:selectedDataKey" element={<FactsPage/>}/>
-        </Route>
         <Route path='/about' element={<AboutPage/>}/>
       </Routes>
     </BrowserRouter>

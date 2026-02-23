@@ -6,7 +6,7 @@
     justify-content: space-between;
     width: 100%;
     flex-shrink: 0;
-    padding: 65px 50px 0 50px;
+    padding: 65px 50px 50px 50px;
     box-sizing: border-box;
     max-width: 1000px;
     gap: 50px;
@@ -76,7 +76,7 @@
 @media only screen and (max-width: 768px) {
 
     .about {
-        padding: 50px 0 0 0;
+        padding: 50px 0 50px 0;
 
         .logo {
             display: flex;

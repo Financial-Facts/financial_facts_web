@@ -35,15 +35,6 @@ function AboutSection() {
                 <img src={originsImageSrc} className='support-img' sizes='cover'/>
             </div>
         </div>
-        <h3 className='definitions-header'>Definitions</h3>
-        <BlockSectionsDisplay
-            blocks={[
-                CONSTANTS.BLOCK_CONFIGS.DISCOUNT,
-                CONSTANTS.BLOCK_CONFIGS.FACTS,
-                CONSTANTS.BLOCK_CONFIGS.STICKER_PRICE,
-                CONSTANTS.BLOCK_CONFIGS.DISCOUNTED_CASH_FLOW,
-                CONSTANTS.BLOCK_CONFIGS.BENCHMARK_RATIO
-          ]}/>
     </section>
 }
 

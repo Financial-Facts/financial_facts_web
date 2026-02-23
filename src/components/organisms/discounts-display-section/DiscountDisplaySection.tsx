@@ -5,8 +5,6 @@ import CircleNavWrapper from '../../molecules/circle-nav-wrapper/circle-nav-wrap
 import DiscountCard from '../../molecules/discount-card/DiscountCard'
 import './DiscountDisplaySection.scss'
 import { CONSTANTS } from '../../../constants/constants'
-import InformationIcon from '../../molecules/information-icon/InformationIcon'
-import { messaging } from '../../../constants/messaging'
 import listenForWindowClick from '../../../hooks/listenForWindowClick'
 import { Subject } from 'rxjs'
 import { useNavigate } from 'react-router-dom'
@@ -98,11 +96,6 @@ function DiscountDisplaySection() {
                 See firms that match our criteria and their&nbsp;
                 <span className='valuation-text'>
                     valuations
-                    <InformationIcon 
-                        message={messaging.valuationDefinitionsLocation}
-                        color='#292929'
-                        alignPopup='center'
-                        screenSide='right'/>
                 </span>
             </h3>
             { loading ? (
