@@ -71,7 +71,7 @@ function SearchDropDown({
             }));
 
     const handleClick = (identity: Identity) => {
-        navigate(`/facts/${identity.cik}`, {
+        navigate(`/discounts/${identity.cik}`, {
             state: identity
         })
     }

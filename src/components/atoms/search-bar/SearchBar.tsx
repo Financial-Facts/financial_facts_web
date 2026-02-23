@@ -57,7 +57,7 @@ function SearchBar({ identityRequestDispatch }: SearchBarProps) {
                 ref={searchBarRef}
                 role={'search'}
                 className='search-bar'
-                placeholder={ mobile.size === 'SMALL' ? 'Search...' : `Search for a company...`}>    
+                placeholder={ mobile.size === 'SMALL' ? 'Search...' : `Search for discounts...`}>    
             </input>
         </div>
     )
