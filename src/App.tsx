@@ -10,7 +10,6 @@ import {
 } from 'chart.js';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DiscountSelectionPage from './components/pages/discount-selection-page/DiscountSelectionPage';
-import FactsPage from './components/pages/facts-page/FactsPage';
 import MainPage from './components/pages/main-page/MainPage';
 import { useEffect } from 'react';
 import { MobileSize, setMobile } from './store/mobile/mobile.slice';

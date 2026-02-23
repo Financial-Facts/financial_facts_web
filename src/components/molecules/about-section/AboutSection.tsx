@@ -1,7 +1,5 @@
 import { messaging } from '../../../constants/messaging';
 import './AboutSection.scss';
-import { CONSTANTS } from '../../../constants/constants';
-import BlockSectionsDisplay from '../block-sections-display/BlockSectionsDisplay';
 import { useEffect } from 'react';
 
 function AboutSection() {
